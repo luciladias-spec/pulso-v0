@@ -179,7 +179,7 @@ const HTML = `
   <div class="col">
     <div class="caixa">
       <span class="rotulo">Como usar na ligação</span>
-      <p>Rode <strong>antes</strong> de ligar, com a OAB que está no cadastro dele. Chegue dizendo o que encontrou: “Doutor, o senhor teve 47 publicações nos últimos 30 dias, 9 pedem alguma providência e 2 são sentença. Quer que eu te mande a lista?”</p>
+      <p>Rode <strong>antes</strong> de ligar, com a OAB que está no cadastro dele. Chegue dizendo o que encontrou: “Doutor, você teve 47 publicações nos últimos 30 dias, 9 pedem alguma providência e 2 são sentença. Quer que eu te mande a lista?”</p>
       <p>É o abridor mais forte que o produto tem. E funciona porque não é promessa — é a carteira dele na tela.</p>
     </div>
   </div>
@@ -363,19 +363,19 @@ const HTML = `
 
   <div class="script">
     <span class="rotulo">Abertura — com o diagnóstico já rodado</span>
-    <p>“Doutor, antes de ligar eu dei uma olhada nos seus processos. O senhor teve <strong>X publicações nos últimos 30 dias</strong>, e <strong>Y delas pedem alguma providência</strong>. Hoje, quem lê isso aí? … E está dando conta?”</p>
+    <p>“Doutor, antes de ligar eu dei uma olhada nos seus processos. Você teve <strong>X publicações nos últimos 30 dias</strong>, e <strong>Y delas pedem alguma providência</strong>. Hoje, quem lê isso aí? … E está dando conta?”</p>
     <p class="acao">Deixe ele descrever o problema inteiro antes de falar da solução. Quanto mais ele falar, menos você precisa argumentar.</p>
   </div>
 
   <div class="script">
     <span class="rotulo">A virada</span>
-    <p>“A gente lançou um serviço novo chamado Pulso. <strong>Depois que o cliente assina a procuração, a gente faz o resto</strong> — pega os documentos, cadastra, escreve a peça, organiza os anexos, distribui ou protocola, lê as publicações todo dia e dá qualquer andamento que o processo pedir. O senhor entra em dois momentos: para conferir a peça e para autorizar o protocolo.”</p>
+    <p>“A gente lançou um serviço novo chamado Pulso. <strong>Depois que o cliente assina a procuração, a gente faz o resto</strong> — pega os documentos, cadastra, escreve a peça, organiza os anexos, distribui ou protocola, lê as publicações todo dia e dá qualquer andamento que o processo pedir. Você entra em dois momentos: para conferir a peça e para autorizar o protocolo.”</p>
     <p class="acao">Aqui, pare. A primeira pergunta dele diz qual objeção tratar.</p>
   </div>
 
   <div class="script">
     <span class="rotulo">O número</span>
-    <p>“Com a sua carteira, isso consome por volta de <strong>R$ 2.400 por mês do seu pacote</strong> — e não é cobrança nova, sai do Soberano que o senhor já tem. <strong>Mês que o processo não anda, não gera conta</strong> — o que é o contrário de ter funcionário. E roda 24 horas por dia, 7 dias por semana.”</p>
+    <p>“Com a sua carteira, isso consome por volta de <strong>R$ 2.400 por mês do seu pacote</strong> — e não é cobrança nova, sai do Soberano que você já tem. <strong>Mês que o processo não anda, não gera conta</strong> — o que é o contrário de ter funcionário. E roda 24 horas por dia, 7 dias por semana.”</p>
     <p class="acao">Rode a calculadora com a carteira real dele antes da ligação. Chegar com o número pronto vale mais do que qualquer argumento.</p>
   </div>
 
@@ -387,7 +387,7 @@ const HTML = `
 
   <div class="script">
     <span class="rotulo">A segunda venda, para a carteira antiga</span>
-    <p>“E o que está parado, doutor? Aquele processo que não publica nada há dois anos — o senhor sabe em que pé está? Por <strong>R$ 30 cada</strong> a gente abre, lê e te diz em que fase está e o que destrava. O senhor olha o relatório e manda tocar o que quiser.”</p>
+    <p>“E o que está parado, doutor? Aquele processo que não publica nada há dois anos — você sabe em que pé está? Por <strong>R$ 30 cada</strong> a gente abre, lê e te diz em que fase está e o que destrava. Você olha o relatório e manda tocar o que quiser.”</p>
     <p class="acao">Faça essa oferta depois que o Pulso estiver rodando, não junto. Primeiro ele vê o serviço funcionando; aí a carteira antiga vira a conversa seguinte.</p>
   </div>
 </section>
@@ -657,15 +657,15 @@ export default function Page() {
 
     + '<div class="destaque">'
       + '<p><b>'+moeda(ultimo.risco)+' dependem de um ato com prazo correndo</b> e <b>'+moeda(ultimo.escuro)
-      + '</b> estão em processos que o senhor não consegue acompanhar pelo diário. '
+      + '</b> estão em processos que você não consegue acompanhar pelo diário. '
       + 'Manter essa carteira em dia custa <b>'+tempo(T.total)+' por mês</b> — '
       + (T.total/480).toFixed(1).replace('.',',')+' dias úteis de alguém dedicado só a isso.</p>'
     + '</div>'
 
-    + bloco('O que o senhor ganhou', g.ganhos, 'ok', 'Nenhuma decisão favorável no período.')
+    + bloco('O que você ganhou', g.ganhos, 'ok', 'Nenhuma decisão favorável no período.')
     + (g.ganhos.length ? '<p class="nota">Decisão favorável publicada é prazo que começa a correr para a outra parte, benefício a implantar e, muitas vezes, honorário a executar. Cada uma dessas precisa de um ato seu para virar dinheiro.</p>' : '')
 
-    + bloco('O que o senhor perdeu ou foi arquivado', g.perdas.concat(g.arquivados), 'mau', 'Nenhuma perda no período.')
+    + bloco('O que você perdeu ou foi arquivado', g.perdas.concat(g.arquivados), 'mau', 'Nenhuma perda no período.')
     + (neg ? '<p class="nota">Vale conferir, um a um, se a perda foi de mérito ou administrativa — emenda não cumprida, documento não juntado, procuração irregular. Arquivamento por inércia se desarquiva com simples petição.</p>' : '')
 
     + bloco('O que está com prazo correndo agora', g.prazos, 'mau', 'Nenhum prazo identificado no período.')
@@ -676,7 +676,7 @@ export default function Page() {
     + (g.dinheiro.length ? bloco('Processos que mencionam pagamento', g.dinheiro, 'ok', '')
         + '<p class="nota">RPV, precatório, alvará ou depósito citados na publicação. Vale conferir se há valor disponível para levantamento.</p>' : '')
 
-    + '<h2>O que o senhor não consegue ler</h2>'
+    + '<h2>O que você não consegue ler</h2>'
     + '<p>São <b>'+g.ilegiveis+' processos</b> ('+g.pctIlegivel+'% dos eventos do mês). Em <b>'+g.segredo.length
     + '</b> deles o processo corre em <b>segredo de justiça</b>; nos demais, o tribunal publicou apenas o aviso e manteve o documento dentro do sistema.</p>'
     + '<p>Nos dois casos o conteúdo existe e está disponível — <b>mas só para quem entra no sistema do tribunal com certificado digital</b>, '
@@ -692,6 +692,28 @@ export default function Page() {
       + '<tr><td><b>Total no mês</b></td><td></td><td></td><td><b>'+tempo(T.total)+'</b></td></tr>'
     + '</table>'
     + '<p class="nota">Não entra aqui o tempo de escrever a peça, falar com o cliente nem ir à audiência. É só o trabalho de manter a carteira organizada e em dia.</p>'
+
+    + '<h2>Conclusão</h2>'
+    + '<div class="conclusao">'
+      + '<p>Em trinta dias, ' + g.nProc + ' dos seus processos se mexeram. '
+      + (g.ganhos.length ? g.ganhos.length + ' trouxeram decisão favorável — e cada uma só vira dinheiro se alguém fizer o ato seguinte. ' : '')
+      + (neg ? neg + ' terminaram em perda ou arquivamento. ' : '')
+      + (g.prazos.length ? g.prazos.length + ' estão com prazo correndo neste momento. ' : '')
+      + (g.ilegiveis ? 'E ' + g.ilegiveis + ' seguem fora do seu alcance, porque o diário não publica o conteúdo.' : '')
+      + '</p>'
+      + '<p>O que esses números descrevem <b>não é um problema de competência jurídica</b>. '
+      + 'Nada aqui se perde por tese fraca. Perde-se porque a publicação não foi lida a tempo, porque o documento não foi juntado, '
+      + 'porque o prazo correu enquanto o dia era ocupado por outra coisa, ou porque ninguém abriu o processo que o diário não deixa ler. '
+      + '<b>É um problema de visibilidade e de organização</b> — e esse tem solução.</p>'
+      + '<p>Manter essa carteira em dia custa <b>' + tempo(T.total) + ' por mês</b>, ou ' + (T.total/480).toFixed(1).replace('.',',')
+      + ' dias úteis de alguém fazendo só isso, todo mês, sem falhar uma semana. É um trabalho que não aparece, não gera honorário '
+      + 'e não pode parar — e é o primeiro a ficar para trás quando o escritório tem um mês cheio.</p>'
+      + '<p><b>É exatamente esse trabalho que o Pulso assume.</b> Lemos as publicações todos os dias, abrimos os autos que o diário não mostra, '
+      + 'dizemos o que cada processo exige e até quando, escrevemos a peça, organizamos os documentos e protocolamos. '
+      + 'Você entra em dois momentos: conferir a peça e autorizar o protocolo. O resto do seu dia volta a ser seu.</p>'
+      + '<p>Pelo que este diagnóstico mostra, seria algo em torno de <b>' + moeda(g.ev.length*20 + g.prazos.length*5)
+      + ' no mês</b> — debitado do pacote que você já tem, sem mensalidade nova e sem ninguém a mais na folha.</p>'
+    + '</div>'
 
     + '<h2>Como lemos isso</h2>'
     + '<p class="nota">Consultamos o Diário de Justiça Eletrônico Nacional do CNJ, que é público, pelo número da OAB, nos últimos 30 dias. '

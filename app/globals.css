@@ -1,4 +1,4 @@
-/* Identidade Facilita Juridico: azul #006EE9 e navy #1118AD, do logotipo. */
+/* Identidade Facilita Juridico: azul #006EE9 e navy #1118AD. */
 :root{
   --ground:#F4F7FB; --surface:#FFFFFF; --surface-2:#E8EEF7;
   --ink:#0C1733; --ink-2:#44506B; --ink-3:#7A869E;
@@ -244,6 +244,10 @@ tbody tr.destaque td{background:var(--azul-soft)}
   #relatorio .destaque{background:#FBE4E1;border-left:3px solid #B3261E;padding:3mm 4mm;margin:0 0 4mm}
   #relatorio .destaque b{color:#B3261E}
   #relatorio .nota{font-size:8.5pt;color:#7A869E;line-height:1.45}
+  #relatorio .conclusao{background:#E1EDFD;border-left:3px solid #006EE9;padding:4mm 5mm;margin:4mm 0}
+  #relatorio .conclusao p{margin:0 0 2.5mm}
+  #relatorio .conclusao p:last-child{margin-bottom:0}
+  #relatorio .conclusao b{color:#1118AD}
   #relatorio .rodape{margin-top:8mm;padding-top:3mm;border-top:1px solid #D9E2EF;font-size:8.5pt;color:#7A869E}
   #relatorio tr{break-inside:avoid}
 }
