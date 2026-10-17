@@ -1,9 +1,9 @@
-/* Identidade Facilita Juridico: azul #006EE9 e navy #1118AD. */
+/* Identidade Facilita Juridico, do logotipo vetorial: azul #2A71E5 e navy #140DBF. */
 :root{
   --ground:#F4F7FB; --surface:#FFFFFF; --surface-2:#E8EEF7;
   --ink:#0C1733; --ink-2:#44506B; --ink-3:#7A869E;
   --rule:#D9E2EF; --rule-2:#BFCCE0;
-  --azul:#006EE9; --azul-soft:#E1EDFD; --navy:#1118AD;
+  --azul:#2A71E5; --azul-soft:#E1EDFD; --navy:#140DBF;
   --verde:#0E7A5F; --verde-soft:#DCF0E9;
   --alerta:#B3261E; --alerta-soft:#FBE4E1;
   --shadow:0 1px 0 rgba(12,23,51,.04), 0 10px 30px -20px rgba(12,23,51,.45);
@@ -230,9 +230,25 @@ tbody tr.destaque td{background:var(--azul-soft)}
   .wrap{max-width:none}
   .wrap > *{display:none !important}
   .wrap > #relatorio{display:block !important}
+  #relatorio{text-align:justify;hyphens:auto}
+  #relatorio .cabeca{display:flex;align-items:baseline;gap:5mm;margin:0 0 6mm;padding-bottom:3mm;border-bottom:2px solid #140DBF}
+  #relatorio .cabeca svg{width:46mm;height:auto;flex:none}
+  #relatorio .produto{font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:#2A71E5;font-weight:700;text-align:left}
+  #relatorio p{margin:0 0 3mm;orphans:3;widows:3}
+  #relatorio h1,#relatorio h2,#relatorio .sub,#relatorio th,#relatorio td{text-align:left}
+  #relatorio .inclui{display:flex;gap:5mm;margin:0 0 4mm}
+  #relatorio .inclui > div{flex:1;border:1px solid #D9E2EF;border-radius:2mm;padding:3mm 4mm}
+  #relatorio .inclui span{display:block;font-size:8pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2mm}
+  #relatorio .inclui .sim{border-color:#0E7A5F}
+  #relatorio .inclui .sim span{color:#0E7A5F}
+  #relatorio .inclui .nao{border-color:#B3261E}
+  #relatorio .inclui .nao span{color:#B3261E}
+  #relatorio .inclui ul{margin:0 0 2mm;padding-left:4mm;text-align:left}
+  #relatorio .inclui li{margin:0 0 1mm;font-size:9pt}
+  #relatorio .inclui p{font-size:8.5pt;color:#44506B;margin:0}
   #relatorio h1{font-family:Lexend,sans-serif;font-size:21pt;letter-spacing:-.02em;margin:0 0 2mm;color:#0C1733}
-  #relatorio h2{font-family:Lexend,sans-serif;font-size:12.5pt;margin:7mm 0 2mm;color:#006EE9;border-bottom:1px solid #D9E2EF;padding-bottom:1.5mm}
-  #relatorio .marca{font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:#006EE9;font-weight:700}
+  #relatorio h2{font-family:Lexend,sans-serif;font-size:12.5pt;margin:7mm 0 2mm;color:#2A71E5;border-bottom:1px solid #D9E2EF;padding-bottom:1.5mm}
+  #relatorio .marca{font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:#2A71E5;font-weight:700}
   #relatorio .sub{color:#44506B;margin:0 0 5mm;font-size:10pt}
   #relatorio .kpis{display:flex;flex-wrap:wrap;gap:4mm;margin:0 0 4mm}
   #relatorio .kpis div{border:1px solid #D9E2EF;border-radius:2mm;padding:3mm 4mm;min-width:30mm}
@@ -244,10 +260,10 @@ tbody tr.destaque td{background:var(--azul-soft)}
   #relatorio .destaque{background:#FBE4E1;border-left:3px solid #B3261E;padding:3mm 4mm;margin:0 0 4mm}
   #relatorio .destaque b{color:#B3261E}
   #relatorio .nota{font-size:8.5pt;color:#7A869E;line-height:1.45}
-  #relatorio .conclusao{background:#E1EDFD;border-left:3px solid #006EE9;padding:4mm 5mm;margin:4mm 0}
+  #relatorio .conclusao{background:#E1EDFD;border-left:3px solid #2A71E5;padding:4mm 5mm;margin:4mm 0}
   #relatorio .conclusao p{margin:0 0 2.5mm}
   #relatorio .conclusao p:last-child{margin-bottom:0}
-  #relatorio .conclusao b{color:#1118AD}
+  #relatorio .conclusao b{color:#140DBF}
   #relatorio .rodape{margin-top:8mm;padding-top:3mm;border-top:1px solid #D9E2EF;font-size:8.5pt;color:#7A869E}
   #relatorio tr{break-inside:avoid}
 }
