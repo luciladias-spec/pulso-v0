@@ -1,5 +1,4 @@
-/* Identidade Facilita Juridico: azul #006EE9 e navy #1118AD, do logotipo.
-   Tipografia Lexend + Inter, as mesmas do site da Facilita. */
+/* Identidade Facilita Juridico: azul #006EE9 e navy #1118AD, do logotipo. */
 :root{
   --ground:#F4F7FB; --surface:#FFFFFF; --surface-2:#E8EEF7;
   --ink:#0C1733; --ink-2:#44506B; --ink-3:#7A869E;
@@ -201,6 +200,14 @@ tbody tr.destaque td{background:var(--azul-soft)}
 .script p{font-family:Lexend,system-ui,sans-serif;font-size:1.14rem;line-height:1.5;margin:0 0 .8em}
 .script p:last-child{margin-bottom:0}
 .script .acao{font-family:Inter,sans-serif;font-size:13.5px;color:var(--ink-3);font-style:italic;line-height:1.5}
+
+.premissas{margin:22px 0 0;padding:18px 0 0;border-top:1px solid #2E3D63}
+.prem-tit{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#7E8BA5;margin-bottom:14px}
+.grade-prem{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.grade-prem label{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#9FB0CC;line-height:1.3}
+.grade-prem input{width:5.4ch;flex:none;font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:15px;
+  background:#19244A;color:var(--ground);border:1px solid #2E3D63;border-radius:3px;padding:7px 6px;text-align:center}
+.grade-prem span{font-size:11px;color:#7E8BA5}
 
 /* ---- o que está na mesa ---- */
 .mesa{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:#223052;border:1px solid #223052;border-radius:4px;overflow:hidden;margin:0 0 20px}

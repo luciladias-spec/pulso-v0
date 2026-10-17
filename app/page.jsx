@@ -148,15 +148,19 @@ const HTML = `
           <option>SE</option><option>TO</option>
         </select>
       </div>
-      <div class="campo">
-        <label for="hon">Honorário médio por processo</label>
-        <input type="text" id="hon" inputmode="numeric" value="5.000" autocomplete="off">
-      </div>
-      <div class="campo">
-        <label for="min">Minutos por publicação</label>
-        <input type="text" id="min" inputmode="numeric" value="10" autocomplete="off">
-      </div>
       <button class="btn" id="btnDiag">Rodar diagnóstico</button>
+    </div>
+
+    <div class="premissas">
+      <span class="prem-tit">Premissas — troque pelos números do escritório e tudo recalcula</span>
+      <div class="grade-prem">
+        <label>Honorário médio por processo<input type="text" id="hon" inputmode="numeric" value="5.000"></label>
+        <label>Ler e triar uma publicação<input type="text" id="tTriar" inputmode="numeric" value="10"><span>min</span></label>
+        <label>Lançar o andamento nos sistemas<input type="text" id="tLancar" inputmode="numeric" value="5"><span>min</span></label>
+        <label>Organizar os documentos do ato<input type="text" id="tDocs" inputmode="numeric" value="20"><span>min</span></label>
+        <label>Protocolar ou distribuir<input type="text" id="tProt" inputmode="numeric" value="15"><span>min</span></label>
+        <label>Abrir os autos de um ilegível<input type="text" id="tAutos" inputmode="numeric" value="15"><span>min</span></label>
+      </div>
     </div>
     <p class="diag-msg" id="diagMsg">Fonte: DJEN/CNJ. A consulta sai do seu navegador direto para o diário — nada passa por nós e nada fica gravado.</p>
 
@@ -412,268 +416,319 @@ const HTML = `
 export default function Page() {
   useEffect(() => {
 
-  /* ---------------- calculadora de consumo ---------------- */
-  var POR100 = { pub: 136/600, prot: 31/600 };   // medido no escritório-piloto
+  /* ================= calculadora de consumo ================= */
+  var POR100 = { pub: 136/600, prot: 31/600 };
   var PRECO  = { triagem: 10, acomp: 10, prot: 5 };
-  var qtd = document.getElementById('qtd');
-  var slider = document.getElementById('slider');
+  var qtd = document.getElementById('qtd'), slider = document.getElementById('slider');
 
   function moeda(v){ return 'R$ ' + Math.round(v).toLocaleString('pt-BR'); }
-  function plural(n, s, p){ return n + ' ' + (n === 1 ? s : p); }
+  function plural(n,s,p){ return n + ' ' + (n===1?s:p); }
+  function num(id, padrao){
+    var v=(document.getElementById(id).value||'').replace(/[^0-9]/g,'');
+    return v ? Number(v) : padrao;
+  }
+  function tempo(min){
+    if (min < 60) return Math.round(min) + ' min';
+    var h = min/60;
+    return (h<10 ? h.toFixed(1).replace('.',',') : String(Math.round(h))) + 'h';
+  }
 
   function calcular(n){
-    n = Math.max(20, Math.min(3000, Math.round(n) || 0));
-    var pub  = Math.round(n * POR100.pub);
-    var prot = Math.round(n * POR100.prot);
-    var v1 = pub * PRECO.triagem, v2 = pub * PRECO.acomp, v3 = prot * PRECO.prot;
-    document.getElementById('q1').textContent = plural(pub, 'publicação', 'publicações');
-    document.getElementById('q2').textContent = plural(pub, 'publicação', 'publicações');
-    document.getElementById('q3').textContent = plural(prot, 'ato', 'atos');
+    n = Math.max(20, Math.min(3000, Math.round(n)||0));
+    var pub=Math.round(n*POR100.pub), prot=Math.round(n*POR100.prot);
+    var v1=pub*PRECO.triagem, v2=pub*PRECO.acomp, v3=prot*PRECO.prot;
+    document.getElementById('q1').textContent = plural(pub,'publicação','publicações');
+    document.getElementById('q2').textContent = plural(pub,'publicação','publicações');
+    document.getElementById('q3').textContent = plural(prot,'ato','atos');
     document.getElementById('v1').textContent = moeda(v1);
     document.getElementById('v2').textContent = moeda(v2);
     document.getElementById('v3').textContent = moeda(v3);
-    document.getElementById('vt').textContent = moeda(v1 + v2 + v3);
+    document.getElementById('vt').textContent = moeda(v1+v2+v3);
   }
-  qtd.addEventListener('input', function(){ slider.value = qtd.value; calcular(Number(qtd.value)); });
-  slider.addEventListener('input', function(){ qtd.value = slider.value; calcular(Number(slider.value)); });
+  qtd.addEventListener('input', function(){ slider.value=qtd.value; calcular(Number(qtd.value)); });
+  slider.addEventListener('input', function(){ qtd.value=slider.value; calcular(Number(slider.value)); });
   calcular(500);
 
-  /* ---------------- diagnóstico por OAB ---------------- */
-  var API = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
-  var ultimo = null;
-  var btn = document.getElementById('btnDiag');
-  var msg = document.getElementById('diagMsg');
-  var res = document.getElementById('diagRes');
+  /* ================= diagnóstico por OAB ================= */
+  var API='https://comunicaapi.pje.jus.br/api/v1/comunicacao';
+  var btn=document.getElementById('btnDiag'), msg=document.getElementById('diagMsg'), res=document.getElementById('diagRes');
+  var campoOab=document.getElementById('oab');
+  var ultimo=null;
 
   function iso(d){ return d.toISOString().slice(0,10); }
-  function limpar(html){
-    var t = String(html || '').replace(/<[^>]+>/g, ' ');
-    var ta = document.createElement('textarea'); ta.innerHTML = t;
-    return ta.value.replace(/\s+/g, ' ').trim();
+  function limpar(h){
+    var t=String(h||'').replace(/<[^>]+>/g,' ');
+    var ta=document.createElement('textarea'); ta.innerHTML=t;
+    return ta.value.replace(/\s+/g,' ').trim();
   }
-  function hash(s){ var h = 0, i; for (i = 0; i < s.length; i++){ h = (h*31 + s.charCodeAt(i)) | 0; } return h; }
+  function hash(s){ var h=0,i; for(i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return h; }
+  function dataBR(s){ var p=(s||'').split('/'); return p.length===3 ? new Date(+p[2],+p[1]-1,+p[0]) : null; }
 
-  var RE = {
-    semTeor: /ARQUIVOS DIGITAIS INDISPON|SEGREDO DE JUSTI/i,
-    decisao: /SENTEN[ÇC]A|AC[ÓO]RD[ÃA]O|A C [ÓO] R D [ÃA] O|JULGO|INDEFIRO A PETI|HOMOLOGO|NEGAR PROVIMENTO|DAR PROVIMENTO|EXTINT/i,
-    agenda:  /per[íi]cia|audi[êe]ncia|estudo social|pauta de julgamento|sess[ãa]o virtual/i,
-    dinheiro:/\bRPV\b|requisi[çc][ãa]o de pequeno valor|precat[óo]rio|alvar[áa]|dep[óo]sito judicial/i,
-    ato:     /intim(e-se|em-se|ada|ado|a[çc][ãa]o)[^.]{0,90}(parte autora|autor|exequente|requerente|patrono|advogad)/i,
-    ato2:    /(manifest\w+|emend\w+|apresent\w+|especific\w+|requeir\w+|junt\w+|comprov\w+|impugn\w+|recolh\w+)[^.]{0,60}prazo de \d+/i,
-    ato3:    /sob pena de (extin|indeferimento|arquivamento|preclus)/i,
-    prazo:   /prazo de (\d+)\s*\(?\s*[a-zç]*\s*\)?\s*dias/i
+  var R = {
+    segredo   : /SEGREDO DE JUSTI/i,
+    cego      : /ARQUIVOS DIGITAIS INDISPON/i,
+    procedente: /JULGO\s+(totalmente\s+|parcialmente\s+)?PROCEDENTE|julgo.{0,30}procedente/i,
+    concessao : /\bCONCEDO\b|DEFIRO\s+(a\s+tutela|o\s+pedido|a\s+liminar|a\s+antecipa)|conceder\s+o\s+benef|implante\s+o\s+benef|implanta[çc][ãa]o\s+do\s+benef|antecipo\s+os\s+efeitos\s+da\s+tutela/i,
+    acordo    : /HOMOLOGO.{0,45}(acordo|transa|propost)|acordo.{0,25}homologad/i,
+    provGanho : /(dou|dar|dando)\s+provimento(?![^.]{0,60}do\s+INSS)|(nego|negar)\s+provimento[^.]{0,70}(do\s+INSS|da\s+(Uni[ãa]o|Fazenda|CEF|Caixa)|da\s+parte\s+r[ée])/i,
+    provPerda : /(nego|negar)\s+provimento[^.]{0,70}(da\s+parte\s+autora|do\s+autor|da\s+apela[çc][ãa]o\s+da\s+parte\s+autora)|desprovid|n[ãa]o\s+provid/i,
+    improc    : /IMPROCEDENTE|improcedente/i,
+    indeferido: /INDEFIRO\s+A\s+PETI|indeferimento\s+da\s+(peti|inicial)|INDEFIRO\s+o\s+pedido/i,
+    extinto   : /JULGO\s+EXTINT|EXTINT[OA]\s+o\s+(processo|feito)|extin[çc][ãa]o\s+do\s+(processo|feito)|sem\s+resolu[çc][ãa]o\s+(do\s+)?m[ée]rito/i,
+    arquivado : /ARQUIVAMENTO|arquivem-se|arquive-se|ao\s+arquivo|baixa\s+definitiva/i,
+    audiencia : /audi[êe]ncia/i,
+    pericia   : /per[íi]cia|estudo\s+social/i,
+    dinheiro  : /\bRPV\b|requisi[çc][ãa]o\s+de\s+pequeno\s+valor|precat[óo]rio|alvar[áa]|dep[óo]sito\s+judicial|levantamento/i,
+    ato       : /intim(e-se|em-se|ada|ado|a[çc][ãa]o)[^.]{0,90}(parte\s+autora|autor|exequente|requerente|patrono|advogad)/i,
+    ato2      : /(manifest\w+|emend\w+|apresent\w+|especific\w+|requeir\w+|junt\w+|comprov\w+|impugn\w+|recolh\w+)[^.]{0,60}prazo\s+de\s+\d+/i,
+    ato3      : /sob\s+pena\s+de\s+(extin|indeferimento|arquivamento|preclus)/i,
+    prazoN    : /prazo\s+de\s+(\d+)\s*\(?\s*[a-zç]*\s*\)?\s*dias/i
   };
 
-  function classificar(t){
-    if (RE.semTeor.test(t) || t.length < 200) return { tipo:'cego', rotulo:'Sem teor' };
-    if (RE.ato.test(t) || RE.ato2.test(t) || RE.ato3.test(t)) return { tipo:'ato', rotulo:'Pede providência' };
-    if (RE.decisao.test(t)) return { tipo:'dec', rotulo:'Decisão' };
-    if (RE.agenda.test(t))  return { tipo:'age', rotulo:'Agenda' };
-    return { tipo:'dec', rotulo:'Andamento' };
+  // Marca cada evento com tudo o que ele é — um mesmo ato pode ser sentença e conter prazo.
+  function marcar(e){
+    var t=e.txt, f={};
+    f.segredo   = R.segredo.test(t);
+    f.cego      = R.cego.test(t) || (t.length<200 && !f.segredo);
+    if (f.segredo || f.cego) { e.f=f; e.rotulo = f.segredo ? 'Segredo de justiça' : 'Ilegível no diário'; return; }
+    f.ganho     = R.procedente.test(t) || R.concessao.test(t) || R.acordo.test(t) || R.provGanho.test(t);
+    f.perdido   = !f.ganho && (R.improc.test(t) || R.indeferido.test(t) || R.provPerda.test(t) ||
+                               (R.extinto.test(t) && !R.acordo.test(t)));
+    f.arquivado = R.arquivado.test(t);
+    f.prazo     = R.ato.test(t) || R.ato2.test(t) || R.ato3.test(t);
+    f.dinheiro  = R.dinheiro.test(t);
+    f.audiencia = R.audiencia.test(t);
+    f.pericia   = R.pericia.test(t);
+    // data marcada só conta se for daqui para frente
+    if (f.audiencia || f.pericia) {
+      var base = dataBR(e.data) || new Date();
+      (t.match(/\d{2}\/\d{2}\/\d{4}/g)||[]).forEach(function(d){
+        var dt=dataBR(d);
+        if (dt && dt >= base && (!f.quando || dt < dataBR(f.quando))) f.quando=d;
+      });
+    }
+    var m=t.match(R.prazoN); if (m) f.dias=m[1];
+    e.f=f;
+    e.rotulo = f.ganho ? 'Ganho' : f.perdido ? 'Perda' : f.arquivado ? 'Arquivado'
+             : f.prazo ? 'Prazo correndo' : (f.quando ? (f.pericia?'Perícia marcada':'Audiência marcada')
+             : (f.dinheiro ? 'Pagamento' : 'Andamento'));
   }
 
   async function buscar(oab, uf){
-    var hoje = new Date(), ini = new Date(); ini.setDate(hoje.getDate() - 30);
-    var todos = [], pagina = 1;
-    while (pagina <= 6){
-      var url = API + '?numeroOab=' + encodeURIComponent(oab) + '&ufOab=' + encodeURIComponent(uf)
-              + '&dataDisponibilizacaoInicio=' + iso(ini) + '&dataDisponibilizacaoFim=' + iso(hoje)
-              + '&pagina=' + pagina + '&itensPorPagina=100';
-      var r = await fetch(url, { headers: { 'Accept':'application/json' } });
-      if (!r.ok) throw new Error('O diário respondeu ' + r.status);
-      var j = await r.json();
-      var itens = (j && j.items) || [];
-      todos = todos.concat(itens);
-      if (itens.length < 100) break;
+    var hoje=new Date(), ini=new Date(); ini.setDate(hoje.getDate()-30);
+    var todos=[], pagina=1;
+    while (pagina<=6){
+      var url=API+'?numeroOab='+encodeURIComponent(oab)+'&ufOab='+encodeURIComponent(uf)
+        +'&dataDisponibilizacaoInicio='+iso(ini)+'&dataDisponibilizacaoFim='+iso(hoje)
+        +'&pagina='+pagina+'&itensPorPagina=100';
+      var r=await fetch(url,{headers:{Accept:'application/json'}});
+      if(!r.ok) throw new Error('O diário respondeu '+r.status);
+      var j=await r.json(), itens=(j&&j.items)||[];
+      todos=todos.concat(itens);
+      if(itens.length<100) break;
       pagina++;
     }
     return todos;
   }
 
-  function render(brutas){
-    var vistos = {}, eventos = [];
+  function apurar(brutas){
+    var vistos={}, ev=[];
     brutas.forEach(function(it){
-      var txt = limpar(it.texto);
-      var k = it.numero_processo + '|' + it.data_disponibilizacao + '|' + hash(txt);
-      if (vistos[k]) return;
-      vistos[k] = 1;
-      eventos.push({
-        proc: it.numeroprocessocommascara || it.numero_processo,
-        trib: it.siglaTribunal, orgao: it.nomeOrgao || '',
-        data: it.datadisponibilizacao || it.data_disponibilizacao,
-        txt: txt, cls: classificar(txt),
-        prazo: (txt.match(RE.prazo) || [])[1] || null,
-        dinheiro: RE.dinheiro.test(txt)
-      });
+      var txt=limpar(it.texto);
+      var k=it.numero_processo+'|'+it.data_disponibilizacao+'|'+hash(txt);
+      if(vistos[k]) return; vistos[k]=1;
+      var e={ proc: it.numeroprocessocommascara||it.numero_processo, trib: it.siglaTribunal,
+              orgao: it.nomeOrgao||'', data: it.datadisponibilizacao||it.data_disponibilizacao, txt: txt };
+      marcar(e); ev.push(e);
     });
+    function por(fn){ return ev.filter(fn); }
+    function procs(lista){ var o={}; lista.forEach(function(e){o[e.proc]=1;}); return Object.keys(o).length; }
+    var g = {
+      ev: ev,
+      nProc: procs(ev),
+      ganhos:    por(function(e){return e.f.ganho;}),
+      perdas:    por(function(e){return e.f.perdido;}),
+      arquivados:por(function(e){return e.f.arquivado && !e.f.ganho;}),
+      prazos:    por(function(e){return e.f.prazo && !e.f.cego && !e.f.segredo;}),
+      agenda:    por(function(e){return e.f.quando;}),
+      dinheiro:  por(function(e){return e.f.dinheiro;}),
+      segredo:   por(function(e){return e.f.segredo;}),
+      cegos:     por(function(e){return e.f.cego;})
+    };
+    g.ilegiveis = procs(g.segredo.concat(g.cegos));
+    g.pctIlegivel = ev.length ? Math.round((g.segredo.length+g.cegos.length)/ev.length*100) : 0;
+    return g;
+  }
 
-    var proc = {}; eventos.forEach(function(e){ proc[e.proc] = 1; });
-    var nProc = Object.keys(proc).length;
-    var atos  = eventos.filter(function(e){ return e.cls.tipo === 'ato'; });
-    var cegos = eventos.filter(function(e){ return e.cls.tipo === 'cego'; });
-    var decs  = eventos.filter(function(e){ return e.cls.tipo === 'dec'; });
-    var agen  = eventos.filter(function(e){ return e.cls.tipo === 'age'; });
-    var grana = eventos.filter(function(e){ return e.dinheiro; });
+  function premissas(){
+    return { hon:num('hon',5000), triar:num('tTriar',10), lancar:num('tLancar',5),
+             docs:num('tDocs',20), prot:num('tProt',15), autos:num('tAutos',15) };
+  }
+  function contaTempo(g,p){
+    var a = g.ev.length*p.triar, b = g.ev.length*p.lancar,
+        c = g.prazos.length*p.docs, d = g.prazos.length*p.prot, e = g.ilegiveis*p.autos;
+    return { ler:a, lancar:b, docs:c, prot:d, autos:e, total:a+b+c+d+e };
+  }
 
-    var pctCego = eventos.length ? Math.round(cegos.length / eventos.length * 100) : 0;
-    var custo = eventos.length * (PRECO.triagem + PRECO.acomp);
+  function li(lista, lim){
+    return lista.slice(0,lim||6).map(function(e){
+      return '<div class="lp"><span class="pr">'+e.proc+'<span class="ds">'+e.data+' · '+e.trib
+        +(e.orgao?' · '+e.orgao:'')+(e.f.quando?' · <b>'+e.f.quando+'</b>':'')
+        +(e.f.dias?' · prazo de '+e.f.dias+' dias':'')+'</span></span></div>';
+    }).join('');
+  }
+
+  function pintar(){
+    if(!ultimo) return;
+    var g=ultimo.g, p=premissas(), T=contaTempo(g,p);
+    ultimo.p=p; ultimo.T=T;
+    ultimo.risco  = g.prazos.length*p.hon;
+    ultimo.escuro = g.ilegiveis*p.hon;
 
     document.getElementById('dgrid').innerHTML =
-      kpi(brutas.length, 'publicações no diário') +
-      kpi(eventos.length, 'eventos reais<br>(sem as repetições)') +
-      kpi(nProc, 'processos') +
-      kpi(atos.length, 'pedem providência', 'mau') +
-      kpi(decs.length, 'decisões e sentenças', 'av') +
-      kpi(cegos.length, 'sem teor no diário (' + pctCego + '%)', 'av');
-
-    var frases = [];
-    frases.push('<p>Em 30 dias saíram <b>' + brutas.length + ' publicações</b> para essa OAB. Deduplicadas — o diário repete a mesma decisão uma vez por destinatário — viram <b>' + eventos.length + ' eventos reais</b>, em <b>' + nProc + ' processos</b>.</p>');
-    if (atos.length) frases.push('<p><b>' + atos.length + '</b> ' + (atos.length === 1 ? 'pede' : 'pedem') + ' alguma providência: manifestação, emenda, cálculo, documento. Cada um desses tem prazo correndo.</p>');
-    if (cegos.length) frases.push('<p><b>' + cegos.length + ' chegaram sem o conteúdo</b> (' + pctCego + '% do total) — o tribunal publicou só o aviso e guardou o ato dentro do sistema. Ninguém consegue triar isso sem abrir o processo. É exatamente o que o Pulso faz.</p>');
-    if (grana.length) frases.push('<p>Há <b>' + grana.length + '</b> ' + (grana.length === 1 ? 'publicação que menciona' : 'publicações que mencionam') + ' RPV, precatório, alvará ou depósito. Pode haver dinheiro parado esperando saque.</p>');
-    if (agen.length) frases.push('<p><b>' + agen.length + '</b> ' + (agen.length === 1 ? 'envolve' : 'envolvem') + ' perícia, audiência ou pauta de julgamento — data que não pode passar em branco.</p>');
-    frases.push('<p>No Pulso, esse mês custaria <b>' + moeda(custo) + '</b> de triagem e acompanhamento, mais R$ 5 por protocolo. <em style="color:#7E8BA5">Estimativa pelo que o diário mostra; o prazo real só sai dos autos.</em></p>');
-    document.getElementById('leitura').innerHTML = frases.join('');
-
-    var destaque = atos.concat(decs).slice(0, 12);
-    document.getElementById('listaProc').innerHTML = destaque.length ? destaque.map(function(e){
-      var det = e.orgao ? e.trib + ' · ' + e.orgao : e.trib;
-      if (e.prazo) det += ' · prazo de ' + e.prazo + ' dias';
-      return '<div class="lp"><span class="pr">' + e.proc + '<span class="ds">' + e.data + ' · ' + det + '</span></span>'
-           + '<span class="tg ' + e.cls.tipo + '">' + e.cls.rotulo + '</span></div>';
-    }).join('') : '';
-
-    document.getElementById('diagRodape').innerHTML =
-      'Mostrando ' + destaque.length + ' de ' + eventos.length + ' eventos. '
-      + '<strong>Classificação automática por palavra-chave</strong> — serve para abrir a conversa, não para dar prazo. '
-      + 'A triagem de verdade abre os autos e lê a data que o tribunal gravou.';
-    res.style.display = 'block';
-
-    ultimo = { brutas:brutas.length, eventos:eventos, nProc:nProc, atos:atos, cegos:cegos,
-               decs:decs, agen:agen, grana:grana, pctCego:pctCego, custo:custo,
-               oab:document.getElementById('oab').value.replace(/\D/g,''),
-               uf:document.getElementById('uf').value };
-    pintarMesa();
-    montarRelatorio();
-  }
-
-  function num(id, padrao){
-    var v = (document.getElementById(id).value || '').replace(/[^0-9]/g,'');
-    return v ? Number(v) : padrao;
-  }
-  function horas(min){
-    var h = min/60;
-    return h < 10 ? h.toFixed(1).replace('.',',') : String(Math.round(h));
-  }
-
-  // Quanto fica na mesa: contagem real do diário x premissas que o usuário edita.
-  function pintarMesa(){
-    if(!ultimo) return;
-    var hon = num('hon', 5000), mpp = num('min', 10);
-    var procCego = {}; ultimo.cegos.forEach(function(e){ procCego[e.proc]=1; });
-    var nCego = Object.keys(procCego).length;
-    var minutos = ultimo.eventos.length * mpp;
-    ultimo.hon = hon; ultimo.mpp = mpp; ultimo.nCego = nCego; ultimo.minutos = minutos;
-    ultimo.risco = ultimo.atos.length * hon;
-    ultimo.escuro = nCego * hon;
+        '<div class="dk"><b>'+ultimo.brutas+'</b><i>publicações no diário</i></div>'
+      + '<div class="dk"><b>'+g.ev.length+'</b><i>eventos reais<br>(sem repetições)</i></div>'
+      + '<div class="dk"><b>'+g.nProc+'</b><i>processos</i></div>'
+      + '<div class="dk bom"><b>'+g.ganhos.length+'</b><i>ganhos</i></div>'
+      + '<div class="dk mau"><b>'+(g.perdas.length+g.arquivados.length)+'</b><i>perdas e arquivamentos</i></div>'
+      + '<div class="dk mau"><b>'+g.prazos.length+'</b><i>com prazo correndo</i></div>'
+      + '<div class="dk av"><b>'+g.agenda.length+'</b><i>audiências e perícias</i></div>'
+      + '<div class="dk av"><b>'+g.ilegiveis+'</b><i>processos ilegíveis ('+g.pctIlegivel+'%)</i></div>';
 
     document.getElementById('mesa').innerHTML =
-      '<div class="mz"><b>' + moeda(ultimo.risco) + '</b><i>exposto neste mês</i>'
-        + '<em>' + ultimo.atos.length + ' processos dependem de um ato com prazo correndo</em></div>'
-      + '<div class="mz"><b>' + moeda(ultimo.escuro) + '</b><i>sem informação</i>'
-        + '<em>' + nCego + ' processos cuja publicação veio sem teor: não dá para saber o que o juiz mandou sem abrir os autos</em></div>'
-      + '<div class="mz neutro"><b>' + horas(minutos) + 'h</b><i>de triagem no mês</i>'
-        + '<em>' + ultimo.eventos.length + ' publicações x ' + mpp + ' min. Equivale a ' + (minutos/480).toFixed(1).replace('.',',') + ' dias úteis de alguém</em></div>'
-      + '<div class="mz ok"><b>' + ultimo.grana.length + '</b><i>com pagamento mencionado</i>'
-        + '<em>RPV, precatório, alvará ou depósito. Pode haver dinheiro já disponível</em></div>';
+        '<div class="mz"><b>'+moeda(ultimo.risco)+'</b><i>exposto agora</i><em>'
+          +g.prazos.length+' processos dependem de um ato com prazo correndo</em></div>'
+      + '<div class="mz"><b>'+moeda(ultimo.escuro)+'</b><i>fora do seu radar</i><em>'
+          +g.ilegiveis+' processos que ninguém consegue ler sem entrar no sistema com certificado</em></div>'
+      + '<div class="mz neutro"><b>'+tempo(T.total)+'</b><i>de trabalho no mês</i><em>'
+          +(T.total/480).toFixed(1).replace('.',',')+' dias úteis só para manter a carteira andando</em></div>'
+      + '<div class="mz ok"><b>'+g.dinheiro.length+'</b><i>com pagamento mencionado</i><em>'
+          +'RPV, precatório, alvará ou depósito a conferir</em></div>';
+
+    var frases=[];
+    frases.push('<p>Em 30 dias saíram <b>'+ultimo.brutas+' publicações</b> nessa OAB. Sem as repetições do diário, são <b>'
+      +g.ev.length+' eventos</b> em <b>'+g.nProc+' processos</b>.</p>');
+    if(g.ganhos.length)  frases.push('<p><b>'+g.ganhos.length+' decisões favoráveis</b> — procedência, benefício concedido, tutela deferida ou acordo homologado.</p>');
+    if(g.perdas.length||g.arquivados.length) frases.push('<p><b>'+(g.perdas.length+g.arquivados.length)+' desfechos negativos</b>: '
+      +g.perdas.length+' perdas e '+g.arquivados.length+' arquivamentos.</p>');
+    if(g.prazos.length)  frases.push('<p><b>'+g.prazos.length+' com prazo correndo</b> agora.</p>');
+    if(g.agenda.length)  frases.push('<p><b>'+g.agenda.length+' audiências ou perícias com data</b> — a mais próxima em '+g.agenda[0].f.quando+'.</p>');
+    if(g.ilegiveis)      frases.push('<p><b>'+g.ilegiveis+' processos ilegíveis no diário</b> ('+g.segredo.length
+      +' em segredo de justiça). O tribunal publica o aviso e guarda o documento dentro do sistema: <b>só se lê entrando com certificado digital</b>.</p>');
+    document.getElementById('leitura').innerHTML = frases.join('');
+
+    document.getElementById('listaProc').innerHTML = li(g.prazos.concat(g.agenda), 10);
+    document.getElementById('diagRodape').innerHTML =
+      'Classificação automática pelo texto da publicação — serve para dimensionar, não para fixar prazo. '
+      +'A triagem de verdade abre os autos e lê a data final que o tribunal gravou.';
+    res.style.display='block';
+    relatorio();
   }
 
-  // Relatório do cliente: só aparece na impressão, sem nada do material interno.
-  function montarRelatorio(){
+  function bloco(titulo, lista, cor, vazio){
+    if(!lista.length) return vazio ? '<h2>'+titulo+'</h2><p class="nota">'+vazio+'</p>' : '';
+    return '<h2>'+titulo+'</h2><table><tr><th>Processo</th><th>Publicado</th><th>Órgão</th><th>O quê</th></tr>'
+      + lista.slice(0,20).map(function(e){
+          return '<tr><td>'+e.proc+'</td><td>'+e.data+'</td><td>'+e.trib+(e.orgao?' · '+e.orgao:'')+'</td><td>'
+            + e.rotulo + (e.f.quando?' em <b>'+e.f.quando+'</b>':'') + (e.f.dias?' · prazo de '+e.f.dias+' dias':'') +'</td></tr>';
+        }).join('') + '</table>';
+  }
+
+  function relatorio(){
     if(!ultimo) return;
-    var hoje = new Date().toLocaleDateString('pt-BR');
-    var linhas = ultimo.atos.concat(ultimo.decs).slice(0, 25).map(function(e){
-      return '<tr><td>' + e.proc + '</td><td>' + e.data + '</td><td>' + e.trib
-           + (e.orgao ? ' · ' + e.orgao : '') + '</td><td>' + e.cls.rotulo
-           + (e.prazo ? ' · prazo de ' + e.prazo + ' dias' : '') + '</td></tr>';
-    }).join('');
+    var g=ultimo.g, p=ultimo.p, T=ultimo.T, hoje=new Date().toLocaleDateString('pt-BR');
+    var neg = g.perdas.length + g.arquivados.length;
 
     document.getElementById('relatorio').innerHTML =
-      '<span class="marca">Facilita Jurídico &middot; Pulso</span>'
+      '<span class="marca">Facilita Jurídico · Pulso</span>'
     + '<h1>Diagnóstico do escritório</h1>'
-    + '<p class="sub">OAB ' + ultimo.oab + '/' + ultimo.uf + ' &middot; últimos 30 dias &middot; emitido em ' + hoje + '</p>'
+    + '<p class="sub">OAB '+ultimo.oab+'/'+ultimo.uf+' · últimos 30 dias · emitido em '+hoje+'</p>'
 
-    + '<h2>O que aconteceu nos seus processos</h2>'
+    + '<h2>O retrato do mês</h2>'
     + '<div class="kpis">'
-      + '<div><b>' + ultimo.brutas + '</b><span>publicações no diário</span></div>'
-      + '<div><b>' + ultimo.eventos.length + '</b><span>eventos reais</span></div>'
-      + '<div><b>' + ultimo.nProc + '</b><span>processos</span></div>'
-      + '<div><b>' + ultimo.atos.length + '</b><span>pedem providência</span></div>'
-      + '<div><b>' + ultimo.decs.length + '</b><span>decisões</span></div>'
-      + '<div><b>' + ultimo.cegos.length + '</b><span>sem teor (' + ultimo.pctCego + '%)</span></div>'
+      + '<div><b>'+ultimo.brutas+'</b><span>publicações</span></div>'
+      + '<div><b>'+g.nProc+'</b><span>processos</span></div>'
+      + '<div><b>'+g.ganhos.length+'</b><span>ganhos</span></div>'
+      + '<div><b>'+neg+'</b><span>perdas e arquivamentos</span></div>'
+      + '<div><b>'+g.prazos.length+'</b><span>com prazo correndo</span></div>'
+      + '<div><b>'+g.agenda.length+'</b><span>audiências e perícias</span></div>'
+      + '<div><b>'+g.ilegiveis+'</b><span>ilegíveis no diário</span></div>'
     + '</div>'
 
-    + '<h2>O que isso representa</h2>'
     + '<div class="destaque">'
-      + '<p><b>' + moeda(ultimo.risco) + ' exposto neste mês.</b> São ' + ultimo.atos.length
-      + ' processos que dependem de um ato com prazo correndo. Não é perda certa — é o que está em jogo se algum deles passar.</p>'
-      + '<p><b>' + moeda(ultimo.escuro) + ' sem informação.</b> Em ' + ultimo.nCego
-      + ' processos a publicação chegou sem o conteúdo: o tribunal avisou que algo aconteceu e guardou o ato dentro do sistema. Sem abrir os autos, não há como saber o que foi determinado.</p>'
-      + (ultimo.grana.length ? '<p><b>' + ultimo.grana.length + ' processos mencionam pagamento</b> — RPV, precatório, alvará ou depósito. Vale conferir se há valor disponível para levantamento.</p>' : '')
+      + '<p><b>'+moeda(ultimo.risco)+' dependem de um ato com prazo correndo</b> e <b>'+moeda(ultimo.escuro)
+      + '</b> estão em processos que o senhor não consegue acompanhar pelo diário. '
+      + 'Manter essa carteira em dia custa <b>'+tempo(T.total)+' por mês</b> — '
+      + (T.total/480).toFixed(1).replace('.',',')+' dias úteis de alguém dedicado só a isso.</p>'
     + '</div>'
-    + '<p><b>Tempo:</b> ler e decidir o que fazer com ' + ultimo.eventos.length + ' publicações leva cerca de <b>'
-      + horas(ultimo.minutos) + ' horas por mês</b>, ou ' + (ultimo.minutos/480).toFixed(1).replace('.',',')
-      + ' dias úteis de uma pessoa dedicada só a isso.</p>'
 
-    + '<h2>Os processos que pedem uma providência</h2>'
-    + (linhas ? '<table><tr><th>Processo</th><th>Publicado</th><th>Órgão</th><th>O que é</th></tr>' + linhas + '</table>'
-              : '<p>Nenhum identificado no período.</p>')
+    + bloco('O que o senhor ganhou', g.ganhos, 'ok', 'Nenhuma decisão favorável no período.')
+    + (g.ganhos.length ? '<p class="nota">Decisão favorável publicada é prazo que começa a correr para a outra parte, benefício a implantar e, muitas vezes, honorário a executar. Cada uma dessas precisa de um ato seu para virar dinheiro.</p>' : '')
+
+    + bloco('O que o senhor perdeu ou foi arquivado', g.perdas.concat(g.arquivados), 'mau', 'Nenhuma perda no período.')
+    + (neg ? '<p class="nota">Vale conferir, um a um, se a perda foi de mérito ou administrativa — emenda não cumprida, documento não juntado, procuração irregular. Arquivamento por inércia se desarquiva com simples petição.</p>' : '')
+
+    + bloco('O que está com prazo correndo agora', g.prazos, 'mau', 'Nenhum prazo identificado no período.')
+
+    + bloco('Audiências e perícias com data', g.agenda, 'av',
+        'Nenhuma data identificada no período — o que não significa que não exista: pauta e perícia nem sempre saem no diário com data.')
+
+    + (g.dinheiro.length ? bloco('Processos que mencionam pagamento', g.dinheiro, 'ok', '')
+        + '<p class="nota">RPV, precatório, alvará ou depósito citados na publicação. Vale conferir se há valor disponível para levantamento.</p>' : '')
+
+    + '<h2>O que o senhor não consegue ler</h2>'
+    + '<p>São <b>'+g.ilegiveis+' processos</b> ('+g.pctIlegivel+'% dos eventos do mês). Em <b>'+g.segredo.length
+    + '</b> deles o processo corre em <b>segredo de justiça</b>; nos demais, o tribunal publicou apenas o aviso e manteve o documento dentro do sistema.</p>'
+    + '<p>Nos dois casos o conteúdo existe e está disponível — <b>mas só para quem entra no sistema do tribunal com certificado digital</b>, '
+    + 'abre o processo e lê o que foi determinado. Nenhum serviço de monitoramento de publicações faz isso, porque o diário simplesmente não traz o texto.</p>'
+
+    + '<h2>Quanto tempo isso consome</h2>'
+    + '<table><tr><th>Atividade</th><th>Volume</th><th>Minutos cada</th><th>Total</th></tr>'
+      + '<tr><td>Ler e triar as publicações</td><td>'+g.ev.length+'</td><td>'+p.triar+'</td><td>'+tempo(T.ler)+'</td></tr>'
+      + '<tr><td>Lançar o andamento nos sistemas</td><td>'+g.ev.length+'</td><td>'+p.lancar+'</td><td>'+tempo(T.lancar)+'</td></tr>'
+      + '<tr><td>Organizar os documentos do ato</td><td>'+g.prazos.length+'</td><td>'+p.docs+'</td><td>'+tempo(T.docs)+'</td></tr>'
+      + '<tr><td>Protocolar ou distribuir</td><td>'+g.prazos.length+'</td><td>'+p.prot+'</td><td>'+tempo(T.prot)+'</td></tr>'
+      + '<tr><td>Abrir os autos dos processos ilegíveis</td><td>'+g.ilegiveis+'</td><td>'+p.autos+'</td><td>'+tempo(T.autos)+'</td></tr>'
+      + '<tr><td><b>Total no mês</b></td><td></td><td></td><td><b>'+tempo(T.total)+'</b></td></tr>'
+    + '</table>'
+    + '<p class="nota">Não entra aqui o tempo de escrever a peça, falar com o cliente nem ir à audiência. É só o trabalho de manter a carteira organizada e em dia.</p>'
 
     + '<h2>Como lemos isso</h2>'
-    + '<p class="nota">Consultamos o Diário de Justiça Eletrônico Nacional do CNJ, que é público, pelo seu número de OAB, no período de 30 dias. '
-    + 'O diário repete a mesma decisão uma vez por destinatário, então agrupamos as repetições: por isso ' + ultimo.brutas
-    + ' publicações viram ' + ultimo.eventos.length + ' eventos reais.</p>'
-    + '<p class="nota">A classificação é automática, por leitura do texto da publicação. <b>Serve para dimensionar, não para fixar prazo.</b> '
-    + 'O prazo que vale é a data final que o próprio tribunal grava no processo, e ela só se lê abrindo os autos.</p>'
-    + '<p class="nota">Os valores usam a premissa de <b>' + moeda(ultimo.hon) + ' de honorário médio por processo</b> e '
-    + '<b>' + ultimo.mpp + ' minutos por publicação</b>, informadas no momento da consulta. Troque por números do seu escritório e a conta muda junto.</p>'
+    + '<p class="nota">Consultamos o Diário de Justiça Eletrônico Nacional do CNJ, que é público, pelo número da OAB, nos últimos 30 dias. '
+    + 'O diário repete a mesma decisão uma vez por destinatário: por isso '+ultimo.brutas+' publicações viram '+g.ev.length+' eventos reais.</p>'
+    + '<p class="nota">A classificação é automática, pela leitura do texto da publicação, e pode errar em casos de redação incomum. '
+    + '<b>Serve para dimensionar, não para fixar prazo.</b> O prazo que vale é a data final que o próprio tribunal grava no processo, e ela só se lê abrindo os autos.</p>'
+    + '<p class="nota">Os valores usam a premissa de <b>'+moeda(p.hon)+' de honorário médio por processo</b> e os tempos informados na consulta '
+    + '('+p.triar+', '+p.lancar+', '+p.docs+', '+p.prot+' e '+p.autos+' minutos). Troque pelos números do seu escritório e a conta muda junto.</p>'
 
-    + '<div class="rodape">Facilita Jurídico &middot; Pulso — acompanhamento processual. '
-    + 'Documento gerado a partir de dados públicos do DJEN/CNJ em ' + hoje + '.</div>';
+    + '<div class="rodape">Facilita Jurídico · Pulso — acompanhamento processual. '
+    + 'Gerado a partir de dados públicos do DJEN/CNJ em '+hoje+'.</div>';
   }
 
-  function kpi(n, rot, cls){
-    return '<div class="dk' + (cls ? ' ' + cls : '') + '"><b>' + n + '</b><i>' + rot + '</i></div>';
-  }
-
-  btn.addEventListener('click', async function(){
-    var oab = (document.getElementById('oab').value || '').replace(/\D/g, '');
-    var uf  = document.getElementById('uf').value;
-    if (!oab){ msg.className = 'diag-msg erro'; msg.textContent = 'Digite o número da OAB.'; return; }
-    btn.disabled = true;
-    msg.className = 'diag-msg';
-    msg.textContent = 'Consultando o diário…';
-    res.style.display = 'none';
-    try {
-      var brutas = await buscar(oab, uf);
-      if (!brutas.length){
-        msg.textContent = 'Nenhuma publicação para a OAB ' + oab + '/' + uf + ' nos últimos 30 dias. Confira o número e a UF — e lembre que carteira pequena ou mês parado realmente não publica.';
+  async function rodar(){
+    var oab=(campoOab.value||'').replace(/\D/g,''), uf=document.getElementById('uf').value;
+    if(!oab){ msg.className='diag-msg erro'; msg.textContent='Digite o número da OAB.'; return; }
+    btn.disabled=true; msg.className='diag-msg'; msg.textContent='Consultando o diário…'; res.style.display='none';
+    try{
+      var brutas=await buscar(oab,uf);
+      if(!brutas.length){
+        msg.textContent='Nenhuma publicação para a OAB '+oab+'/'+uf+' nos últimos 30 dias. Confira o número e a UF.';
       } else {
-        msg.textContent = 'Diagnóstico da OAB ' + oab + '/' + uf + ', últimos 30 dias.';
-        render(brutas);
+        ultimo={ brutas:brutas.length, g:apurar(brutas), oab:oab, uf:uf };
+        msg.textContent='Diagnóstico da OAB '+oab+'/'+uf+', últimos 30 dias.';
+        pintar();
       }
-    } catch (e) {
-      msg.className = 'diag-msg erro';
-      msg.textContent = 'Não consegui consultar agora: ' + e.message + '. Tente de novo em instantes.';
+    }catch(e){
+      msg.className='diag-msg erro';
+      msg.textContent='Não consegui consultar agora: '+e.message+'. Tente de novo em instantes.';
     }
-    btn.disabled = false;
-  });
+    btn.disabled=false;
+  }
 
-  document.getElementById('oab').addEventListener('keydown', function(ev){
-    if (ev.key === 'Enter') btn.click();
-  });
-  ['hon','min'].forEach(function(id){
-    document.getElementById(id).addEventListener('input', function(){ pintarMesa(); montarRelatorio(); });
+  btn.addEventListener('click', rodar);
+  campoOab.addEventListener('keydown', function(ev){ if(ev.key==='Enter') rodar(); });
+  ['hon','tTriar','tLancar','tDocs','tProt','tAutos'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', pintar);
   });
   document.getElementById('btnPdf').addEventListener('click', function(){ window.print(); });
 
