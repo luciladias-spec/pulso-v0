@@ -148,15 +148,27 @@ const HTML = `
           <option>SE</option><option>TO</option>
         </select>
       </div>
+      <div class="campo">
+        <label for="hon">Honorário médio por processo</label>
+        <input type="text" id="hon" inputmode="numeric" value="5.000" autocomplete="off">
+      </div>
+      <div class="campo">
+        <label for="min">Minutos por publicação</label>
+        <input type="text" id="min" inputmode="numeric" value="10" autocomplete="off">
+      </div>
       <button class="btn" id="btnDiag">Rodar diagnóstico</button>
     </div>
     <p class="diag-msg" id="diagMsg">Fonte: DJEN/CNJ. A consulta sai do seu navegador direto para o diário — nada passa por nós e nada fica gravado.</p>
 
     <div id="diagRes">
       <div class="dgrid" id="dgrid"></div>
+      <div class="mesa" id="mesa"></div>
       <div class="leitura" id="leitura"></div>
       <div class="lista-proc" id="listaProc"></div>
       <p class="calc-nota" id="diagRodape"></p>
+      <div class="acoes-diag">
+        <button class="btn-sec" id="btnPdf">Baixar relatório em PDF</button>
+      </div>
     </div>
   </div>
 
@@ -392,6 +404,8 @@ const HTML = `
   Material interno da Facilita Jurídico · outubro de 2026 · As proporções da calculadora vêm do primeiro escritório atendido, medidas sobre 30 dias de publicações reais. O diagnóstico consulta o DJEN/CNJ, que é público, direto do navegador. Não cite o nome do cliente fora de casa.
 </footer>
 
+<div id="relatorio"></div>
+
 </div>
 `;
 
@@ -426,6 +440,7 @@ export default function Page() {
 
   /* ---------------- diagnóstico por OAB ---------------- */
   var API = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
+  var ultimo = null;
   var btn = document.getElementById('btnDiag');
   var msg = document.getElementById('diagMsg');
   var res = document.getElementById('diagRes');
@@ -533,6 +548,98 @@ export default function Page() {
       + '<strong>Classificação automática por palavra-chave</strong> — serve para abrir a conversa, não para dar prazo. '
       + 'A triagem de verdade abre os autos e lê a data que o tribunal gravou.';
     res.style.display = 'block';
+
+    ultimo = { brutas:brutas.length, eventos:eventos, nProc:nProc, atos:atos, cegos:cegos,
+               decs:decs, agen:agen, grana:grana, pctCego:pctCego, custo:custo,
+               oab:document.getElementById('oab').value.replace(/\D/g,''),
+               uf:document.getElementById('uf').value };
+    pintarMesa();
+    montarRelatorio();
+  }
+
+  function num(id, padrao){
+    var v = (document.getElementById(id).value || '').replace(/[^0-9]/g,'');
+    return v ? Number(v) : padrao;
+  }
+  function horas(min){
+    var h = min/60;
+    return h < 10 ? h.toFixed(1).replace('.',',') : String(Math.round(h));
+  }
+
+  // Quanto fica na mesa: contagem real do diário x premissas que o usuário edita.
+  function pintarMesa(){
+    if(!ultimo) return;
+    var hon = num('hon', 5000), mpp = num('min', 10);
+    var procCego = {}; ultimo.cegos.forEach(function(e){ procCego[e.proc]=1; });
+    var nCego = Object.keys(procCego).length;
+    var minutos = ultimo.eventos.length * mpp;
+    ultimo.hon = hon; ultimo.mpp = mpp; ultimo.nCego = nCego; ultimo.minutos = minutos;
+    ultimo.risco = ultimo.atos.length * hon;
+    ultimo.escuro = nCego * hon;
+
+    document.getElementById('mesa').innerHTML =
+      '<div class="mz"><b>' + moeda(ultimo.risco) + '</b><i>exposto neste mês</i>'
+        + '<em>' + ultimo.atos.length + ' processos dependem de um ato com prazo correndo</em></div>'
+      + '<div class="mz"><b>' + moeda(ultimo.escuro) + '</b><i>sem informação</i>'
+        + '<em>' + nCego + ' processos cuja publicação veio sem teor: não dá para saber o que o juiz mandou sem abrir os autos</em></div>'
+      + '<div class="mz neutro"><b>' + horas(minutos) + 'h</b><i>de triagem no mês</i>'
+        + '<em>' + ultimo.eventos.length + ' publicações x ' + mpp + ' min. Equivale a ' + (minutos/480).toFixed(1).replace('.',',') + ' dias úteis de alguém</em></div>'
+      + '<div class="mz ok"><b>' + ultimo.grana.length + '</b><i>com pagamento mencionado</i>'
+        + '<em>RPV, precatório, alvará ou depósito. Pode haver dinheiro já disponível</em></div>';
+  }
+
+  // Relatório do cliente: só aparece na impressão, sem nada do material interno.
+  function montarRelatorio(){
+    if(!ultimo) return;
+    var hoje = new Date().toLocaleDateString('pt-BR');
+    var linhas = ultimo.atos.concat(ultimo.decs).slice(0, 25).map(function(e){
+      return '<tr><td>' + e.proc + '</td><td>' + e.data + '</td><td>' + e.trib
+           + (e.orgao ? ' · ' + e.orgao : '') + '</td><td>' + e.cls.rotulo
+           + (e.prazo ? ' · prazo de ' + e.prazo + ' dias' : '') + '</td></tr>';
+    }).join('');
+
+    document.getElementById('relatorio').innerHTML =
+      '<span class="marca">Facilita Jurídico &middot; Pulso</span>'
+    + '<h1>Diagnóstico do escritório</h1>'
+    + '<p class="sub">OAB ' + ultimo.oab + '/' + ultimo.uf + ' &middot; últimos 30 dias &middot; emitido em ' + hoje + '</p>'
+
+    + '<h2>O que aconteceu nos seus processos</h2>'
+    + '<div class="kpis">'
+      + '<div><b>' + ultimo.brutas + '</b><span>publicações no diário</span></div>'
+      + '<div><b>' + ultimo.eventos.length + '</b><span>eventos reais</span></div>'
+      + '<div><b>' + ultimo.nProc + '</b><span>processos</span></div>'
+      + '<div><b>' + ultimo.atos.length + '</b><span>pedem providência</span></div>'
+      + '<div><b>' + ultimo.decs.length + '</b><span>decisões</span></div>'
+      + '<div><b>' + ultimo.cegos.length + '</b><span>sem teor (' + ultimo.pctCego + '%)</span></div>'
+    + '</div>'
+
+    + '<h2>O que isso representa</h2>'
+    + '<div class="destaque">'
+      + '<p><b>' + moeda(ultimo.risco) + ' exposto neste mês.</b> São ' + ultimo.atos.length
+      + ' processos que dependem de um ato com prazo correndo. Não é perda certa — é o que está em jogo se algum deles passar.</p>'
+      + '<p><b>' + moeda(ultimo.escuro) + ' sem informação.</b> Em ' + ultimo.nCego
+      + ' processos a publicação chegou sem o conteúdo: o tribunal avisou que algo aconteceu e guardou o ato dentro do sistema. Sem abrir os autos, não há como saber o que foi determinado.</p>'
+      + (ultimo.grana.length ? '<p><b>' + ultimo.grana.length + ' processos mencionam pagamento</b> — RPV, precatório, alvará ou depósito. Vale conferir se há valor disponível para levantamento.</p>' : '')
+    + '</div>'
+    + '<p><b>Tempo:</b> ler e decidir o que fazer com ' + ultimo.eventos.length + ' publicações leva cerca de <b>'
+      + horas(ultimo.minutos) + ' horas por mês</b>, ou ' + (ultimo.minutos/480).toFixed(1).replace('.',',')
+      + ' dias úteis de uma pessoa dedicada só a isso.</p>'
+
+    + '<h2>Os processos que pedem uma providência</h2>'
+    + (linhas ? '<table><tr><th>Processo</th><th>Publicado</th><th>Órgão</th><th>O que é</th></tr>' + linhas + '</table>'
+              : '<p>Nenhum identificado no período.</p>')
+
+    + '<h2>Como lemos isso</h2>'
+    + '<p class="nota">Consultamos o Diário de Justiça Eletrônico Nacional do CNJ, que é público, pelo seu número de OAB, no período de 30 dias. '
+    + 'O diário repete a mesma decisão uma vez por destinatário, então agrupamos as repetições: por isso ' + ultimo.brutas
+    + ' publicações viram ' + ultimo.eventos.length + ' eventos reais.</p>'
+    + '<p class="nota">A classificação é automática, por leitura do texto da publicação. <b>Serve para dimensionar, não para fixar prazo.</b> '
+    + 'O prazo que vale é a data final que o próprio tribunal grava no processo, e ela só se lê abrindo os autos.</p>'
+    + '<p class="nota">Os valores usam a premissa de <b>' + moeda(ultimo.hon) + ' de honorário médio por processo</b> e '
+    + '<b>' + ultimo.mpp + ' minutos por publicação</b>, informadas no momento da consulta. Troque por números do seu escritório e a conta muda junto.</p>'
+
+    + '<div class="rodape">Facilita Jurídico &middot; Pulso — acompanhamento processual. '
+    + 'Documento gerado a partir de dados públicos do DJEN/CNJ em ' + hoje + '.</div>';
   }
 
   function kpi(n, rot, cls){
@@ -565,6 +672,10 @@ export default function Page() {
   document.getElementById('oab').addEventListener('keydown', function(ev){
     if (ev.key === 'Enter') btn.click();
   });
+  ['hon','min'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', function(){ pintarMesa(); montarRelatorio(); });
+  });
+  document.getElementById('btnPdf').addEventListener('click', function(){ window.print(); });
 
   }, []);
 

@@ -202,6 +202,45 @@ tbody tr.destaque td{background:var(--azul-soft)}
 .script p:last-child{margin-bottom:0}
 .script .acao{font-family:Inter,sans-serif;font-size:13.5px;color:var(--ink-3);font-style:italic;line-height:1.5}
 
+/* ---- o que está na mesa ---- */
+.mesa{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:#223052;border:1px solid #223052;border-radius:4px;overflow:hidden;margin:0 0 20px}
+.mz{background:#121C3A;padding:18px 16px}
+.mz b{display:block;font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:1.65rem;line-height:1.05;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:#F08C7E}
+.mz.ok b{color:#5FC9A4}
+.mz.neutro b{color:#4D9BFF}
+.mz i{display:block;font-style:normal;margin-top:8px;font-size:11.5px;line-height:1.4;color:#9FB0CC}
+.mz em{display:block;font-style:normal;margin-top:6px;font-size:10.5px;line-height:1.4;color:#7E8BA5}
+.acoes-diag{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 0}
+.btn-sec{font-family:Inter,sans-serif;font-size:13.5px;font-weight:700;background:transparent;color:#4D9BFF;border:1px solid #2E3D63;border-radius:3px;padding:11px 18px;cursor:pointer}
+.btn-sec:hover{border-color:#4D9BFF}
+
+/* ---- relatório para o cliente (só na impressão) ---- */
+#relatorio{display:none}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff;color:#111;padding:0;font-size:10.5pt;line-height:1.5}
+  body::before{display:none}
+  .wrap{max-width:none}
+  .wrap > *{display:none !important}
+  .wrap > #relatorio{display:block !important}
+  #relatorio h1{font-family:Lexend,sans-serif;font-size:21pt;letter-spacing:-.02em;margin:0 0 2mm;color:#0C1733}
+  #relatorio h2{font-family:Lexend,sans-serif;font-size:12.5pt;margin:7mm 0 2mm;color:#006EE9;border-bottom:1px solid #D9E2EF;padding-bottom:1.5mm}
+  #relatorio .marca{font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:#006EE9;font-weight:700}
+  #relatorio .sub{color:#44506B;margin:0 0 5mm;font-size:10pt}
+  #relatorio .kpis{display:flex;flex-wrap:wrap;gap:4mm;margin:0 0 4mm}
+  #relatorio .kpis div{border:1px solid #D9E2EF;border-radius:2mm;padding:3mm 4mm;min-width:30mm}
+  #relatorio .kpis b{display:block;font-family:Lexend,sans-serif;font-size:15pt;color:#0C1733}
+  #relatorio .kpis span{font-size:8pt;color:#44506B}
+  #relatorio table{width:100%;border-collapse:collapse;font-size:9pt;margin:0 0 4mm}
+  #relatorio th{text-align:left;background:#E8EEF7;padding:2mm 3mm;font-size:8pt;text-transform:uppercase;letter-spacing:.08em;color:#44506B}
+  #relatorio td{padding:2mm 3mm;border-bottom:1px solid #E8EEF7;vertical-align:top}
+  #relatorio .destaque{background:#FBE4E1;border-left:3px solid #B3261E;padding:3mm 4mm;margin:0 0 4mm}
+  #relatorio .destaque b{color:#B3261E}
+  #relatorio .nota{font-size:8.5pt;color:#7A869E;line-height:1.45}
+  #relatorio .rodape{margin-top:8mm;padding-top:3mm;border-top:1px solid #D9E2EF;font-size:8.5pt;color:#7A869E}
+  #relatorio tr{break-inside:avoid}
+}
+
 footer{margin-top:76px;padding-top:26px;border-top:2px solid var(--ink);font-size:12.5px;color:var(--ink-3);line-height:1.7}
 
 @media (max-width:720px){
