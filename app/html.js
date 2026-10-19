@@ -42,32 +42,9 @@ export const HTML = `
   <p>Na ligação, o encadeamento vale mais do que qualquer lista de funcionalidade. Se ele não souber dizer quantos processos tem, <strong>não corrija e não julgue</strong> — rode o diagnóstico da OAB na frente dele e deixe o número aparecer sozinho.</p>
 </section>
 
-<section class="col">
-  <h2>A frase que abre a conversa</h2>
-  <p class="lede"><strong>Depois que o cliente assina a procuração, a Facilita faz o resto.</strong> Pegamos os documentos onde o advogado já os deixa, cadastramos, escrevemos a peça, organizamos tudo no formato do tribunal, distribuímos ou protocolamos, acompanhamos as publicações todos os dias e damos qualquer andamento que o processo pedir — guia, RPV, manifestação, recurso.</p>
-  <p>O advogado entra em dois momentos: para conferir a peça e para autorizar o protocolo. Dois cliques. O resto do dia dele volta a ser dele.</p>
-</section>
-
 <section>
-  <div class="col"><h2>O que a Facilita faz</h2>
-  <p class="lede">Esta é a lista que vocês devem decorar. É o produto inteiro, na ordem em que acontece.</p></div>
-
-  <div class="esteira">
-    <div class="passo"><span class="n">1</span><div><b>Capta os documentos</b><span>Pegamos o que ele colheu do cliente, de onde ele já deixa — pasta no Drive, OneDrive ou o WhatsApp da Facilita. Ele não organiza nada.</span></div></div>
-    <div class="passo"><span class="n">2</span><div><b>Cadastra na plataforma</b><span>A solicitação é aberta por nós. Ele não preenche formulário.</span></div></div>
-    <div class="passo"><span class="n">3</span><div><b>Escreve a peça</b><span>Inicial, contestação, manifestação, recurso, parecer, cálculo. A mesma esteira que ele já conhece.</span></div></div>
-    <div class="passo"><span class="n">4</span><div><b>Organiza os documentos</b><span>Na ordem e no formato que aquele tribunal exige — separados, nomeados e dentro do limite de tamanho dele.</span></div></div>
-    <div class="passo"><span class="n">5</span><div><b>Verifica pendência e encaminha</b><span>Se falta documento para instruir o caso, dizemos exatamente qual, em qual processo e como resolver — e cobramos até chegar.</span></div></div>
-    <div class="passo"><span class="n">6</span><div><b>Distribui ou protocola</b><span>No nome dele, com o certificado dele, depois da autorização dele. Volta com número e comprovante.</span></div></div>
-    <div class="passo"><span class="n">7</span><div><b>Acompanha as publicações</b><span>Todo dia. Lemos, dizemos o que o juiz mandou fazer e até quando — com o prazo lido de dentro do processo, nunca calculado.</span></div></div>
-    <div class="passo"><span class="n">8</span><div><b>Dá qualquer andamento</b><span>Providencia a guia, cadastra o RPV, cumpre a diligência, peticiona o que o processo pedir. Não para na peça.</span></div></div>
-    <div class="passo"><span class="n">9</span><div><b>Avisa e relata</b><span>Audiência e perícia no WhatsApp do escritório. Relatório no fim do dia com tudo o que andou e o que vence a seguir.</span></div></div>
-  </div>
-</section>
-
-<section>
-  <div class="col"><h2>A linha</h2>
-  <p class="lede">Desenhe isto na frente dele. De um lado, o que só ele pode fazer. Do outro, tudo o que hoje come o dia dele sem precisar.</p></div>
+  <div class="col"><h2>O que passa a ser nosso</h2>
+  <p class="lede">Desenhe esta linha na frente dele. De um lado, o que só ele pode fazer. Do outro, tudo o que hoje come o dia dele sem precisar — e que a Facilita assume por inteiro, 24 horas por dia, 7 dias por semana.</p></div>
 
   <div class="linha">
     <div class="lado frente">
@@ -103,22 +80,18 @@ export const HTML = `
 
 <section class="col">
   <h2>A âncora: ele não quer folha</h2>
-  <p class="lede">Este é o centro da venda, e o lugar onde quase todo vendedor erra.</p>
-  <p>O advogado que compra o Pulso <strong>não quer funcionário</strong>. Já teve, ou tem, e sabe o preço: salário todo mês caia ou não caia serviço, encargos, férias, treinar de novo quando a pessoa sai, e a semana inteira perdida quando ela falta. <strong>Folha fixa é custo que não some quando o movimento cai.</strong></p>
-  <p>O que ele quer são três coisas, e vocês devem dizê-las com essas palavras: <strong>mais eficiência, menos dor de cabeça e mais dinheiro no bolso.</strong></p>
+  <p class="lede">É o centro da venda, e o lugar onde quase todo vendedor erra.</p>
+  <p>Quem compra o Pulso <strong>não quer funcionário</strong>. Já teve, e sabe o preço: salário todo mês caia ou não caia serviço, encargos, férias, treinar de novo quando a pessoa sai, a semana perdida quando ela falta. O que ele quer são três coisas, e digam com estas palavras: <strong>mais eficiência, menos dor de cabeça e mais dinheiro no bolso.</strong></p>
 
   <div class="caixa ok">
     <span class="rotulo">A promessa, em uma linha</span>
-    <p><strong>O Pulso é a operação do escritório sem folha de pagamento.</strong> Custo que só existe quando o processo anda: mês parado não gera conta. Nada de encargo, de rescisão, de alguém que adoece no meio do prazo. E roda 24 horas por dia, 7 dias por semana.</p>
+    <p><strong>O Pulso é a operação do escritório sem folha de pagamento.</strong> Custo que só existe quando o processo anda: <strong>mês parado não gera conta.</strong> Nada de encargo, de rescisão, de alguém que adoece no meio do prazo.</p>
   </div>
 
   <div class="caixa">
     <span class="rotulo">A pergunta que abre tudo</span>
-    <p>“Hoje, quem lê suas publicações?” — e depois, qualquer que seja a resposta: <strong>“e está dando conta?”</strong></p>
-    <p>Nunca ouvimos um sim. É essa pergunta que faz o cliente descrever o problema com as palavras dele, e o resto da conversa fica fácil.</p>
+    <p>“Hoje, quem lê suas publicações?” — e depois, qualquer que seja a resposta: <strong>“e está dando conta?”</strong> Nunca ouvimos um sim.</p>
   </div>
-
-  <p>Os três ganhos têm número, e é assim que vocês devem fechar: <strong>eficiência</strong>, porque nada fica sem leitura; <strong>menos dor de cabeça</strong>, porque ele deixa de administrar gente e sistema; e <strong>dinheiro no bolso</strong>, porque processo que anda é processo que gera honorário — e porque o custo acompanha o movimento em vez de correr todo mês.</p>
 </section>
 
 <section>
@@ -203,12 +176,7 @@ export const HTML = `
   </div>
 
   <div class="col">
-    <div class="caixa">
-      <span class="rotulo">Como usar na ligação</span>
-      <p>Rode <strong>antes</strong> de ligar, com a OAB que está no cadastro dele. Chegue dizendo o que encontrou: “Doutor, você teve 47 publicações nos últimos 30 dias, 9 pedem alguma providência e 2 são sentença. Quer que eu te mande a lista?”</p>
-      <p>É o abridor mais forte que o produto tem. E funciona porque não é promessa — é a carteira dele na tela.</p>
-    </div>
-  </div>
+</div>
 </section>
 
 <section>
@@ -246,14 +214,7 @@ export const HTML = `
   <h2>Diagnóstico de processo parado</h2>
   <p class="lede">O serviço que resolve a outra metade da carteira — a que não aparece em publicação nenhuma, e por isso ninguém olha.</p>
   <p>Publicação só mostra o processo que se mexeu. O que está <strong>parado</strong> continua parado, em silêncio, às vezes por anos. É aí que mora o dinheiro esquecido do escritório: execução que ninguém impulsionou, cumprimento de sentença que não foi iniciado, RPV que ninguém sacou.</p>
-
-  <div class="caixa">
-    <span class="rotulo">A ponte com a tese — use esta conta</span>
-    <p>No piloto, o diário mostrou <strong>309 processos com movimentação em 12 meses</strong> e o advogado dizia ter cerca de <strong>600</strong>. <strong>A diferença entre o que o diário mostra e o que ele diz ter é a carteira parada dele</strong>, processo por processo. O diagnóstico é o que traz essa metade de volta para dentro do escritório.</p>
-    <p>Por isso a pergunta que abre esta oferta é a mesma da tese: <strong>“quantos processos ativos você tem?”</strong> — e depois: <strong>“o diário aponta tantos; e os outros, você sabe em que pé estão?”</strong></p>
-  </div>
-
-  <p>Por <strong>R$ 30 por processo</strong>, a Facilita baixa os autos, lê o caso inteiro e responde duas perguntas, só duas:</p>
+<p>Por <strong>R$ 30 por processo</strong>, a Facilita baixa os autos, lê o caso inteiro e responde duas perguntas, só duas:</p>
   <div class="caixa">
     <span class="rotulo">O que o cliente recebe por processo</span>
     <ul>
@@ -341,187 +302,8 @@ export const HTML = `
   </div>
 
   <div class="col">
-    <div class="caixa">
-      <span class="rotulo">Como usar isso na conversa</span>
-      <p>Um escritório de <strong>500 processos ativos</strong> consome <strong>cerca de R$ 2.400 por mês</strong>. Diga o número e pare. Se ele achar alto, a próxima frase não é desconto — é: <strong>“e quanto custa hoje a pessoa que deveria estar fazendo isso, com encargos, no mês em que ela falta?”</strong></p>
-      <p>Lembre que esse valor <strong>não é cobrança nova</strong>: sai do pacote Soberano que ele já contratou. E que <strong>mês parado não gera conta</strong> — diferente de folha.</p>
-    </div>
-    <p style="font-size:13.5px;color:var(--ink-3);line-height:1.55">As proporções saem de um escritório previdenciário com 600 processos ativos, medido entre 16/09 e 16/10/2026. Carteira trabalhista tende a publicar mais; carteira cível, menos. <strong>Trate como estimativa</strong> e confirme com o diagnóstico ao vivo da OAB dele.</p>
+<p style="font-size:13.5px;color:var(--ink-3);line-height:1.55">As proporções saem de um escritório previdenciário com 600 processos ativos, medido entre 16/09 e 16/10/2026. Carteira trabalhista tende a publicar mais; carteira cível, menos. <strong>Trate como estimativa</strong> e confirme com o diagnóstico ao vivo da OAB dele.</p>
   </div>
-</section>
-
-<!-- INICIO custo-atual -->
-<section>
-  <div class="col">
-    <h2>Quanto isso já custa hoje</h2>
-    <p class="lede">Depois do preço vem sempre a mesma frase: “eu ponho alguém para fazer isso”. Esta calculadora responde com os números do escritório dele — <strong>mesmo escopo dos dois lados</strong>, e sem inflar nenhum. <strong>Os únicos valores que ele informa são quem está na equipe e quanto cada um recebe.</strong> O resto é projeção nossa, declarada na tela.</p>
-  </div>
-
-  <div class="calc">
-    <span class="rotulo">Custo atual do escritório · mês típico</span>
-
-    <p class="cu-escopo"><b>Dos dois lados, o mesmo serviço:</b> ler as publicações, decidir o que fazer, lançar o andamento, organizar os documentos e protocolar. <b>Escrever peça, parecer e cálculo não entra em nenhum dos dois</b> — isso ele paga pela tabela do pacote de qualquer jeito.</p>
-
-    <label id="cuLabEq">Quem faz esse trabalho hoje — monte a equipe real dele</label>
-    <div class="cu-eq" aria-labelledby="cuLabEq">
-      <div class="cu-eqL" id="cuLinEst">
-        <span class="pn">Estagiários<em>bolsa mensal, normalmente sem encargos</em></span>
-        <label for="cuNEst">quantos <input type="number" id="cuNEst" value="1" min="0" max="50" step="1" aria-label="Quantos estagiários"></label>
-        <label for="cuVEst">bolsa R$ <input type="text" class="cu-larga" id="cuVEst" inputmode="numeric" value="1.500" aria-label="Bolsa mensal de cada estagiário"><span class="un">/mês</span></label>
-        <span class="tot" id="cuTotEst">—</span>
-      </div>
-      <div class="cu-eqL" id="cuLinAdv">
-        <span class="pn">Advogados<em>remuneração mensal de cada associado</em></span>
-        <label for="cuNAdv">quantos <input type="number" id="cuNAdv" value="0" min="0" max="50" step="1" aria-label="Quantos advogados"></label>
-        <label for="cuVAdv">salário R$ <input type="text" class="cu-larga" id="cuVAdv" inputmode="numeric" value="4.000" aria-label="Remuneração mensal de cada advogado"><span class="un">/mês</span></label>
-        <span class="tot" id="cuTotAdv">—</span>
-      </div>
-      <div class="cu-eqL" id="cuLinDono">
-        <span class="pn">O próprio dono<em>não tem salário: o custo é o honorário que ele deixa de produzir</em></span>
-        <label for="cuHDono">horas/mês <input type="number" id="cuHDono" value="0" min="0" max="300" step="1" aria-label="Horas por mês que o dono gasta nisso"></label>
-        <label for="cuVHora">hora R$ <input type="text" class="cu-larga" id="cuVHora" inputmode="numeric" value="200" aria-label="Valor da hora do dono"><span class="un">/h</span></label>
-        <span class="tot" id="cuTotDono">—</span>
-      </div>
-    </div>
-    <p class="cu-sub" id="cuResumoEquipe">—</p>
-
-    <div>
-      <label for="cuPub">Publicações por mês</label>
-      <div class="calc-campo">
-        <input type="number" id="cuPub" value="110" min="0" max="20000" step="5" aria-label="Publicações por mês">
-        <input type="range" id="cuPubRange" value="110" min="0" max="600" step="5" aria-label="Ajustar publicações por mês">
-        <span class="un">por mês</span>
-      </div>
-      <p class="cu-dica" id="cuMedido" hidden></p>
-    </div>
-
-    <p class="cu-proj" id="cuProj">—</p>
-
-    <div class="premissas">
-      <span class="prem-tit">O mês de trabalho — premissas nossas, editáveis</span>
-      <div class="grade-prem">
-        <label class="cu-prem">Horas por dia<input type="text" id="cuHoras" inputmode="numeric" value="6"><span>h</span></label>
-        <label class="cu-prem">Dias úteis por mês<input type="text" id="cuDias" inputmode="numeric" value="21"><span>dias</span></label>
-        <label class="cu-prem">Protocolos a cada 100 publicações<input type="text" id="cuProt100" inputmode="numeric" value="23"></label>
-        <label class="cu-prem">Publicações num mês parado<input type="text" id="cuParado" inputmode="numeric" value="30"></label>
-      </div>
-      <label class="cu-chave" id="cuChaveClt" for="cuClt">
-        <input type="checkbox" id="cuClt">
-        <span><b>Os contratados são CLT.</b> Ligada, soma encargos e provisões com multiplicador <b>1,7</b> sobre estagiários e advogados — FGTS, INSS patronal, 13º, férias e provisão de rescisão. <b>Nunca se aplica ao dono</b>, que não tem folha. Desligada por padrão: esses escritórios usam estágio ou associação, não carteira assinada.</span>
-      </label>
-    </div>
-
-    <div class="premissas">
-      <span class="prem-tit">Quanto tempo o serviço leva — a nossa projeção, medida no piloto</span>
-      <div class="grade-prem">
-        <label class="cu-prem">Ler e triar uma publicação<input type="text" id="cuMinTriar" inputmode="numeric" value="10"><span>min</span></label>
-        <label class="cu-prem">Lançar o andamento nos sistemas<input type="text" id="cuMinLancar" inputmode="numeric" value="5"><span>min</span></label>
-        <label class="cu-prem">Organizar os documentos do ato<input type="text" id="cuMinDocs" inputmode="numeric" value="20"><span>min</span></label>
-        <label class="cu-prem">Protocolar ou distribuir<input type="text" id="cuMinProt" inputmode="numeric" value="15"><span>min</span></label>
-      </div>
-    </div>
-
-    <div class="premissas" id="cuPremContratados">
-      <span class="prem-tit">Gestão, falta e troca — só para contratados, estimativas nossas</span>
-      <div class="grade-prem">
-        <label class="cu-prem">Supervisionar cada contratado<input type="text" id="cuGestaoH" inputmode="numeric" value="4"><span>h/mês</span></label>
-        <label class="cu-prem">Dias perdidos por falta ou atestado<input type="text" id="cuDiasFalta" inputmode="numeric" value="1"><span>dias/mês</span></label>
-        <label class="cu-prem">Quanto tempo a pessoa fica<input type="text" id="cuPermanencia" inputmode="numeric" value="18"><span>meses</span></label>
-        <label class="cu-prem">Dias úteis perdidos a cada troca<input type="text" id="cuDiasTroca" inputmode="numeric" value="30"><span>dias</span></label>
-        <label class="cu-prem">Horas do dono a cada troca<input type="text" id="cuHorasTroca" inputmode="numeric" value="10"><span>h</span></label>
-      </div>
-    </div>
-
-    <span class="cu-tit">Hoje, sem Pulso</span>
-    <div class="calc-out">
-      <div class="linha-out cu-lo" id="cuR1">
-        <span class="oque">Estagiários<em id="cuE1">—</em></span>
-        <span class="qt" id="cuQ1">—</span><span class="vl" id="cuV1">—</span>
-      </div>
-      <div class="linha-out cu-lo" id="cuR2">
-        <span class="oque">Advogados<em id="cuE2">—</em></span>
-        <span class="qt" id="cuQ2">—</span><span class="vl" id="cuV2">—</span>
-      </div>
-      <div class="linha-out cu-lo" id="cuR3">
-        <span class="oque">O dono, de própria mão<em id="cuE3">—</em></span>
-        <span class="qt" id="cuQ3">—</span><span class="vl" id="cuV3">—</span>
-      </div>
-      <div class="linha-out cu-lo" id="cuR4">
-        <span class="oque">Supervisionar, conferir e cobrar<em id="cuE4">—</em></span>
-        <span class="qt" id="cuQ4">—</span><span class="vl" id="cuV4">—</span>
-      </div>
-      <div class="linha-out cu-lo" id="cuR5">
-        <span class="oque">Dias pagos sem leitura<em id="cuE5">—</em></span>
-        <span class="qt" id="cuQ5">—</span><span class="vl" id="cuV5">—</span>
-      </div>
-      <div class="linha-out cu-lo" id="cuR6">
-        <span class="oque">A troca de pessoa, amortizada<em id="cuE6">—</em></span>
-        <span class="qt" id="cuQ6">—</span><span class="vl" id="cuV6">—</span>
-      </div>
-      <div class="linha-out total">
-        <span class="oque">Custo atual, por mês</span>
-        <span class="qt" id="cuQT1">—</span><span class="vl" id="cuVT1">—</span>
-      </div>
-    </div>
-    <p class="calc-nota" id="cuFolha">—</p>
-
-    <span class="cu-tit">Com o Pulso, no mesmo escopo</span>
-    <div class="calc-out">
-      <div class="linha-out">
-        <span class="oque">Triagem e acompanhamento<em id="cuPE1">R$ 10 + R$ 10 por publicação</em></span>
-        <span class="qt" id="cuPQ1">—</span><span class="vl" id="cuPV1">—</span>
-      </div>
-      <div class="linha-out">
-        <span class="oque">Protocolos e distribuições<em id="cuPE2">—</em></span>
-        <span class="qt" id="cuPQ2">—</span><span class="vl" id="cuPV2">—</span>
-      </div>
-      <div class="linha-out total">
-        <span class="oque">Pulso, por mês</span>
-        <span class="qt" id="cuQT2">—</span><span class="vl" id="cuVT2">—</span>
-      </div>
-    </div>
-
-    <div class="medido cu-veredito" id="cuVeredito"></div>
-
-    <span class="cu-tit">O mês parado</span>
-    <div class="mesa" id="cuMesa" style="margin-top:22px"></div>
-
-    <p class="calc-nota"><strong>Fora desta conta, nos dois lados:</strong> R$ 1.500 de configuração do escritório, uma única vez, e o diagnóstico de processo parado a R$ 30, só quando ele pedir. <strong>Toda premissa acima é nossa e é editável</strong> — nenhuma veio de pergunta feita a ele, e nenhuma é medição do escritório dele. Diga isso quando mostrar a tela.</p>
-  </div>
-
-  <div class="col">
-    <div class="caixa nao">
-      <span class="rotulo">O que a conta não mede — e não vamos fingir que mede</span>
-      <p>A assimetria entre os dois lados é de <strong>custo</strong>, não de prazo. <strong>Prazo processual não corre em fim de semana, feriado nem no recesso</strong> — quem disser o contrário perde o advogado na primeira frase. O que não para é a folha.</p>
-      <ul>
-        <li><strong>Férias e o recesso de 20/12 a 20/01.</strong> A equipe não está, e o salário sai igual. O Pulso cobra por publicação: mês sem volume, conta pequena.</li>
-        <li><strong>Feriado e fim de semana.</strong> Dia pago, nada lido. Do outro lado só se paga o que passou pela mesa.</li>
-        <li><strong>O mês fraco.</strong> Pouco movimento não reduz folha em um centavo. É a assimetria inteira do produto, e está na conta acima, no mês parado.</li>
-        <li><strong>O que a leitura não feita custa.</strong> No escritório-piloto havia quem lesse, e mesmo assim três iniciais foram indeferidas e dois processos arquivados em trinta dias. <strong>Não pusemos preço nisso, e não vamos pôr</strong> — número inventado derruba a conversa inteira.</li>
-      </ul>
-    </div>
-
-    <div class="caixa">
-      <span class="rotulo">Como usar na ligação</span>
-      <p>Monte a equipe dele enquanto ele fala: <strong>“quem cuida das publicações hoje — estagiário, advogado, você mesmo? E quanto cada um recebe?”</strong> A resposta quase nunca é uma pessoa só, e é por isso que a tela tem três linhas. <strong>Pergunte também quantas horas por mês ele mesmo gasta tapando buraco</strong> — é a linha que mais pesa e a que ele nunca contou.</p>
-      <p>O resto da tela é projeção nossa, e é exatamente isso que você deve dizer, em voz alta, antes que ele pergunte. <strong>Premissa escondida vira desconfiança; premissa declarada vira autoridade.</strong></p>
-      <p>Se der que o Pulso custa mais, <strong>fale o número mesmo assim</strong> e siga para o mês parado e para a lista acima. Esconder a diferença custa a venda inteira quando ele refaz a conta sozinho depois.</p>
-    </div>
-  </div>
-</section>
-<!-- FIM custo-atual -->
-
-<section class="col">
-  <h2>Para quem oferecer</h2>
-  <div class="caixa ok">
-    <span class="rotulo">Ofereça quando ouvir</span>
-    <p>“Eu capto bem, o problema é dar conta.” · “Não quero contratar mais ninguém.” · “Já tive funcionário e não compensa.” · “Tenho processo parado que eu nem sei em que pé está.” · “Já perdi prazo.” · “Fico o dia inteiro no sistema do tribunal.” · “Tenho caso pronto para distribuir há meses.”</p>
-  </div>
-  <div class="caixa nao">
-    <span class="rotulo">Segure quando</span>
-    <p>O volume é baixo demais. Advogado com vinte processos ativos não sente a dor que o produto cura e vai achar caro por publicação — para ele, venda a esteira de peças, que é o que resolve.</p>
-  </div>
-  <p><strong>Perfil ideal:</strong> advogado ou banca pequena com <strong>carteira de 100 processos para cima</strong>, forte em captação, que não quer montar nem manter estrutura administrativa. Previdenciário e trabalhista sofrem mais, porque o volume de publicações é alto e repetitivo.</p>
 </section>
 
 <section class="col">
@@ -547,7 +329,7 @@ export const HTML = `
     </div>
     <div class="o">
       <p class="fala">Quanto fica por mês?</p>
-      <p class="resp">Não há valor fixo novo: <strong>sai do pacote Soberano que ele já tem.</strong> Use a calculadora com a carteira dele e dê o número de uma vez — cerca de R$ 2.400 para 500 processos. E a frase que desarma: <strong>“mês parado não gera conta”</strong>, que é o contrário de folha.</p>
+      <p class="resp">Não há valor fixo novo: <strong>sai do pacote que ele já tem.</strong> Rode a calculadora com a carteira dele e dê o número de uma vez. Se ele estranhar, mostre o simulador de pacotes na tela — é mais forte do que qualquer explicação.</p>
     </div>
     <div class="o">
       <p class="fala">Vocês atendem o meu tribunal?</p>
@@ -557,64 +339,45 @@ export const HTML = `
 </section>
 
 <section class="col">
-  <h2>O que não prometer</h2>
-  <div class="caixa nao">
-    <span class="rotulo">Limites honestos</span>
-    <ul>
-      <li><strong>Não prometa cobertura total de protocolo.</strong> Está em construção. Pergunte antes de afirmar.</li>
-      <li><strong>Não prometa prazo recuperado.</strong> O que venceu antes de entrarmos, analisamos e dizemos o que ainda cabe — sem garantir reverter.</li>
-      <li><strong>Não diga que ele não precisa olhar mais nada.</strong> Ele confere a peça e autoriza o protocolo. É exigência da OAB e é o que protege os dois.</li>
-      <li><strong>Não prometa resultado no diagnóstico de processo parado.</strong> Os R$ 30 pagam a análise e a indicação do caminho, não a garantia de que há dinheiro lá dentro.</li>
-      <li><strong>Não prometa data de implantação apertada.</strong> O escritório entra em operação depois da configuração, que depende do certificado digital dele chegar.</li>
-      <li><strong>Não cite o nome de outro cliente.</strong> Os números desta página são internos. Diga “um escritório previdenciário em Goiás”.</li>
-    </ul>
-  </div>
-</section>
-
-<section class="col">
-  <h2>Como conduzir a conversa</h2>
+  <h2>Na ligação</h2>
 
   <div class="script">
     <span class="rotulo">Abertura — com o diagnóstico já rodado</span>
-    <p>“Doutor, antes de ligar eu dei uma olhada nos seus processos. Você teve <strong>X publicações nos últimos 30 dias</strong>, e <strong>Y delas pedem alguma providência</strong>. Hoje, quem lê isso aí? … E está dando conta?”</p>
-    <p class="acao">Deixe ele descrever o problema inteiro antes de falar da solução. Quanto mais ele falar, menos você precisa argumentar.</p>
-  </div>
-
-  <div class="script">
-    <span class="rotulo">A virada</span>
-    <p>“A gente lançou um serviço novo chamado Pulso. <strong>Depois que o cliente assina a procuração, a gente faz o resto</strong> — pega os documentos, cadastra, escreve a peça, organiza os anexos, distribui ou protocola, lê as publicações todo dia e dá qualquer andamento que o processo pedir. Você entra em dois momentos: para conferir a peça e para autorizar o protocolo.”</p>
-    <p class="acao">Aqui, pare. A primeira pergunta dele diz qual objeção tratar.</p>
+    <p>“Doutor, antes de ligar eu olhei seus processos. Você teve <strong>X publicações nos últimos 30 dias</strong>, e <strong>Y pedem alguma providência</strong>. Hoje, quem lê isso aí? … E está dando conta?”</p>
+    <p class="acao">Deixe ele descrever o problema inteiro antes de falar da solução. A primeira pergunta dele diz qual objeção tratar.</p>
   </div>
 
   <div class="script">
     <span class="rotulo">O número</span>
-    <p>“Com a sua carteira, isso consome por volta de <strong>R$ 2.400 por mês do seu pacote</strong> — e não é cobrança nova, sai do Soberano que você já tem. <strong>Mês que o processo não anda, não gera conta</strong> — o que é o contrário de ter funcionário. E roda 24 horas por dia, 7 dias por semana.”</p>
-    <p class="acao">Rode a calculadora com a carteira real dele antes da ligação. Chegar com o número pronto vale mais do que qualquer argumento.</p>
+    <p>“Com a sua carteira, isso consome por volta de <strong>R$ 2.400 por mês do seu pacote</strong> — e não é cobrança nova, sai do que você já tem.”</p>
+    <p class="acao">Rode a calculadora antes de ligar. Chegar com o número pronto vale mais do que qualquer argumento. Se ele achar alto, a próxima frase não é desconto — é <strong>“e quanto custa hoje a pessoa que deveria estar fazendo isso, no mês em que ela falta?”</strong></p>
   </div>
 
   <div class="script">
     <span class="rotulo">O fechamento</span>
-    <p>“Me deixa fazer o seguinte: eu te mando <strong>a lista dos seus processos que pedem providência</strong>, com o que cada um precisa. Sem compromisso. Se não fizer sentido, a gente para por aí.”</p>
-    <p class="acao">É o fechamento mais forte do produto e custa quase nada — o diagnóstico já está rodado. No piloto, revelou cinco processos perdidos e onze vitórias que o próprio advogado não conhecia. É muito difícil dizer não depois de ver a própria carteira na tela.</p>
+    <p>“Me deixa te mandar <strong>o diagnóstico completo do seu escritório em PDF</strong>, com tudo o que aconteceu nos seus processos nos últimos 30 dias. Sem compromisso.”</p>
+    <p class="acao">É o fechamento mais forte do produto e custa um clique. No piloto, revelou cinco processos perdidos e onze vitórias que o próprio advogado não conhecia.</p>
   </div>
 
-  <div class="script">
-    <span class="rotulo">A segunda venda, para a carteira antiga</span>
-    <p>“E o que está parado, doutor? Aquele processo que não publica nada há dois anos — você sabe em que pé está? Por <strong>R$ 30 cada</strong> a gente abre, lê e te diz em que fase está e o que destrava. Você olha o relatório e manda tocar o que quiser.”</p>
-    <p class="acao">Faça essa oferta depois que o Pulso estiver rodando, não junto. Primeiro ele vê o serviço funcionando; aí a carteira antiga vira a conversa seguinte.</p>
+  <div class="caixa ok">
+    <span class="rotulo">Ofereça quando ouvir</span>
+    <p>“Eu capto bem, o problema é dar conta.” · “Não quero contratar mais ninguém.” · “Já tive funcionário e não compensa.” · “Tenho processo parado que nem sei em que pé está.” · “Já perdi prazo.” · “Fico o dia inteiro no sistema do tribunal.”</p>
+    <p><strong>Perfil ideal:</strong> carteira de 100 processos para cima, forte em captação, sem vontade de montar estrutura administrativa. Previdenciário e trabalhista sofrem mais. Abaixo de 100 processos ele não sente a dor — para esse, venda a esteira de peças.</p>
   </div>
-</section>
 
-<section class="col">
-  <h2>Antes de ofertar</h2>
-  <ol>
-    <li><strong>Rode o simulador de pacotes</strong> com a carteira dele. O Pulso vale para todos os pacotes, mas só compensa quando o saldo do mês cobre o acompanhamento e ainda deixa peça — na prática, Infinity e Soberano.</li>
-    <li><strong>Rode o diagnóstico</strong> com a OAB dele e leve o que encontrou.</li>
-    <li><strong>Rode a calculadora</strong> com a carteira dele e leve o número pronto.</li>
-    <li><strong>Confirme a cobertura de protocolo</strong> no tribunal onde ele atua.</li>
-    <li><strong>Alinhe a implantação</strong> antes de prometer data: certificado digital, acesso aos tribunais e inclusão do nosso número no grupo de WhatsApp do escritório.</li>
-  </ol>
-  <p>Dúvida sobre caso específico, fale comigo antes de prometer. O produto é novo e estamos aprendendo com cada escritório — o que vocês ouvirem dos clientes muda o desenho, então me tragam.</p>
+  <div class="caixa nao">
+    <span class="rotulo">O que não prometer</span>
+    <ul>
+      <li><strong>Cobertura total de protocolo.</strong> Está em construção, tribunal a tribunal. Pergunte antes de afirmar.</li>
+      <li><strong>Prazo recuperado.</strong> O que venceu, analisamos e dizemos o que ainda cabe — sem garantir reverter.</li>
+      <li><strong>Que ele não olha mais nada.</strong> Ele revisa a peça e autoriza o protocolo. É exigência da OAB e protege os dois.</li>
+      <li><strong>Resultado no diagnóstico de processo parado.</strong> Os R$ 30 pagam a análise e o caminho, não a garantia de que há dinheiro dentro.</li>
+      <li><strong>Data de implantação apertada.</strong> A operação começa depois da configuração, que depende do certificado dele chegar.</li>
+      <li><strong>Nome de cliente.</strong> Os números desta página são internos. Diga “um escritório previdenciário em Goiás”.</li>
+    </ul>
+  </div>
+
+  <p>Dúvida sobre caso específico, fale comigo antes de prometer. O produto é novo e o que vocês ouvirem dos clientes muda o desenho — então me tragam.</p>
 </section>
 
 <footer>
