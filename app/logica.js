@@ -245,15 +245,26 @@ export function iniciar() {
     /* Levanta a carteira: quantos processos distintos se mexeram em 12 meses,
        quantas publicações por mês e quantos atos com prazo por mês. */
     function carteira(brutas){
-      var procs={}, vistos={}, eventos=0, prazo=0;
+      var procs={}, vistos={}, eventos=0, prazo=0, derrotas=0, evitaveis=0, ganhos=0;
       brutas.forEach(function(it){
         var txt=limpar(it.texto);
         var k=it.numero_processo+'|'+it.data_disponibilizacao+'|'+hash(txt);
         if(vistos[k]) return; vistos[k]=1; eventos++;
         procs[it.numero_processo]=1;
         if(R.ato.test(txt)||R.ato2.test(txt)||R.ato3.test(txt)) prazo++;
+        /* mesma classificação do diagnóstico, agora sobre os 12 meses:
+           assim a perda anual é CONTADA, não um mês multiplicado por doze */
+        if (R.segredo.test(txt) || R.cego.test(txt) || txt.length<200) return;
+        if (R.ganho.test(txt)) { ganhos++; return; }
+        var op = operativo(txt);
+        if (R.opDerrota.test(op)) {
+          derrotas++;
+          var c = causaDaDerrota(op);
+          if (c !== 'mérito' && c !== 'não identificada') evitaveis++;
+        }
       });
-      return { procs:Object.keys(procs).length, eventos:eventos, prazo:prazo };
+      return { procs:Object.keys(procs).length, eventos:eventos, prazo:prazo,
+               derrotas:derrotas, evitaveis:evitaveis, ganhos:ganhos };
     }
 
     async function levantar(oab, uf){
@@ -269,7 +280,9 @@ export function iniciar() {
           return;
         }
         var c=carteira(brutas);
-        medida={ carteira:c.procs, pubMes:Math.round(c.eventos/12), protMes:Math.round(c.prazo/12) };
+        medida={ carteira:c.procs, pubMes:Math.round(c.eventos/12), protMes:Math.round(c.prazo/12),
+                 derrotasAno:c.derrotas, evitaveisAno:c.evitaveis, ganhosAno:c.ganhos };
+        if (ultimo) { ultimo.ano = medida; relatorio(); }
         modo='medido';
         qtd.value=c.procs; slider.value=Math.min(3000, Math.max(20, c.procs));
         el.innerHTML='<span class="rot">Medido na OAB '+oab+'/'+uf+'</span>'
@@ -372,6 +385,8 @@ export function iniciar() {
             +g.ilegiveis+' processos que ninguém consegue ler sem entrar no sistema com certificado</em></div>'
         + '<div class="mz neutro"><b>'+tempo(T.total)+'</b><i>de trabalho no mês</i><em>'
             +(T.total/480).toFixed(1).replace('.',',')+' dias úteis só para manter a carteira andando</em></div>'
+        + '<div class="mz"><b>'+moeda(g.evitaveis.length*p.hon)+'</b><i>perdido por acompanhamento</i><em>'
+            +g.evitaveis.length+' das '+g.derrotas.length+' perdas do mês não foram de mérito</em></div>'
         + '<div class="mz ok"><b>'+g.dinheiro.length+'</b><i>com pagamento mencionado</i><em>'
             +'RPV, precatório, alvará ou depósito a conferir</em></div>';
 
@@ -587,6 +602,17 @@ export function iniciar() {
           h.push('<p>Todas as perdas do período foram de mérito ou não puderam ser classificadas pelo texto '
             +'da publicação. Perda de mérito é a única que o acompanhamento não evita — ela se discute no '
             +'recurso, e o prazo para recorrer é justamente o que não pode passar em branco.</p>');
+        }
+        if (ultimo.ano && ultimo.ano.derrotasAno) {
+          var A=ultimo.ano;
+          h.push('<p><b>E o mês não é exceção.</b> Lendo <b>os doze meses</b> do diário dessa OAB: '
+            +'<b>'+A.derrotasAno+' perdas</b> no ano, das quais <b>'+A.evitaveisAno+' não foram de mérito</b>. '
+            +'Pela mesma premissa, <b>'+moeda(A.derrotasAno*p.hon)+'</b> em valor de causa perdido no ano, '
+            +'sendo <b>'+moeda(A.evitaveisAno*p.hon)+'</b> por motivo que o acompanhamento evita.</p>');
+          h.push('<div class="destaque"><p>Na média, <b>'+moeda(Math.round(A.evitaveisAno*p.hon/12))
+            +' por mês</b> deixam de entrar por falha de acompanhamento — '
+            +(A.evitaveisAno/12).toFixed(1).replace('.',',')+' processos por mês, todo mês. '
+            +'<b>Isso não é projeção de um mês multiplicado por doze: é a contagem dos doze meses.</b></p></div>');
         }
         /* classificação das perdas: o que foi, quanto custou e o que ainda cabe */
         h.push('<table><tr><th>Motivo da perda</th><th>Quantos</th><th>Valor</th><th>O que ainda cabe</th></tr>'
