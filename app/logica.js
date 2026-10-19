@@ -61,27 +61,40 @@ export function iniciar() {
       { nome:'Soberano', preco:10000, servicos:142, meses:2  }
     ];
 
+    /* Quanto o Pulso custa por processo ativo ao mês, pelas proporções do piloto.
+       É o que permite dizer até que carteira cada pacote aguenta. */
+    function custoPorProcesso(){
+      return POR100.pub*(PRECO.triagem+PRECO.acomp) + POR100.prot*PRECO.prot;
+    }
+
     function pintarPacotes(custoPulso){
       var linhas = ['<div class="pacL cab"><span>Pacote</span><span>Saldo por mês</span>'
-                  + '<span>Pulso</span><span>Sobra para peças</span><span></span></div>'];
-      var ideal = null;
+                  + '<span>Pulso</span><span>Sobra ou falta</span><span>Cobre até</span><span></span></div>'];
+      var ideal = null, porProc = custoPorProcesso();
       PACOTES.forEach(function(k){
         var saldo = k.preco / k.meses;
         var porPeca = k.preco / k.servicos;
         var sobra = saldo - custoPulso;
         var cabe  = sobra >= porPeca;          // sobra ao menos uma peça
         if (cabe && !ideal) ideal = k.nome;
+        // maior carteira que ainda deixa uma peça de folga
+        k._cobre = Math.max(0, Math.floor((saldo - porPeca) / porProc));
         k._saldo=saldo; k._sobra=sobra; k._cabe=cabe; k._peca=porPeca;
       });
       PACOTES.forEach(function(k){
         var cls = k._cabe ? 'cabe' : (k._sobra >= 0 ? 'justo' : 'nao');
         var np  = Math.floor(k._sobra/k._peca);
         var txt = k._cabe ? (np + (np===1 ? ' peça' : ' peças')) : (k._sobra >= 0 ? 'não sobra peça' : 'não cabe');
+        // o que o vendedor precisa responder: falta quanto?
+        var col4 = k._sobra >= 0
+          ? '<b>+'+moeda(k._sobra)+'</b>'
+          : '<b style="color:#F08C7E">faltam '+moeda(-k._sobra)+'</b>';
         linhas.push('<div class="pacL'+(k.nome===ideal?' ideal':'')+'">'
           + '<span class="pn">'+k.nome+(k.nome===ideal?' &middot; ideal':'')+'</span>'
           + '<span class="pv"><b>'+moeda(k._saldo)+'</b></span>'
           + '<span class="pv">'+moeda(custoPulso)+'</span>'
-          + '<span class="pv">'+(k._sobra>=0?moeda(k._sobra):'—')+'</span>'
+          + '<span class="pv">'+col4+'</span>'
+          + '<span class="pv">'+(k._cobre ? k._cobre+' proc.' : '—')+'</span>'
           + '<span class="tag '+cls+'">'+txt+'</span></div>');
       });
       document.getElementById('pacotes').innerHTML = linhas.join('');
@@ -95,7 +108,11 @@ export function iniciar() {
         '<br><br>Saldo por mês = preço do pacote dividido pela validade. Start, Premium e Infinity em 12 meses; '
         + '<b>Soberano em 60 dias</b>, que é como a casa pratica — por isso o saldo mensal dele é tão maior. '
         + 'O que sobra está em reais e em quantas peças cabem, pelo preço por serviço daquele pacote '
-        + '(Start R$ 160, Premium R$ 140, Infinity R$ 120, Soberano R$ 70).';
+        + '(Start R$ 160, Premium R$ 140, Infinity R$ 120, Soberano R$ 70).'
+        + '<br><br><b>Por que o Infinity cobre tão menos que o Soberano?</b> Não é o preço, é a validade. '
+        + 'O Infinity são R$ 8.400 para <b>12 meses</b> — R$ 700 por mês. O Soberano são R$ 10.000 para '
+        + '<b>60 dias</b> — R$ 5.000 por mês. Sete vezes mais saldo mensal por um preço 19% maior. '
+        + 'A coluna <b>Cobre até</b> diz a maior carteira que cada pacote aguenta deixando ainda uma peça de folga.';
     }
 
     function manual(v){ modo='estimado'; qtd.value=v; slider.value=Math.min(3000,Math.max(20,v)); calcular(); }
@@ -800,8 +817,6 @@ export function iniciar() {
   /* ================= custo atual do escritório ================= */
     var CU_ENCARGO = 1.7;                      /* multiplicador CLT, declarado na tela */
     var CU_PRECO   = { pub: 20, prot: 5 };     /* R$ 10 triagem + R$ 10 acompanhamento; R$ 5 protocolo */
-    var CU_PADRAO  = { estagiario:'1.500', associado:'4.000', dono:'200' };
-    var cuCenario  = 'estagiario';
 
     function cuEl(id){ return document.getElementById(id); }
 
@@ -826,21 +841,26 @@ export function iniciar() {
     }
 
     function cuCalcular(){
-      var dono     = (cuCenario === 'dono');
+      /* ---- a equipe, como ela é: mista ---- */
+      var nEst  = cuInt('cuNEst', 1, 0, 50);
+      var vEst  = cuInt('cuVEst', 1500, 0, 9999999);
+      var nAdv  = cuInt('cuNAdv', 0, 0, 50);
+      var vAdv  = cuInt('cuVAdv', 4000, 0, 9999999);
+      var hDono = cuInt('cuHDono', 0, 0, 300);
+      var vHora = cuInt('cuVHora', 200, 0, 99999);
+
       var horasDia = cuInt('cuHoras', 6, 1, 24);
       var dias     = cuInt('cuDias', 21, 1, 31);
       var horasMes = horasDia * dias;
-      var pessoas  = dono ? 1 : cuInt('cuPessoas', 1, 1, 50);
-      var clt      = !dono && cuEl('cuClt').checked;
-      var remun    = cuInt('cuRemun', dono ? 200 : 1500, 0, 9999999);
       var pub      = cuInt('cuPub', 110, 0, 20000);
       var prot100  = cuInt('cuProt100', 23, 0, 200);
       var pubPar   = cuInt('cuParado', 30, 0, 20000);
+      var clt      = cuEl('cuClt').checked;
 
-      var mTriar   = cuInt('cuMinTriar', 10, 0, 600);
-      var mLancar  = cuInt('cuMinLancar', 5, 0, 600);
-      var mDocs    = cuInt('cuMinDocs', 20, 0, 600);
-      var mProt    = cuInt('cuMinProt', 15, 0, 600);
+      var mTriar  = cuInt('cuMinTriar', 10, 0, 600);
+      var mLancar = cuInt('cuMinLancar', 5, 0, 600);
+      var mDocs   = cuInt('cuMinDocs', 20, 0, 600);
+      var mProt   = cuInt('cuMinProt', 15, 0, 600);
 
       var gestaoH  = cuInt('cuGestaoH', 4, 0, 200);
       var diasFal  = cuInt('cuDiasFalta', 1, 0, 20);
@@ -848,140 +868,176 @@ export function iniciar() {
       var diasTro  = cuInt('cuDiasTroca', 30, 0, 400);
       var horasTro = cuInt('cuHorasTroca', 10, 0, 500);
 
-      var prot     = Math.round(pub * prot100 / 100);
+      var prot = Math.round(pub * prot100 / 100);
+
+      /* o multiplicador de CLT vale só para quem tem folha — nunca para o dono */
+      var mult      = clt ? CU_ENCARGO : 1;
+      var folhaEst  = nEst * vEst * mult;
+      var folhaAdv  = nAdv * vAdv * mult;
+      var folha     = folhaEst + folhaAdv;
+      var nContrat  = nEst + nAdv;
+      var semEquipe = (nContrat === 0 && hDono === 0);
 
       /* ---- a fatia de tempo é PROJEÇÃO NOSSA: sai do volume e dos minutos medidos,
               nunca de uma pergunta feita ao advogado ---- */
       var horasProj = pub * (mTriar + mLancar) / 60 + prot * (mDocs + mProt) / 60;
-      var horasDisp = horasMes * pessoas;
-      var fracaoBruta = horasDisp ? horasProj / horasDisp : 0;
-      var fracao = Math.min(fracaoBruta, 1);
-      var estoura = fracaoBruta > 1.0001;
+      var capContrat = nContrat * horasMes;
+      var horasDisp  = capContrat + hDono;
 
-      /* ---- o lado de hoje ---- */
-      var mult = clt ? CU_ENCARGO : 1;
-      var horaDono = dono ? remun : cuInt('cuHoraDono', 200, 0, 99999);
-      var porPessoa, cheio, hora;
-      if (dono){
-        hora      = remun;                   /* a hora é digitada: honorário que ele deixa de produzir */
-        porPessoa = remun * horasMes;
-        cheio     = porPessoa;
-      } else {
-        porPessoa = remun * mult;
-        hora      = horasMes ? porPessoa / horasMes : 0;
-        cheio     = porPessoa * pessoas;
-      }
-      var dedicado = cheio * fracao;
+      /* as horas que o dono declara já são deste escopo e saem por inteiro;
+         o que resta do serviço é o que recai sobre os contratados */
+      var restoEquipe = Math.max(0, horasProj - hDono);
+      var fracaoEquipe = capContrat ? Math.min(restoEquipe / capContrat, 1) : 0;
+      var horasEquipe  = capContrat * fracaoEquipe;
 
-      /* gestão: tempo do dono supervisionando, rateado pela mesma fatia dedicada —
-         sem volume no escopo não há o que supervisionar. No cenário do dono não existe. */
-      var gestaoHRat = gestaoH * fracao;
-      var gestao = dono ? 0 : gestaoHRat * pessoas * horaDono;
+      var dedEst = folhaEst * fracaoEquipe;
+      var dedAdv = folhaAdv * fracaoEquipe;
+      var dedEqu = dedEst + dedAdv;
+      var custoDono = hDono * vHora;
 
-      /* falta: paga-se o mês inteiro e recebe-se menos dias. O acréscimo é o que
-         a capacidade perdida encarece — não o salário do dia, que já está acima.
-         No cenário do dono não existe: ele não paga a si mesmo por dia parado. */
-      var falta = dono ? 0 : ((dias > diasFal) ? dedicado * diasFal / (dias - diasFal) : dedicado);
+      /* gestão, falta e troca só existem para contratados: ninguém se supervisiona,
+         o dono não falta contra si mesmo e não pede demissão de si mesmo */
+      var gestaoHRat = gestaoH * fracaoEquipe;
+      var gestao = nContrat ? gestaoHRat * nContrat * vHora : 0;
+      var falta  = (nContrat && dias > diasFal) ? dedEqu * diasFal / (dias - diasFal) : 0;
+      var saida  = nContrat
+        ? ((dedEqu / dias) * diasTro + horasTro * vHora * fracaoEquipe * nContrat) / perm
+        : 0;
 
-      /* troca: dias parados e horas do dono a cada saída, diluídos na permanência média.
-         As horas do dono também entram rateadas pela fatia dedicada. */
-      var saida = dono ? 0 : ((dedicado / dias) * diasTro + horasTro * horaDono * fracao) * pessoas / perm;
-
-      var atual = dedicado + gestao + falta + saida;
+      var atual = dedEqu + custoDono + gestao + falta + saida;
 
       /* ---- o lado do Pulso ---- */
       var pulso    = pub * CU_PRECO.pub + prot * CU_PRECO.prot;
       var protPar  = Math.round(pubPar * prot100 / 100);
       var pulsoPar = pubPar * CU_PRECO.pub + protPar * CU_PRECO.prot;
 
-      /* ---- rótulos que mudam com o cenário ---- */
-      var rotLinha1, rotRemun, unRemun, detalhe1, qt1;
-      if (dono){
-        rotLinha1 = 'Um mês inteiro de horas dele';
-        rotRemun  = 'Valor da hora do dono';
-        unRemun   = 'a hora';
-        detalhe1  = horasMes + ' h × ' + cuMoeda(remun) + ' a hora — honorário que ele deixaria de produzir se gastasse o mês inteiro nisso';
-        qt1       = horasMes + ' h';
-      } else {
-        rotLinha1 = cuCenario === 'associado' ? 'Remuneração cheia de quem faz isso' : 'Bolsa cheia de quem faz isso';
-        rotRemun  = cuCenario === 'associado' ? 'Remuneração mensal de cada associado' : 'Bolsa mensal de cada estagiário';
-        unRemun   = 'por mês';
-        detalhe1  = clt
-          ? cuMoeda(remun) + ' × 1,7 de encargos e provisões = ' + cuMoeda(porPessoa) + ' por pessoa'
-          : cuMoeda(remun) + ' por pessoa · sem encargos, porque não é CLT';
-        qt1       = cuPlural(pessoas, 'pessoa', 'pessoas');
-      }
-      cuEl('cuLabRemun').textContent = rotRemun;
-      cuEl('cuUnRemun').textContent  = unRemun;
-      cuEl('cuO1').childNodes[0].nodeValue = rotLinha1;
-      cuEl('cuBlocoPessoas').hidden  = dono;
-      cuEl('cuChaveClt').hidden      = dono;
-      cuEl('cuPremHoraDono').hidden  = dono;   /* no cenário do dono a hora dele é o campo principal */
-      cuEl('cuPremGestao').hidden    = dono;
-      cuEl('cuPremFalta').hidden     = dono;
-      cuEl('cuPremPerm').hidden      = dono;
-      cuEl('cuPremTroca').hidden     = dono;
-      cuEl('cuPremHTroca').hidden    = dono;
+      /* ---- a composição da equipe, na própria caixa ---- */
+      cuEl('cuTotEst').textContent  = nEst ? cuMoeda(folhaEst) + ' de folha' : 'nenhum';
+      cuEl('cuTotAdv').textContent  = nAdv ? cuMoeda(folhaAdv) + ' de folha' : 'nenhum';
+      cuEl('cuTotDono').textContent = hDono ? cuMoeda(custoDono) + ' em honorário' : 'não participa';
+      cuEl('cuLinEst').className  = nEst  ? 'cu-eqL' : 'cu-eqL off';
+      cuEl('cuLinAdv').className  = nAdv  ? 'cu-eqL' : 'cu-eqL off';
+      cuEl('cuLinDono').className = hDono ? 'cu-eqL' : 'cu-eqL off';
+      cuEl('cuChaveClt').hidden        = (nContrat === 0);
+      cuEl('cuPremContratados').hidden = (nContrat === 0);
 
-      /* a hora real, e a comparação com o divisor de 220 h que todo mundo usa de cabeça */
-      if (dono){
-        cuEl('cuSubHora').innerHTML = '<b>' + horasMes + ' h reais por mês</b> (' + horasDia + ' h × ' + dias +
-          ' dias úteis). A hora é a que você digitou — o honorário que ele deixa de produzir enquanto lê publicação.';
+      /* a hora real de cada contratado, contra o divisor de 220 h que se usa de cabeça */
+      if (semEquipe){
+        cuEl('cuResumoEquipe').innerHTML = '<b>Nenhuma linha preenchida.</b> Monte a equipe dele acima — e se a resposta sincera for ' +
+          '“ninguém”, essa também é uma resposta, e a conta abaixo diz o que fazer com ela.';
+      } else if (nContrat === 0){
+        cuEl('cuResumoEquipe').innerHTML = '<b>Só o dono.</b> ' + cuHoras(hDono) + ' por mês a ' + cuMoeda(vHora) +
+          ' a hora — honorário que ele deixa de produzir enquanto lê publicação. Sem folha, sem encargo e sem troca de pessoa.';
       } else {
-        cuEl('cuSubHora').innerHTML = '<b>' + horasMes + ' h reais por mês</b> (' + horasDia + ' h × ' + dias +
-          ' dias úteis) · <b>' + cuCentavos(hora) + ' a hora</b>. Dividindo por 220 h, que é o divisor da folha e não o tempo de alguém na mesa, daria ' +
-          cuCentavos(porPessoa / 220) + '. O número de cima é o verdadeiro.';
+        var partes = [];
+        if (nEst) partes.push('estagiário ' + cuCentavos(vEst * mult / horasMes) +
+          ' (contra ' + cuCentavos(vEst * mult / 220) + ' se dividisse por 220 h)');
+        if (nAdv) partes.push('advogado ' + cuCentavos(vAdv * mult / horasMes) +
+          ' (contra ' + cuCentavos(vAdv * mult / 220) + ')');
+        cuEl('cuResumoEquipe').innerHTML = '<b>' + horasMes + ' h reais por mês para cada contratado</b> (' + horasDia +
+          ' h × ' + dias + ' dias úteis)' + (clt ? ', já com o multiplicador de 1,7' : '') + '. A hora real sai por ' +
+          partes.join(' e ') + '. <b>220 h é o divisor da folha, não o tempo de alguém na mesa</b> — os primeiros números são os verdadeiros.';
       }
 
-      /* ---- a projeção, declarada ---- */
-      var caixaProj = cuEl('cuProj');
-      caixaProj.className = estoura ? 'cu-proj estoura' : 'cu-proj';
-      if (estoura){
-        caixaProj.innerHTML = '<b>Pela nossa projeção, esse volume não cabe na equipe que ele tem.</b> ' +
-          cuPlural(pub,'publicação','publicações') + ' e ' + cuPlural(prot,'protocolo','protocolos') + ' pedem <b>' +
-          cuHoras(horasProj) + ' por mês</b>, e ' + cuPlural(pessoas,'pessoa','pessoas') + ' ' + (pessoas === 1 ? 'tem' : 'têm') +
-          ' <b>' + cuHoras(horasDisp) + '</b>. A conta abaixo usa só o que ele de fato paga — <b>a diferença é trabalho que hoje não está sendo feito</b>, e é aí que mora o prazo perdido. Os minutos são nossos e estão nas premissas.';
+      /* ---- a projeção e a capacidade da equipe, declaradas ---- */
+      var caixa = cuEl('cuProj'), txt;
+      var volume = cuPlural(pub,'publicação','publicações') + ' e ' + cuPlural(prot,'protocolo','protocolos');
+      if (semEquipe){
+        caixa.className = 'cu-proj estoura';
+        txt = '<b>Hoje ninguém faz isso.</b> ' + volume + ' pedem <b>' + cuHoras(horasProj) +
+          ' por mês</b> pelos minutos que medimos, e não há ninguém alocado. O custo atual não é zero — ' +
+          'é o que se perde por não fazer, e isso não tem preço honesto nesta tela.';
+      } else if (horasProj > horasDisp){
+        caixa.className = 'cu-proj estoura';
+        txt = '<b>Pela nossa projeção, esse volume não cabe na equipe que ele tem.</b> ' + volume + ' pedem <b>' +
+          cuHoras(horasProj) + ' por mês</b>, e a equipe soma <b>' + cuHoras(horasDisp) + '</b> — faltam <b>' +
+          cuHoras(horasProj - horasDisp) + '</b>. A conta abaixo usa só o que ele de fato paga: ' +
+          '<b>a diferença é trabalho que hoje não está sendo feito</b>, e é aí que mora o prazo perdido.';
+      } else if (horasProj > horasDisp * 0.85){
+        caixa.className = 'cu-proj justo';
+        txt = '<b>A equipe está no limite.</b> ' + volume + ' pedem <b>' + cuHoras(horasProj) +
+          ' por mês</b> de <b>' + cuHoras(horasDisp) + '</b> disponíveis — sobram só ' + cuHoras(horasDisp - horasProj) +
+          '. Uma falta, uma semana de férias ou um mês mais movimentado e deixa de caber.';
       } else {
-        caixaProj.innerHTML = '<b>A fatia de tempo é projeção nossa, não pergunta a ele.</b> Pelos minutos que medimos, ' +
-          cuPlural(pub,'publicação','publicações') + ' e ' + cuPlural(prot,'protocolo','protocolos') + ' ocupam <b>' +
-          cuHoras(horasProj) + ' por mês</b> — <b>' + Math.round(fracao * 100) + '% de ' + cuHoras(horasDisp) +
-          ' disponíveis</b>. Só essa fatia entra na conta: comparar o salário cheio contra o Pulso é conta que o advogado derruba com uma pergunta.';
+        caixa.className = 'cu-proj';
+        txt = '<b>A fatia de tempo é projeção nossa, não pergunta a ele.</b> Pelos minutos que medimos, ' + volume +
+          ' ocupam <b>' + cuHoras(horasProj) + ' por mês</b> de <b>' + cuHoras(horasDisp) + '</b> que a equipe tem — ' +
+          'sobram ' + cuHoras(horasDisp - horasProj) + '. <b>Só a fatia dedicada entra na conta:</b> comparar a folha cheia ' +
+          'contra o Pulso é conta que o advogado derruba com uma pergunta.';
       }
+      caixa.innerHTML = txt;
 
-      /* ---- linhas de hoje ---- */
-      cuEl('cuE1').textContent = detalhe1;
-      cuEl('cuQ1').textContent = qt1;
-      cuEl('cuV1').textContent = cuMoeda(cheio);
+      /* ---- linhas de hoje: cada uma aparece só se existir ---- */
+      var pctEq = Math.round(fracaoEquipe * 100);
+      var notaDono = hDono ? ' — já descontadas as ' + cuHoras(hDono) + ' que o dono assume' : '';
 
-      cuEl('cuE2').textContent = 'atendimento, fórum, pasta, cliente — fora desta conta porque o Pulso também não faz';
-      cuEl('cuQ2').textContent = Math.round((1 - fracao) * 100) + '% · ' + cuHoras(horasDisp - horasProj > 0 ? horasDisp - horasProj : 0);
-      cuEl('cuV2').textContent = (cheio - dedicado) < 0.5 ? '—' : '− ' + cuMoeda(cheio - dedicado);
-
-      cuEl('cuE3').textContent = dono
-        ? 'não se aplica: é ele mesmo quem faz, não há quem supervisionar'
-        : gestaoH + ' h do dono por mês, por pessoa, rateadas pela fatia dedicada (' + Math.round(fracao * 100) +
-          '%) e cobradas a ' + cuMoeda(horaDono) + ' a hora — estimativa nossa, editável acima';
-      cuEl('cuQ3').textContent = dono ? '—' : cuHoras(gestaoHRat * pessoas);
-      cuEl('cuV3').textContent = cuMoeda(gestao);
-
-      cuEl('cuE4').textContent = dono
-        ? 'não se aplica: o dono não paga a si mesmo pelo dia em que não trabalhou'
-        : diasFal + (diasFal === 1 ? ' dia' : ' dias') +
+      cuEl('cuR1').hidden = !nEst;
+      if (nEst){
+        cuEl('cuE1').textContent = cuPlural(nEst,'estagiário','estagiários') + ' × ' + cuMoeda(vEst * mult) +
+          (clt ? ' já com encargos' : ' sem encargos') + ' = ' + cuMoeda(folhaEst) + ' de folha; ' + pctEq +
+          '% disso é publicação e prazo' + notaDono;
+        cuEl('cuQ1').textContent = pctEq + '% · ' + cuHoras(horasMes * nEst * fracaoEquipe);
+        cuEl('cuV1').textContent = cuMoeda(dedEst);
+      }
+      cuEl('cuR2').hidden = !nAdv;
+      if (nAdv){
+        cuEl('cuE2').textContent = cuPlural(nAdv,'advogado','advogados') + ' × ' + cuMoeda(vAdv * mult) +
+          (clt ? ' já com encargos' : ' sem encargos') + ' = ' + cuMoeda(folhaAdv) + ' de folha; ' + pctEq +
+          '% disso é publicação e prazo' + notaDono;
+        cuEl('cuQ2').textContent = pctEq + '% · ' + cuHoras(horasMes * nAdv * fracaoEquipe);
+        cuEl('cuV2').textContent = cuMoeda(dedAdv);
+      }
+      cuEl('cuR3').hidden = !hDono;
+      if (hDono){
+        cuEl('cuE3').textContent = cuHoras(hDono) + ' por mês × ' + cuMoeda(vHora) +
+          ' a hora — honorário que ele deixa de produzir enquanto faz isso. Entram por inteiro: são horas já declaradas neste escopo';
+        cuEl('cuQ3').textContent = cuHoras(hDono);
+        cuEl('cuV3').textContent = cuMoeda(custoDono);
+      }
+      cuEl('cuR4').hidden = !nContrat;
+      if (nContrat){
+        cuEl('cuE4').textContent = gestaoH + ' h do dono por mês, por contratado, rateadas pela fatia dedicada (' +
+          pctEq + '%) e cobradas a ' + cuMoeda(vHora) + ' a hora — estimativa nossa, editável acima';
+        cuEl('cuQ4').textContent = cuHoras(gestaoHRat * nContrat);
+        cuEl('cuV4').textContent = cuMoeda(gestao);
+      }
+      cuEl('cuR5').hidden = !nContrat;
+      if (nContrat){
+        cuEl('cuE5').textContent = diasFal + (diasFal === 1 ? ' dia' : ' dias') +
           ' de falta, atestado ou licença por mês: paga-se ' + dias + ' e recebe-se ' + (dias - diasFal) +
-          ' — estimativa nossa, editável acima';
-      cuEl('cuQ4').textContent = dono ? '—' : cuPlural(diasFal, 'dia', 'dias');
-      cuEl('cuV4').textContent = cuMoeda(falta);
+          '. Só para contratados — estimativa nossa, editável acima';
+        cuEl('cuQ5').textContent = cuPlural(diasFal, 'dia', 'dias');
+        cuEl('cuV5').textContent = cuMoeda(falta);
+      }
+      cuEl('cuR6').hidden = !nContrat;
+      if (nContrat){
+        cuEl('cuE6').textContent = diasTro + ' dias úteis parados e ' + horasTro +
+          ' h do dono a cada saída — seleção, treinamento e curva até produzir —, diluídos em ' + perm +
+          ' meses de permanência média' + (clt ? '. A rescisão já está no multiplicador de 1,7, e não é contada duas vezes' : '') +
+          '. Estimativa nossa, editável acima';
+        cuEl('cuQ6').textContent = '÷ ' + perm + ' meses';
+        cuEl('cuV6').textContent = cuMoeda(saida);
+      }
 
-      cuEl('cuE5').textContent = dono
-        ? 'não se aplica: o dono não pede demissão de si mesmo'
-        : diasTro + ' dias úteis parados e ' + horasTro + ' h do dono a cada saída — seleção, treinamento e curva até produzir —, diluídos em ' +
-          perm + ' meses de permanência média — as horas do dono também rateadas pela fatia dedicada. Estimativa nossa, editável acima' +
-          (clt ? '. A rescisão em si já está no multiplicador de 1,7, e não é contada duas vezes' : '');
-      cuEl('cuQ5').textContent = dono ? '—' : '÷ ' + perm + ' meses';
-      cuEl('cuV5').textContent = cuMoeda(saida);
-
-      cuEl('cuQT1').textContent = pub ? cuCentavos(atual / pub) + ' por publicação' : 'sem publicação no mês';
-      cuEl('cuVT1').textContent = cuMoeda(atual);
+      if (semEquipe){
+        cuEl('cuQT1').textContent = 'ninguém faz isso hoje';
+        cuEl('cuVT1').textContent = '—';
+        cuEl('cuFolha').innerHTML = '<strong>Não há folha a comparar.</strong> E isso não quer dizer que o serviço custa zero: ' +
+          'quer dizer que ele não está sendo feito. Vá direto para a caixa vermelha abaixo.';
+      } else {
+        cuEl('cuQT1').textContent = pub ? cuCentavos(atual / pub) + ' por publicação' : 'sem publicação no mês';
+        cuEl('cuVT1').textContent = cuMoeda(atual);
+        var sobraNota = (nContrat >= 2 && horasDisp - horasProj > horasMes * 0.5)
+          ? ' <strong>E mais gente não multiplica esta conta:</strong> o serviço é o mesmo e custa o mesmo — ' +
+            'a folha a mais está pagando outro trabalho, que o Pulso também não faz.'
+          : '';
+        cuEl('cuFolha').innerHTML = nContrat
+          ? '<strong>Folha cheia da equipe: ' + cuMoeda(folha) + ' por mês.</strong> Só ' + cuMoeda(dedEqu) +
+            ' disso entra nesta conta — o resto é atendimento, fórum, pasta e cliente, que o Pulso também não faz. ' +
+            '<strong>Nunca compare a folha cheia contra o Pulso</strong>: é a conta que o advogado derruba com uma pergunta.' + sobraNota
+          : '<strong>Não há folha nesta conta</strong> — o custo é só o honorário que o dono deixa de produzir nas ' +
+            cuHoras(hDono) + ' que ele gasta nisso.';
+      }
 
       /* ---- linhas do Pulso ---- */
       cuEl('cuPQ1').textContent = cuPlural(pub, 'publicação', 'publicações');
@@ -992,48 +1048,64 @@ export function iniciar() {
       cuEl('cuQT2').textContent = pub ? cuCentavos(pulso / pub) + ' por publicação' : 'nada a cobrar';
       cuEl('cuVT2').textContent = cuMoeda(pulso);
 
-      /* ---- o veredito, nos dois sentidos ---- */
+      /* ---- o veredito, nos dois sentidos — e o caso em que não há o que comparar ---- */
       var dif = atual - pulso, box = cuEl('cuVeredito');
-      /* se o volume não cabe na equipe, o custo de hoje é o de um trabalho que
-         não está sendo feito inteiro — e isso tem de aparecer junto do número */
-      var ressalva = estoura
-        ? ' <b>E leia a linha laranja acima antes de usar este número:</b> pela projeção, esse volume não cabe nas horas que ele tem. ' +
+      var ressalva = (!semEquipe && horasProj > horasDisp)
+        ? ' <b>E leia a linha laranja acima antes de usar este número:</b> pela projeção, esse volume não cabe nas horas que a equipe tem. ' +
           'Comparar o custo de um serviço que hoje não é feito por inteiro com o preço de um que seria não é comparação.'
         : '';
-      if (Math.abs(dif) < 1){
+      var naoCabe = '<p class="aviso">O que muda a favor do Pulso e não cabe na aritmética: <b>o custo acompanha o movimento</b> — ' +
+        'mês parado, recesso e férias saem baratos aqui e saem pelo preço cheio na folha; não há atestado, rescisão nem semana ' +
+        'perdida treinando o substituto; e roda <b>7 dias por semana</b>. E o essencial: no escritório-piloto <b>havia quem lesse</b> — ' +
+        'e ainda assim três iniciais foram indeferidas e dois processos arquivados em trinta dias. ' +
+        '<b>Esta conta compara custo, não resultado.</b></p>';
+
+      if (semEquipe){
+        box.className = 'medido cu-veredito nao';
+        box.innerHTML = '<span class="rot">Não há custo atual para comparar</span>' +
+          '<p>Hoje ninguém faz isso no escritório dele. <b>Não mostre R$ 0 contra ' + cuMoeda(pulso) +
+          '</b> — não é que seja de graça, é que <b>não está sendo feito</b>, e o preço disso aparece em prazo perdido, ' +
+          'não em folha de pagamento.</p>' +
+          '<p class="aviso">A conversa aqui não é de economia, é de risco: no escritório-piloto, que <b>tinha</b> quem lesse, ' +
+          'três iniciais foram indeferidas e dois processos arquivados em trinta dias. ' +
+          '<b>Rode o diagnóstico da OAB dele e mostre a carteira na tela</b> — com ninguém lendo, é o argumento inteiro.</p>';
+      } else if (Math.abs(dif) < 1){
         box.className = 'medido cu-veredito';
         box.innerHTML = '<span class="rot">Empate no dinheiro</span>' +
-          '<p>Com esses valores os dois custam praticamente o mesmo. <b>A decisão sai do que a conta não mede</b> — e isso está logo abaixo.</p>';
+          '<p>Com esses valores os dois custam praticamente o mesmo.' + ressalva +
+          ' <b>A decisão sai do que a conta não mede</b> — e isso está logo abaixo.</p>';
       } else if (dif > 0){
         box.className = 'medido cu-veredito ok';
         box.innerHTML = '<span class="rot">Com esses números, o Pulso sai mais barato</span>' +
           '<p>O escritório gasta hoje <b>' + cuMoeda(dif) + ' a mais por mês</b> do que gastaria com o Pulso no mesmo escopo. ' +
-          (pulso > 0 ? '<b>' + Math.round(dif / pulso * 100) + '% a mais.</b> ' : '') + 'E esse custo é fixo: volta inteiro no mês em que o movimento cai.' + ressalva + '</p>' +
-          '<p class="aviso">Use o número, mas <b>não prometa economia garantida</b>: ele vale para as premissas que estão na tela, e elas são nossas. ' +
-          'Diga quais são antes que ele pergunte.</p>';
+          (pulso > 0 ? '<b>' + Math.round(dif / pulso * 100) + '% a mais.</b> ' : '') +
+          'E esse custo é fixo: volta inteiro no mês em que o movimento cai.' + ressalva + '</p>' +
+          '<p class="aviso">Use o número, mas <b>não prometa economia garantida</b>: ele vale para as premissas que estão na tela, ' +
+          'e elas são nossas. Diga quais são antes que ele pergunte.</p>';
       } else {
         box.className = 'medido cu-veredito nao';
         box.innerHTML = '<span class="rot">Com esses números, o Pulso sai mais caro</span>' +
           '<p>Pelo dinheiro seco, sim: o Pulso custa <b>' + cuMoeda(-dif) + ' a mais por mês</b> que esse arranjo. ' +
           '<b>Diga o número.</b> Ele vai refazer essa conta sozinho depois, e é melhor que ouça de você.' + ressalva + '</p>' +
-          '<p class="aviso">O que muda a favor do Pulso e não cabe na aritmética: <b>o custo acompanha o movimento</b> — mês parado, recesso e férias saem baratos aqui e saem pelo preço cheio na folha; ' +
-          'não há atestado, rescisão nem semana perdida treinando o substituto; e roda <b>7 dias por semana</b>. ' +
-          'E o essencial: no escritório-piloto <b>havia quem lesse</b> — e ainda assim três iniciais foram indeferidas e dois processos arquivados em trinta dias. ' +
-          '<b>Esta conta compara custo, não resultado.</b></p>';
+          naoCabe;
       }
 
       /* ---- o mês parado ---- */
       var queda = pulso > 0 ? Math.round((1 - pulsoPar / pulso) * 100) : 0;
       cuEl('cuMesa').innerHTML =
-        '<div class="mz"><b>' + cuMoeda(atual) + '</b>' +
-          '<i>o que o escritório paga no mês parado</i>' +
-          '<em>exatamente o mesmo do mês cheio — ninguém devolve salário porque o movimento caiu</em></div>' +
-        '<div class="mz ' + (pulsoPar < atual ? 'ok' : 'neutro') + '"><b>' + cuMoeda(pulsoPar) + '</b>' +
+        '<div class="mz"><b>' + (semEquipe ? '—' : cuMoeda(atual)) + '</b>' +
+          '<i>' + (semEquipe ? 'não há folha a comparar' : 'o que o escritório paga no mês parado') + '</i>' +
+          '<em>' + (semEquipe
+            ? 'hoje esse trabalho não é feito por ninguém'
+            : 'exatamente o mesmo do mês cheio — ninguém devolve salário porque o movimento caiu') + '</em></div>' +
+        '<div class="mz ' + (!semEquipe && pulsoPar < atual ? 'ok' : 'neutro') + '"><b>' + cuMoeda(pulsoPar) + '</b>' +
           '<i>o que o Pulso custaria nesse mês</i>' +
-          '<em>' + cuPlural(pubPar, 'publicação', 'publicações') + ' e ' + cuPlural(protPar, 'protocolo', 'protocolos') + ' — cai junto com o movimento</em></div>' +
+          '<em>' + cuPlural(pubPar, 'publicação', 'publicações') + ' e ' + cuPlural(protPar, 'protocolo', 'protocolos') +
+          ' — cai junto com o movimento</em></div>' +
         '<div class="mz neutro"><b>' + queda + '%</b>' +
           '<i>é quanto o Pulso cai de um mês para o outro</i>' +
-          '<em>a folha cai 0%. É esta linha, e não o preço, que ganha a conversa</em></div>';
+          '<em>' + (semEquipe ? 'e quem não tem ninguém também não tem esse alívio: não tem o serviço'
+                              : 'a folha cai 0%. É esta linha, e não o preço, que ganha a conversa') + '</em></div>';
     }
 
     /* Reaproveita o levantamento por OAB da calculadora de consumo, quando ele existir.
@@ -1062,26 +1134,10 @@ export function iniciar() {
       });
     }
 
-    function cuTrocarCenario(cen){
-      cuCenario = cen;
-      [['estagiario','cuCenEst'], ['associado','cuCenAss'], ['dono','cuCenDono']].forEach(function(par){
-        var b = cuEl(par[1]), on = (par[0] === cen);
-        b.className = on ? 'cu-cen on' : 'cu-cen';
-        b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
-      /* a remuneração muda de natureza entre os cenários (mês × hora), então volta ao padrão */
-      cuEl('cuRemun').value = CU_PADRAO[cen];
-      if (cen === 'dono') cuEl('cuPessoas').value = 1;
-      cuCalcular();
-    }
-
-    cuEl('cuCenEst').addEventListener('click', function(){ cuTrocarCenario('estagiario'); });
-    cuEl('cuCenAss').addEventListener('click', function(){ cuTrocarCenario('associado'); });
-    cuEl('cuCenDono').addEventListener('click', function(){ cuTrocarCenario('dono'); });
-
-    ['cuPessoas','cuRemun','cuPub','cuHoras','cuDias','cuProt100','cuParado',
+    ['cuNEst','cuVEst','cuNAdv','cuVAdv','cuHDono','cuVHora','cuPub',
+     'cuHoras','cuDias','cuProt100','cuParado',
      'cuMinTriar','cuMinLancar','cuMinDocs','cuMinProt',
-     'cuHoraDono','cuGestaoH','cuDiasFalta','cuPermanencia','cuDiasTroca','cuHorasTroca'].forEach(function(id){
+     'cuGestaoH','cuDiasFalta','cuPermanencia','cuDiasTroca','cuHorasTroca'].forEach(function(id){
       cuEl(id).addEventListener('input', function(){
         if (id === 'cuPub') cuEl('cuPubRange').value = Math.min(600, cuInt('cuPub', 110, 0, 20000));
         cuCalcular(); cuOferecerMedida();

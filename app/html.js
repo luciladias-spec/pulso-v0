@@ -350,10 +350,11 @@ export const HTML = `
   </div>
 </section>
 
+<!-- INICIO custo-atual -->
 <section>
   <div class="col">
     <h2>Quanto isso já custa hoje</h2>
-    <p class="lede">Depois do preço vem sempre a mesma frase: “eu ponho alguém para fazer isso”. Esta calculadora responde com os números do escritório dele — <strong>mesmo escopo dos dois lados</strong>, e sem inflar nenhum. <strong>O único valor em reais que ele informa é o salário.</strong> O resto é projeção nossa, declarada na tela.</p>
+    <p class="lede">Depois do preço vem sempre a mesma frase: “eu ponho alguém para fazer isso”. Esta calculadora responde com os números do escritório dele — <strong>mesmo escopo dos dois lados</strong>, e sem inflar nenhum. <strong>Os únicos valores que ele informa são quem está na equipe e quanto cada um recebe.</strong> O resto é projeção nossa, declarada na tela.</p>
   </div>
 
   <div class="calc">
@@ -361,31 +362,28 @@ export const HTML = `
 
     <p class="cu-escopo"><b>Dos dois lados, o mesmo serviço:</b> ler as publicações, decidir o que fazer, lançar o andamento, organizar os documentos e protocolar. <b>Escrever peça, parecer e cálculo não entra em nenhum dos dois</b> — isso ele paga pela tabela do pacote de qualquer jeito.</p>
 
-    <label id="cuLabCen">Quem faz esse trabalho hoje</label>
-    <div class="cu-cenarios" role="group" aria-labelledby="cuLabCen">
-      <button type="button" class="cu-cen on" id="cuCenEst" aria-pressed="true">Estagiário<span>Bolsa mensal, sem encargos</span></button>
-      <button type="button" class="cu-cen" id="cuCenAss" aria-pressed="false">Advogado associado<span>Remuneração mensal</span></button>
-      <button type="button" class="cu-cen" id="cuCenDono" aria-pressed="false">O próprio dono<span>Não tem salário: deixa de produzir honorário</span></button>
-    </div>
-
-    <div class="cu-dupla">
-      <div class="cu-bloco" id="cuBlocoPessoas">
-        <label for="cuPessoas">Quantas pessoas fazem isso</label>
-        <div class="calc-campo">
-          <input type="number" id="cuPessoas" value="1" min="1" max="50" step="1" aria-label="Quantas pessoas fazem isso">
-          <span class="un">pessoas</span>
-        </div>
+    <label id="cuLabEq">Quem faz esse trabalho hoje — monte a equipe real dele</label>
+    <div class="cu-eq" aria-labelledby="cuLabEq">
+      <div class="cu-eqL" id="cuLinEst">
+        <span class="pn">Estagiários<em>bolsa mensal, normalmente sem encargos</em></span>
+        <label for="cuNEst">quantos <input type="number" id="cuNEst" value="1" min="0" max="50" step="1" aria-label="Quantos estagiários"></label>
+        <label for="cuVEst">bolsa R$ <input type="text" class="cu-larga" id="cuVEst" inputmode="numeric" value="1.500" aria-label="Bolsa mensal de cada estagiário"><span class="un">/mês</span></label>
+        <span class="tot" id="cuTotEst">—</span>
       </div>
-      <div class="cu-bloco">
-        <label for="cuRemun" id="cuLabRemun">Bolsa mensal de cada estagiário</label>
-        <div class="calc-campo">
-          <span class="un">R$</span>
-          <input type="text" class="cu-grande" id="cuRemun" inputmode="numeric" value="1.500" aria-label="Remuneração">
-          <span class="un" id="cuUnRemun">por mês</span>
-        </div>
-        <p class="cu-sub" id="cuSubHora">—</p>
+      <div class="cu-eqL" id="cuLinAdv">
+        <span class="pn">Advogados<em>remuneração mensal de cada associado</em></span>
+        <label for="cuNAdv">quantos <input type="number" id="cuNAdv" value="0" min="0" max="50" step="1" aria-label="Quantos advogados"></label>
+        <label for="cuVAdv">salário R$ <input type="text" class="cu-larga" id="cuVAdv" inputmode="numeric" value="4.000" aria-label="Remuneração mensal de cada advogado"><span class="un">/mês</span></label>
+        <span class="tot" id="cuTotAdv">—</span>
+      </div>
+      <div class="cu-eqL" id="cuLinDono">
+        <span class="pn">O próprio dono<em>não tem salário: o custo é o honorário que ele deixa de produzir</em></span>
+        <label for="cuHDono">horas/mês <input type="number" id="cuHDono" value="0" min="0" max="300" step="1" aria-label="Horas por mês que o dono gasta nisso"></label>
+        <label for="cuVHora">hora R$ <input type="text" class="cu-larga" id="cuVHora" inputmode="numeric" value="200" aria-label="Valor da hora do dono"><span class="un">/h</span></label>
+        <span class="tot" id="cuTotDono">—</span>
       </div>
     </div>
+    <p class="cu-sub" id="cuResumoEquipe">—</p>
 
     <div>
       <label for="cuPub">Publicações por mês</label>
@@ -409,7 +407,7 @@ export const HTML = `
       </div>
       <label class="cu-chave" id="cuChaveClt" for="cuClt">
         <input type="checkbox" id="cuClt">
-        <span><b>Tem CLT.</b> Ligada, soma encargos e provisões com multiplicador <b>1,7</b> sobre o salário — FGTS, INSS patronal, 13º, férias e provisão de rescisão. Desligada por padrão: esses escritórios usam estagiário ou associado, não carteira assinada.</span>
+        <span><b>Os contratados são CLT.</b> Ligada, soma encargos e provisões com multiplicador <b>1,7</b> sobre estagiários e advogados — FGTS, INSS patronal, 13º, férias e provisão de rescisão. <b>Nunca se aplica ao dono</b>, que não tem folha. Desligada por padrão: esses escritórios usam estágio ou associação, não carteira assinada.</span>
       </label>
     </div>
 
@@ -423,45 +421,49 @@ export const HTML = `
       </div>
     </div>
 
-    <div class="premissas">
-      <span class="prem-tit">Gestão, falta e troca — estimativas nossas, editáveis</span>
+    <div class="premissas" id="cuPremContratados">
+      <span class="prem-tit">Gestão, falta e troca — só para contratados, estimativas nossas</span>
       <div class="grade-prem">
-        <label class="cu-prem" id="cuPremHoraDono">Valor da hora do dono<input type="text" id="cuHoraDono" inputmode="numeric" value="200"><span>R$/h</span></label>
-        <label class="cu-prem" id="cuPremGestao">Supervisionar cada pessoa<input type="text" id="cuGestaoH" inputmode="numeric" value="4"><span>h/mês</span></label>
-        <label class="cu-prem" id="cuPremFalta">Dias perdidos por falta ou atestado<input type="text" id="cuDiasFalta" inputmode="numeric" value="1"><span>dias/mês</span></label>
-        <label class="cu-prem" id="cuPremPerm">Quanto tempo a pessoa fica<input type="text" id="cuPermanencia" inputmode="numeric" value="18"><span>meses</span></label>
-        <label class="cu-prem" id="cuPremTroca">Dias úteis perdidos a cada troca<input type="text" id="cuDiasTroca" inputmode="numeric" value="30"><span>dias</span></label>
-        <label class="cu-prem" id="cuPremHTroca">Horas do dono a cada troca<input type="text" id="cuHorasTroca" inputmode="numeric" value="10"><span>h</span></label>
+        <label class="cu-prem">Supervisionar cada contratado<input type="text" id="cuGestaoH" inputmode="numeric" value="4"><span>h/mês</span></label>
+        <label class="cu-prem">Dias perdidos por falta ou atestado<input type="text" id="cuDiasFalta" inputmode="numeric" value="1"><span>dias/mês</span></label>
+        <label class="cu-prem">Quanto tempo a pessoa fica<input type="text" id="cuPermanencia" inputmode="numeric" value="18"><span>meses</span></label>
+        <label class="cu-prem">Dias úteis perdidos a cada troca<input type="text" id="cuDiasTroca" inputmode="numeric" value="30"><span>dias</span></label>
+        <label class="cu-prem">Horas do dono a cada troca<input type="text" id="cuHorasTroca" inputmode="numeric" value="10"><span>h</span></label>
       </div>
     </div>
 
     <span class="cu-tit">Hoje, sem Pulso</span>
     <div class="calc-out">
-      <div class="linha-out">
-        <span class="oque" id="cuO1">Bolsa cheia de quem faz isso<em id="cuE1">—</em></span>
+      <div class="linha-out cu-lo" id="cuR1">
+        <span class="oque">Estagiários<em id="cuE1">—</em></span>
         <span class="qt" id="cuQ1">—</span><span class="vl" id="cuV1">—</span>
       </div>
-      <div class="linha-out">
-        <span class="oque">Fora de publicações e prazos<em id="cuE2">—</em></span>
+      <div class="linha-out cu-lo" id="cuR2">
+        <span class="oque">Advogados<em id="cuE2">—</em></span>
         <span class="qt" id="cuQ2">—</span><span class="vl" id="cuV2">—</span>
       </div>
-      <div class="linha-out">
-        <span class="oque">Supervisionar, conferir e cobrar<em id="cuE3">—</em></span>
+      <div class="linha-out cu-lo" id="cuR3">
+        <span class="oque">O dono, de própria mão<em id="cuE3">—</em></span>
         <span class="qt" id="cuQ3">—</span><span class="vl" id="cuV3">—</span>
       </div>
-      <div class="linha-out">
-        <span class="oque">Dias pagos sem leitura<em id="cuE4">—</em></span>
+      <div class="linha-out cu-lo" id="cuR4">
+        <span class="oque">Supervisionar, conferir e cobrar<em id="cuE4">—</em></span>
         <span class="qt" id="cuQ4">—</span><span class="vl" id="cuV4">—</span>
       </div>
-      <div class="linha-out">
-        <span class="oque">A troca de pessoa, amortizada<em id="cuE5">—</em></span>
+      <div class="linha-out cu-lo" id="cuR5">
+        <span class="oque">Dias pagos sem leitura<em id="cuE5">—</em></span>
         <span class="qt" id="cuQ5">—</span><span class="vl" id="cuV5">—</span>
+      </div>
+      <div class="linha-out cu-lo" id="cuR6">
+        <span class="oque">A troca de pessoa, amortizada<em id="cuE6">—</em></span>
+        <span class="qt" id="cuQ6">—</span><span class="vl" id="cuV6">—</span>
       </div>
       <div class="linha-out total">
         <span class="oque">Custo atual, por mês</span>
         <span class="qt" id="cuQT1">—</span><span class="vl" id="cuVT1">—</span>
       </div>
     </div>
+    <p class="calc-nota" id="cuFolha">—</p>
 
     <span class="cu-tit">Com o Pulso, no mesmo escopo</span>
     <div class="calc-out">
@@ -492,7 +494,7 @@ export const HTML = `
       <span class="rotulo">O que a conta não mede — e não vamos fingir que mede</span>
       <p>A assimetria entre os dois lados é de <strong>custo</strong>, não de prazo. <strong>Prazo processual não corre em fim de semana, feriado nem no recesso</strong> — quem disser o contrário perde o advogado na primeira frase. O que não para é a folha.</p>
       <ul>
-        <li><strong>Férias e o recesso de 20/12 a 20/01.</strong> A pessoa não está, e o salário sai igual. O Pulso cobra por publicação: mês sem volume, conta pequena.</li>
+        <li><strong>Férias e o recesso de 20/12 a 20/01.</strong> A equipe não está, e o salário sai igual. O Pulso cobra por publicação: mês sem volume, conta pequena.</li>
         <li><strong>Feriado e fim de semana.</strong> Dia pago, nada lido. Do outro lado só se paga o que passou pela mesa.</li>
         <li><strong>O mês fraco.</strong> Pouco movimento não reduz folha em um centavo. É a assimetria inteira do produto, e está na conta acima, no mês parado.</li>
         <li><strong>O que a leitura não feita custa.</strong> No escritório-piloto havia quem lesse, e mesmo assim três iniciais foram indeferidas e dois processos arquivados em trinta dias. <strong>Não pusemos preço nisso, e não vamos pôr</strong> — número inventado derruba a conversa inteira.</li>
@@ -501,11 +503,13 @@ export const HTML = `
 
     <div class="caixa">
       <span class="rotulo">Como usar na ligação</span>
-      <p>Pergunte só isto, e digite na frente dele: <strong>“quem faz isso hoje, e quanto você paga?”</strong> O resto da tela é projeção nossa — e é exatamente isso que você deve dizer, em voz alta, antes que ele pergunte. <strong>Premissa escondida vira desconfiança; premissa declarada vira autoridade.</strong></p>
+      <p>Monte a equipe dele enquanto ele fala: <strong>“quem cuida das publicações hoje — estagiário, advogado, você mesmo? E quanto cada um recebe?”</strong> A resposta quase nunca é uma pessoa só, e é por isso que a tela tem três linhas. <strong>Pergunte também quantas horas por mês ele mesmo gasta tapando buraco</strong> — é a linha que mais pesa e a que ele nunca contou.</p>
+      <p>O resto da tela é projeção nossa, e é exatamente isso que você deve dizer, em voz alta, antes que ele pergunte. <strong>Premissa escondida vira desconfiança; premissa declarada vira autoridade.</strong></p>
       <p>Se der que o Pulso custa mais, <strong>fale o número mesmo assim</strong> e siga para o mês parado e para a lista acima. Esconder a diferença custa a venda inteira quando ele refaz a conta sozinho depois.</p>
     </div>
   </div>
 </section>
+<!-- FIM custo-atual -->
 
 <section class="col">
   <h2>Para quem oferecer</h2>
