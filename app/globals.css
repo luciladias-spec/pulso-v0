@@ -134,6 +134,15 @@ li::marker{color:var(--ink-3)}
 .linha-out.total .oque{font-family:Lexend,system-ui,sans-serif;font-size:1.2rem;font-weight:600}
 .linha-out.total .vl{font-size:1.9rem;color:#4D9BFF;letter-spacing:-.02em}
 .calc-nota{margin:20px 0 0;font-size:12.5px;line-height:1.55;color:#7E8BA5}
+
+.medido{background:#19244A;border-left:3px solid var(--azul);border-radius:0 4px 4px 0;padding:16px 20px;margin:0 0 22px}
+.medido .rot{display:block;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#4D9BFF;margin-bottom:8px}
+.medido p{margin:0 0 .6em;font-size:14px;line-height:1.55;color:#C9D4E8}
+.medido p:last-child{margin-bottom:0}
+.medido b{color:var(--ground)}
+.medido .aviso{font-size:12.5px;color:#9FB0CC;border-top:1px solid #2E3D63;padding-top:10px;margin-top:10px}
+.dica{margin:12px 0 0;font-size:12.5px;color:#7E8BA5;line-height:1.5}
+.link{background:none;border:0;padding:0;font:inherit;color:#4D9BFF;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .calc-nota strong{color:#9FB0CC}
 
 /* ---- diagnóstico ---- */

@@ -239,31 +239,34 @@ const HTML = `
 <section>
   <div class="col">
     <h2>Calculadora de consumo</h2>
-    <p class="lede">Quanto o Pulso consome do pacote por mês, a partir do tamanho da carteira. As proporções vêm do escritório-piloto, medidas em 30 dias reais.</p>
+    <p class="lede">Quanto o Pulso consome do pacote por mês. Rodando o diagnóstico acima, os números saem <strong>medidos no diário da OAB dele</strong>. Sem OAB, a calculadora estima pelo tamanho da carteira, com as proporções do escritório-piloto.</p>
   </div>
 
   <div class="calc">
     <span class="rotulo">Estimativa mensal de consumo</span>
+    <div class="medido" id="medido" hidden></div>
+
     <div>
       <label for="qtd">Processos ativos na carteira do escritório</label>
       <div class="calc-campo">
-        <input type="number" id="qtd" value="500" min="20" max="3000" step="10" aria-label="Processos ativos">
+        <input type="number" id="qtd" value="500" min="20" max="6000" step="10" aria-label="Processos ativos">
         <input type="range" id="slider" value="500" min="20" max="3000" step="10" aria-label="Ajustar processos ativos">
         <span class="un">processos</span>
       </div>
+      <p class="dica" id="dicaQtd">O advogado quase nunca sabe esse número de cabeça. <button type="button" class="link" id="irDiag">Levante pela OAB</button> e estes valores passam a ser medidos, não estimados.</p>
     </div>
 
     <div class="calc-out">
       <div class="linha-out">
-        <span class="oque">Triagem<em>capturar e ler · 22,7 publicações por 100 processos ativos</em></span>
+        <span class="oque">Triagem<em id="e1">capturar e ler · 22,7 publicações por 100 processos ativos</em></span>
         <span class="qt" id="q1">—</span><span class="vl" id="v1">—</span>
       </div>
       <div class="linha-out">
-        <span class="oque">Acompanhamento<em>decidir o que fazer · uma por publicação</em></span>
+        <span class="oque">Acompanhamento<em id="e2">decidir o que fazer · uma por publicação</em></span>
         <span class="qt" id="q2">—</span><span class="vl" id="v2">—</span>
       </div>
       <div class="linha-out">
-        <span class="oque">Protocolos e distribuições<em>5,2 por 100 processos ativos ao mês</em></span>
+        <span class="oque">Protocolos e distribuições<em id="e3">5,2 por 100 processos ativos ao mês</em></span>
         <span class="qt" id="q3">—</span><span class="vl" id="v3">—</span>
       </div>
       <div class="linha-out total">
@@ -424,6 +427,7 @@ export default function Page() {
       var POR100 = { pub: 136/600, prot: 31/600 };
       var PRECO  = { triagem: 10, acomp: 10, prot: 5 };
       var qtd = document.getElementById('qtd'), slider = document.getElementById('slider');
+      var modo = 'estimado', medida = null;
 
       function moeda(v){ return 'R$ ' + Math.round(v).toLocaleString('pt-BR'); }
       function plural(n,s,p){ return n + ' ' + (n===1?s:p); }
@@ -437,10 +441,25 @@ export default function Page() {
         return (h<10 ? h.toFixed(1).replace('.',',') : String(Math.round(h))) + 'h';
       }
 
-      function calcular(n){
-        n = Math.max(20, Math.min(3000, Math.round(n)||0));
-        var pub=Math.round(n*POR100.pub), prot=Math.round(n*POR100.prot);
+      function calcular(){
+        var pub, prot, e1, e2, e3;
+        if (modo === 'medido' && medida){
+          pub = medida.pubMes; prot = medida.protMes;
+          e1 = 'medido no diário · média dos últimos 12 meses';
+          e2 = 'uma por publicação';
+          e3 = 'atos com prazo, contados no próprio diário';
+        } else {
+          var n = Math.max(20, Math.min(6000, Math.round(Number(qtd.value))||0));
+          pub  = Math.round(n*POR100.pub);
+          prot = Math.round(n*POR100.prot);
+          e1 = 'capturar e ler · 22,7 publicações por 100 processos ativos';
+          e2 = 'decidir o que fazer · uma por publicação';
+          e3 = '5,2 por 100 processos ativos ao mês';
+        }
         var v1=pub*PRECO.triagem, v2=pub*PRECO.acomp, v3=prot*PRECO.prot;
+        document.getElementById('e1').textContent = e1;
+        document.getElementById('e2').textContent = e2;
+        document.getElementById('e3').textContent = e3;
         document.getElementById('q1').textContent = plural(pub,'publicação','publicações');
         document.getElementById('q2').textContent = plural(pub,'publicação','publicações');
         document.getElementById('q3').textContent = plural(prot,'ato','atos');
@@ -449,9 +468,10 @@ export default function Page() {
         document.getElementById('v3').textContent = moeda(v3);
         document.getElementById('vt').textContent = moeda(v1+v2+v3);
       }
-      qtd.addEventListener('input', function(){ slider.value=qtd.value; calcular(Number(qtd.value)); });
-      slider.addEventListener('input', function(){ qtd.value=slider.value; calcular(Number(slider.value)); });
-      calcular(500);
+      function manual(v){ modo='estimado'; qtd.value=v; slider.value=Math.min(3000,Math.max(20,v)); calcular(); }
+      qtd.addEventListener('input', function(){ manual(Number(qtd.value)); });
+      slider.addEventListener('input', function(){ manual(Number(slider.value)); });
+      calcular();
 
       /* ================= diagnóstico por OAB ================= */
       var API='https://comunicaapi.pje.jus.br/api/v1/comunicacao';
@@ -518,21 +538,71 @@ export default function Page() {
                  : (f.dinheiro ? 'Pagamento' : 'Andamento'));
       }
 
-      async function buscar(oab, uf){
-        var hoje=new Date(), ini=new Date(); ini.setDate(hoje.getDate()-30);
-        var todos=[], pagina=1;
-        while (pagina<=6){
-          var url=API+'?numeroOab='+encodeURIComponent(oab)+'&ufOab='+encodeURIComponent(uf)
-            +'&dataDisponibilizacaoInicio='+iso(ini)+'&dataDisponibilizacaoFim='+iso(hoje)
-            +'&pagina='+pagina+'&itensPorPagina=100';
-          var r=await fetch(url,{headers:{Accept:'application/json'}});
-          if(!r.ok) throw new Error('O diário respondeu '+r.status);
-          var j=await r.json(), itens=(j&&j.items)||[];
-          todos=todos.concat(itens);
-          if(itens.length<100) break;
-          pagina++;
+      /* A API devolve em 'count' o total do intervalo pedido. Lendo a primeira página
+         já se sabe quantas faltam, e elas vão em paralelo — um ano inteiro sai em segundos. */
+      async function buscar(oab, uf, dias, aviso){
+        var fim=new Date(), ini=new Date(); ini.setDate(fim.getDate()-dias);
+        var base=API+'?numeroOab='+encodeURIComponent(oab)+'&ufOab='+encodeURIComponent(uf)
+          +'&dataDisponibilizacaoInicio='+iso(ini)+'&dataDisponibilizacaoFim='+iso(fim)
+          +'&itensPorPagina=100&pagina=';
+        async function pag(n){
+          var r=await fetch(base+n,{headers:{Accept:'application/json'}});
+          if(!r.ok) throw new Error('o diário respondeu '+r.status);
+          return r.json();
+        }
+        var p1=await pag(1), todos=((p1&&p1.items)||[]).slice();
+        var total=(p1&&p1.count)||todos.length, paginas=Math.min(Math.ceil(total/100), 60);
+        for(var i=2;i<=paginas;i+=6){
+          var lote=[];
+          for(var k=i;k<i+6&&k<=paginas;k++) lote.push(pag(k));
+          var rs=await Promise.all(lote);
+          rs.forEach(function(j){ todos=todos.concat((j&&j.items)||[]); });
+          if(aviso) aviso(todos.length, total);
         }
         return todos;
+      }
+
+      /* Levanta a carteira: quantos processos distintos se mexeram em 12 meses,
+         quantas publicações por mês e quantos atos com prazo por mês. */
+      function carteira(brutas){
+        var procs={}, vistos={}, eventos=0, prazo=0;
+        brutas.forEach(function(it){
+          var txt=limpar(it.texto);
+          var k=it.numero_processo+'|'+it.data_disponibilizacao+'|'+hash(txt);
+          if(vistos[k]) return; vistos[k]=1; eventos++;
+          procs[it.numero_processo]=1;
+          if(R.ato.test(txt)||R.ato2.test(txt)||R.ato3.test(txt)) prazo++;
+        });
+        return { procs:Object.keys(procs).length, eventos:eventos, prazo:prazo };
+      }
+
+      async function levantar(oab, uf){
+        var el=document.getElementById('medido');
+        el.hidden=false;
+        el.innerHTML='<span class="rot">Levantando a carteira</span><p>Lendo 12 meses do diário da OAB '+oab+'/'+uf+'…</p>';
+        try{
+          var brutas=await buscar(oab, uf, 365, function(lidas, total){
+            el.innerHTML='<span class="rot">Levantando a carteira</span><p>'+lidas+' de '+total+' publicações lidas…</p>';
+          });
+          if(!brutas.length){
+            el.innerHTML='<span class="rot">Carteira não levantada</span><p>O diário não tem publicação dessa OAB nos últimos 12 meses.</p>';
+            return;
+          }
+          var c=carteira(brutas);
+          medida={ carteira:c.procs, pubMes:Math.round(c.eventos/12), protMes:Math.round(c.prazo/12) };
+          modo='medido';
+          qtd.value=c.procs; slider.value=Math.min(3000, Math.max(20, c.procs));
+          el.innerHTML='<span class="rot">Medido na OAB '+oab+'/'+uf+'</span>'
+            +'<p><b>'+c.procs+' processos</b> tiveram movimentação nos últimos 12 meses, com média de <b>'
+            +Math.round(c.eventos/12)+' publicações por mês</b>. Os valores abaixo saem desses números — não são estimativa.</p>'
+            +'<p class="aviso"><b>Esse é o piso, não a carteira inteira.</b> Processo que não publicou em 12 meses não aparece no diário: '
+            +'no escritório-piloto, o diário mostrou pouco mais da metade do que o advogado tinha. '
+            +'Pergunte quantos processos ele tem ao todo — <b>a diferença é a carteira parada</b>, e é exatamente o diagnóstico de R$ 30 por processo.</p>';
+          calcular();
+        }catch(e){
+          el.innerHTML='<span class="rot">Não consegui levantar a carteira</span><p>'+e.message
+            +'. O diagnóstico de 30 dias acima continua válido; a calculadora segue no modo estimado.</p>';
+        }
       }
 
       function apurar(brutas){
@@ -755,13 +825,14 @@ export default function Page() {
         if(!oab){ msg.className='diag-msg erro'; msg.textContent='Digite o número da OAB.'; return; }
         btn.disabled=true; msg.className='diag-msg'; msg.textContent='Consultando o diário…'; res.style.display='none';
         try{
-          var brutas=await buscar(oab,uf);
+          var brutas=await buscar(oab,uf,30);
           if(!brutas.length){
             msg.textContent='Nenhuma publicação para a OAB '+oab+'/'+uf+' nos últimos 30 dias. Confira o número e a UF.';
           } else {
             ultimo={ brutas:brutas.length, g:apurar(brutas), oab:oab, uf:uf };
             msg.textContent='Diagnóstico da OAB '+oab+'/'+uf+', últimos 30 dias.';
             pintar();
+            levantar(oab, uf);
           }
         }catch(e){
           msg.className='diag-msg erro';
@@ -776,6 +847,10 @@ export default function Page() {
         document.getElementById(id).addEventListener('input', pintar);
       });
       document.getElementById('btnPdf').addEventListener('click', function(){ window.print(); });
+      document.getElementById('irDiag').addEventListener('click', function(){
+        campoOab.scrollIntoView({behavior:'smooth', block:'center'});
+        campoOab.focus();
+      });
     })();
   }, []);
 
