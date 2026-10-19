@@ -234,27 +234,45 @@ export function iniciar() {
                : (f.dinheiro ? 'Pagamento' : 'Andamento'));
     }
 
-    /* A API devolve em 'count' o total do intervalo pedido. Lendo a primeira página
-       já se sabe quantas faltam, e elas vão em paralelo — um ano inteiro sai em segundos. */
+    function espera(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+    /* O diário limita a 20 requisições por janela (cabeçalho X-RateLimit-Limit).
+       O navegador NÃO consegue ler esse cabeçalho — a API não manda
+       Access-Control-Expose-Headers —, então não dá para contar o saldo: resta ir
+       devagar e recuar quando levar 429. Três páginas por vez, com pausa. */
+    var LOTE = 3, PAUSA = 400, RECUO = [3000, 8000, 15000, 30000];
+
     async function buscar(oab, uf, dias, aviso){
       var fim=new Date(), ini=new Date(); ini.setDate(fim.getDate()-dias);
       var base=API+'?numeroOab='+encodeURIComponent(oab)+'&ufOab='+encodeURIComponent(uf)
         +'&dataDisponibilizacaoInicio='+iso(ini)+'&dataDisponibilizacaoFim='+iso(fim)
         +'&itensPorPagina=100&pagina=';
-      async function pag(n){
-        var r=await fetch(base+n,{headers:{Accept:'application/json'}});
-        if(!r.ok) throw new Error('o diário respondeu '+r.status);
+
+      async function pag(n, tent){
+        tent = tent || 0;
+        var r = await fetch(base+n, {headers:{Accept:'application/json'}});
+        if (r.status === 429) {
+          if (tent >= RECUO.length) {
+            throw new Error('o diário está limitando as consultas. Espere um minuto e rode de novo');
+          }
+          if (aviso) aviso(-1, Math.round(RECUO[tent]/1000));   // -1 avisa que está esperando
+          await espera(RECUO[tent]);
+          return pag(n, tent+1);
+        }
+        if (!r.ok) throw new Error('o diário respondeu '+r.status);
         return r.json();
       }
+
       var p1=await pag(1), todos=((p1&&p1.items)||[]).slice();
       /* A API devolve no máximo 10.000 itens por intervalo; não adianta pedir mais. */
       var total=(p1&&p1.count)||todos.length, paginas=Math.min(Math.ceil(total/100), 100);
-      for(var i=2;i<=paginas;i+=6){
+      for(var i=2;i<=paginas;i+=LOTE){
         var lote=[];
-        for(var k=i;k<i+6&&k<=paginas;k++) lote.push(pag(k));
+        for(var k=i;k<i+LOTE&&k<=paginas;k++) lote.push(pag(k));
         var rs=await Promise.all(lote);
         rs.forEach(function(j){ todos=todos.concat((j&&j.items)||[]); });
         if(aviso) aviso(todos.length, total);
+        if (i+LOTE <= paginas) await espera(PAUSA);
       }
       return todos;
     }
@@ -290,7 +308,10 @@ export function iniciar() {
       el.innerHTML='<span class="rot">Levantando a carteira</span><p>Lendo 12 meses do diário da OAB '+oab+'/'+uf+'…</p>';
       try{
         var brutas=await buscar(oab, uf, 365, function(lidas, total){
-          el.innerHTML='<span class="rot">Levantando a carteira</span><p>'+lidas+' de '+total+' publicações lidas…</p>';
+          el.innerHTML = (lidas === -1)
+            ? '<span class="rot">Levantando a carteira</span><p>O diário limita o número de consultas por minuto. '
+              + 'Aguardando '+total+' segundos para continuar de onde parou…</p>'
+            : '<span class="rot">Levantando a carteira</span><p>'+lidas+' de '+total+' publicações lidas…</p>';
         });
         if(!brutas.length){
           el.innerHTML='<span class="rot">Carteira não levantada</span><p>O diário não tem publicação dessa OAB nos últimos 12 meses.</p>';
@@ -789,7 +810,7 @@ export function iniciar() {
         }
       }catch(e){
         msg.className='diag-msg erro';
-        msg.textContent='Não consegui consultar agora: '+e.message+'. Tente de novo em instantes.';
+        msg.textContent='Não consegui consultar agora: '+e.message+'.';
       }
       btn.disabled=false;
     }
