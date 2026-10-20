@@ -19,7 +19,14 @@ fi
 export CLOUDFLARE_API_TOKEN
 export CLOUDFLARE_ACCOUNT_ID=ec73382d6c6b043c8338b0821832329e
 
-[ -d node_modules ] || npm install
+# Confere a chave antes do build, para nao esperar o build inteiro e falhar no fim.
+verifica() { curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" "https://api.cloudflare.com/client/v4/$1" | grep -q '"status":"active"'; }
+verifica user/tokens/verify || verifica "accounts/$CLOUDFLARE_ACCOUNT_ID/tokens/verify" || {
+  echo "ERRO: a chave da Cloudflare e invalida ou foi desativada. Peca uma nova ao Tiago." >&2
+  exit 1
+}
+
+[ -d node_modules ] || npm ci
 rm -rf out
 npx next build
 # Roda de dentro de out/: na raiz, o wrangler tenta converter o projeto Next sozinho.

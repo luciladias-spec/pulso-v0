@@ -22,6 +22,7 @@ Material interno: as páginas não aparecem no Google (`robots: noindex` em `app
    - o texto novo aparece (`curl -s <link> | grep "<trecho novo>"`);
    - se mexeu no diagnóstico ou na calculadora, abra no navegador e teste uma vez.
    Mostre o link da prévia à Lucila e pergunte se pode publicar para os vendedores. Se ela já disse "publica direto", pule a pergunta.
+   Se ela recusar, desfaça a mudança (`git checkout -- . && git clean -fd public app`) e rode `npm run previa` de novo, para a prévia voltar a ficar igual ao que os vendedores veem.
 5. **Grave no GitHub:** `git add -A && git commit -m "<o que mudou, em português>" && git push`.
 6. **Publique:** `npm run publicar`.
 7. **Confira no ar** https://pulso-vendas.pages.dev do mesmo jeito do passo 4.
@@ -31,20 +32,33 @@ Material interno: as páginas não aparecem no Google (`robots: noindex` em `app
 
 Cada tela nova vira um endereço próprio, por exemplo `https://pulso-vendas.pages.dev/diagnostico`.
 
-- **Página em HTML pronta** (a Lucila mandou um arquivo `.html`): salve em `public/<nome>.html`. Ela abre em `/<nome>`. Garanta que o `<head>` tem `<meta name="robots" content="noindex">`.
+- **Página HTML avulsa** (a Lucila mandou um `.html` ou pediu uma tela simples em texto): salve em `public/<nome>.html` (crie a pasta `public/` se não existir). Ela abre em `/<nome>`. Garanta que o `<head>` tem `<meta name="robots" content="noindex">`.
 - **Página no padrão do site** (mesmo visual da principal): crie `app/<nome>/page.jsx` seguindo `app/page.jsx`. Ela abre em `/<nome>`.
 - Use nomes curtos, minúsculos, sem acento e sem espaço (`calculadora`, `objecoes`).
 - Não apague nem renomeie uma tela que já está com os vendedores sem a Lucila pedir: o link deles para de funcionar.
+- Tela apagada pode continuar abrindo por até 7 dias (cache da Cloudflare). Para tirar do ar na hora, não apague o arquivo: troque o conteúdo por um aviso curto ("Esta página saiu do ar") e publique.
 
 ## Voltar a versão anterior
 
-O Cloudflare guarda todas as publicações. Para voltar:
+O Cloudflare guarda todas as publicações. Para voltar, use o rollback dele (não republique um commit antigo: os anteriores a esta skill nem têm o script):
 
-1. `git log --oneline` e escolha o commit bom.
-2. `git checkout <commit> && npm run publicar && git checkout main`.
-3. Confira no ar e avise a Lucila. Depois corrija o problema na `main` e publique de novo.
+1. Liste as publicações de produção (a mais recente primeiro):
+   ```bash
+   T=$(security find-generic-password -s pulso-vendas-cloudflare -w); A=ec73382d6c6b043c8338b0821832329e
+   curl -s -H "Authorization: Bearer $T" "https://api.cloudflare.com/client/v4/accounts/$A/pages/projects/pulso-vendas/deployments?env=production" \
+     | python3 -c 'import json,sys; [print(d["id"], d["created_on"][:16], d.get("deployment_trigger",{}).get("metadata",{}).get("commit_message","")[:60]) for d in json.load(sys.stdin)["result"]]'
+   ```
+   Horários em UTC (BRT = UTC−3). Confirme com a Lucila qual é a versão boa.
+2. Volte para ela:
+   ```bash
+   curl -s -X POST -H "Authorization: Bearer $T" "https://api.cloudflare.com/client/v4/accounts/$A/pages/projects/pulso-vendas/deployments/<id>/rollback" | python3 -c 'import json,sys; print(json.load(sys.stdin)["success"])'
+   ```
+   Deve imprimir `True`. Leva segundos.
+3. Confira no ar. Depois corrija o problema na `main` e publique de novo.
 
 ## Configuração única (no Mac da Lucila)
+
+Precisa de Node.js com npm (`node -v` deve responder; se não, instale de https://nodejs.org, versão LTS). Na primeira publicação o comando baixa as dependências e o `wrangler`; pode levar alguns minutos.
 
 O script `scripts/publicar.sh` lê a chave da Cloudflare no Chaveiro do Mac. Se ele disser "chave da Cloudflare nao encontrada", peça a chave ao Tiago e, com a Lucila colando a chave quando o terminal pedir, rode:
 
