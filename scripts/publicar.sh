@@ -1,5 +1,5 @@
 #!/bin/bash
-# Publica o site no Cloudflare Pages (https://pulso-vendas.pages.dev).
+# Publica o site no Cloudflare Pages (https://vendas.facilitajuridico.com).
 # Uso: scripts/publicar.sh          -> link dos vendedores
 #      scripts/publicar.sh previa   -> prévia em https://previa.pulso-vendas.pages.dev
 # A chave da Cloudflare fica no Chaveiro do Mac (servico "pulso-vendas-cloudflare").
