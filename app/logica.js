@@ -85,7 +85,7 @@ export function iniciar() {
         var cls = k._cabe ? 'cabe' : (k._sobra >= 0 ? 'justo' : 'nao');
         var np  = Math.floor(k._sobra/k._peca);
         var txt = k._cabe ? (np + (np===1 ? ' peça' : ' peças')) : (k._sobra >= 0 ? 'não sobra peça' : 'não cabe');
-        // o que o vendedor precisa responder: falta quanto?
+        // a pergunta que importa: falta quanto?
         var col4 = k._sobra >= 0
           ? '<b>+'+moeda(k._sobra)+'</b>'
           : '<b style="color:#F08C7E">faltam '+moeda(-k._sobra)+'</b>';

@@ -1,0 +1,1539 @@
+<title>Vender Pulso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+
+<style>
+:root{
+  --ground:#F4F7FB; --surface:#FFFFFF; --surface-2:#E8EEF7;
+  --ink:#0C1733; --ink-2:#44506B; --ink-3:#7A869E;
+  --rule:#D9E2EF; --rule-2:#BFCCE0;
+  --azul:#2A71E5; --azul-soft:#E1EDFD; --navy:#140DBF;
+  --verde:#0E7A5F; --verde-soft:#DCF0E9;
+  --alerta:#B3261E; --alerta-soft:#FBE4E1;
+  --shadow:0 1px 0 rgba(12,23,51,.04), 0 10px 30px -20px rgba(12,23,51,.45);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0A1024; --surface:#121A33; --surface-2:#1B2645;
+    --ink:#E6ECF7; --ink-2:#AFBBD1; --ink-3:#7E8BA5;
+    --rule:#233055; --rule-2:#32406B;
+    --azul:#4D9BFF; --azul-soft:#10234A; --navy:#8A93FF;
+    --verde:#5FC9A4; --verde-soft:#10302A;
+    --alerta:#F08C7E; --alerta-soft:#3A1620;
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 12px 34px -22px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0A1024; --surface:#121A33; --surface-2:#1B2645;
+  --ink:#E6ECF7; --ink-2:#AFBBD1; --ink-3:#7E8BA5;
+  --rule:#233055; --rule-2:#32406B;
+  --azul:#4D9BFF; --azul-soft:#10234A; --navy:#8A93FF;
+  --verde:#5FC9A4; --verde-soft:#10302A;
+  --alerta:#F08C7E; --alerta-soft:#3A1620;
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 12px 34px -22px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:4px;z-index:9;
+  background:linear-gradient(90deg,var(--azul) 0%,var(--navy) 100%)}
+body{
+  background:var(--ground);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.62;margin:0;padding:0 22px 110px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto}
+.col{max-width:66ch}
+.tagline{font-size:11.5px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--azul)}
+
+header{padding:60px 0 44px;border-bottom:2px solid var(--ink)}
+h1{
+  font-family:Lexend,system-ui,sans-serif;font-weight:700;
+  font-size:clamp(3.4rem,13vw,8rem);line-height:.88;letter-spacing:-.04em;
+  margin:.14em 0 .18em;
+}
+.promessa{
+  font-family:Lexend,system-ui,sans-serif;font-weight:600;
+  font-size:clamp(1.5rem,4.4vw,2.9rem);line-height:1.14;letter-spacing:-.022em;
+  max-width:19ch;margin:0 0 26px;text-wrap:balance;
+}
+.promessa b{color:var(--azul);font-weight:600}
+.fitas{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 4px}
+.fita{background:var(--ink);color:var(--ground);font-size:11.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding:7px 13px;border-radius:2px}
+.fita.aberta{background:transparent;color:var(--ink);border:2px solid var(--ink);padding:5px 11px}
+
+section{padding-top:66px}
+h2{
+  font-family:Lexend,system-ui,sans-serif;font-weight:600;
+  font-size:clamp(1.7rem,3.6vw,2.4rem);line-height:1.12;letter-spacing:-.022em;
+  margin:.1em 0 .55em;text-wrap:balance;
+}
+h3{font-family:Inter,sans-serif;font-weight:700;font-size:1.02rem;margin:2em 0 .5em}
+p{margin:0 0 1.05em}
+a{color:var(--azul);text-underline-offset:2px}
+a:focus-visible,input:focus-visible,button:focus-visible,select:focus-visible{outline:2px solid var(--azul);outline-offset:3px}
+strong{font-weight:700}
+ul,ol{margin:0 0 1.05em;padding-left:1.2em}
+li{margin-bottom:.46em}
+li::marker{color:var(--ink-3)}
+.lede{font-size:1.1rem;color:var(--ink-2);max-width:60ch}
+
+.esteira{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin:0 0 1.4em}
+.passo{background:var(--surface);padding:17px 22px;display:grid;grid-template-columns:30px 1fr;gap:16px;align-items:start}
+.passo .n{font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:1.05rem;color:var(--azul);line-height:1.5;font-variant-numeric:tabular-nums}
+.passo b{display:block;margin-bottom:2px}
+.passo span{font-size:14.5px;line-height:1.5;color:var(--ink-2)}
+
+.linha{display:grid;grid-template-columns:1fr auto 1fr;margin:0 0 1.5em;align-items:stretch}
+.lado{padding:26px 30px}
+.lado.frente{background:var(--surface);border:1px solid var(--rule);border-right:0;border-radius:4px 0 0 4px}
+.lado.tras{background:var(--verde-soft);border:1px solid var(--rule);border-left:0;border-radius:0 4px 4px 0}
+.divisor{width:3px;background:var(--ink);position:relative}
+.divisor span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);background:var(--ground);color:var(--ink);padding:5px 12px;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;border:2px solid var(--ink);border-radius:2px}
+.lado h4{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin:0 0 12px;color:var(--ink-3)}
+.lado.tras h4{color:var(--verde)}
+.lado .quem{display:block;font-family:Lexend,system-ui,sans-serif;font-size:1.25rem;font-weight:600;margin-bottom:10px;letter-spacing:-.01em}
+.lado.tras .quem{color:var(--verde)}
+.lado ul{list-style:none;padding:0;margin:0}
+.lado li{margin:0;padding:9px 0;border-bottom:1px solid var(--rule);font-size:14.5px;line-height:1.45}
+.lado li:last-child{border-bottom:0}
+
+.caixa{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--azul);padding:22px 26px;border-radius:0 4px 4px 0;margin:0 0 1.3em;box-shadow:var(--shadow)}
+.caixa:last-child{margin-bottom:0}
+.caixa p:last-child,.caixa ul:last-child{margin-bottom:0}
+.caixa .rotulo{display:block;font-size:10.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--azul);margin-bottom:9px}
+.caixa.ok{border-left-color:var(--verde)}
+.caixa.ok .rotulo{color:var(--verde)}
+.caixa.nao{border-left-color:var(--alerta)}
+.caixa.nao .rotulo{color:var(--alerta)}
+
+.prova{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin:0 0 1.4em}
+.p-item{background:var(--surface);padding:20px 18px}
+.p-item b{display:block;font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:2.3rem;line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.p-item.mau b{color:var(--alerta)}
+.p-item.bom b{color:var(--verde)}
+.p-item i{display:block;font-style:normal;margin-top:8px;font-size:12.5px;line-height:1.4;color:var(--ink-3)}
+
+/* ---- painéis escuros (calculadora e diagnóstico) ---- */
+.calc{background:#0C1733;color:#F4F7FB;border-radius:5px;padding:32px 34px;margin:0 0 1.3em}
+.calc .rotulo{display:block;font-size:10.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#6FB0FF;margin-bottom:18px}
+.calc label{display:block;font-size:13px;color:#C2CFE4;margin-bottom:9px;letter-spacing:.02em}
+.calc-campo{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.calc-campo input[type=number]{
+  font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:2.4rem;width:5.2ch;
+  background:transparent;color:#F4F7FB;border:0;border-bottom:3px solid #4D9BFF;
+  padding:0 0 3px;text-align:center;font-variant-numeric:tabular-nums;-moz-appearance:textfield;
+}
+.calc-campo input[type=number]::-webkit-outer-spin-button,
+.calc-campo input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.calc-campo input[type=range]{flex:1;min-width:180px;accent-color:#4D9BFF;height:4px}
+.calc-campo .un{font-size:13.5px;color:#C2CFE4}
+
+.calc-out{margin-top:28px;border-top:1px solid #2E3D63;padding-top:4px}
+.linha-out{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px solid #223052}
+.linha-out .oque{font-size:14.5px}
+.linha-out .oque em{font-style:normal;color:#9CACC8;font-size:12.5px;display:block;line-height:1.4}
+.linha-out .qt{font-size:14.5px;color:#C2CFE4;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.linha-out .vl{font-family:Lexend,system-ui,sans-serif;font-weight:600;font-size:1.15rem;font-variant-numeric:tabular-nums;text-align:right;min-width:7.5ch;white-space:nowrap}
+.linha-out.total{border-bottom:0;border-top:2px solid var(--azul);margin-top:6px;padding-top:16px}
+.linha-out.total .oque{font-family:Lexend,system-ui,sans-serif;font-size:1.2rem;font-weight:600}
+.linha-out.total .vl{font-size:1.9rem;color:#6FB0FF;letter-spacing:-.02em}
+.calc-nota{margin:20px 0 0;font-size:12.5px;line-height:1.55;color:#9CACC8}
+
+.medido{background:#19244A;border-left:3px solid var(--azul);border-radius:0 4px 4px 0;padding:16px 20px;margin:0 0 22px}
+.medido .rot{display:block;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#4D9BFF;margin-bottom:8px}
+.medido p{margin:0 0 .6em;font-size:14px;line-height:1.55;color:#C9D4E8}
+.medido p:last-child{margin-bottom:0}
+.medido b{color:#F4F7FB}
+.medido .aviso{font-size:12.5px;color:#AFBDD6;border-top:1px solid #2E3D63;padding-top:10px;margin-top:10px}
+.dica{margin:12px 0 0;font-size:12.5px;color:#9CACC8;line-height:1.5}
+.pac{border:1px solid #223052;border-radius:4px;overflow:hidden;margin:0 0 16px}
+.pacL{display:grid;grid-template-columns:1.1fr .9fr .9fr 1.1fr .9fr auto;gap:12px;align-items:baseline;
+  background:#121C3A;padding:13px 16px;border-bottom:1px solid #223052;font-size:13.5px}
+.pacL:last-child{border-bottom:0}
+.pacL.cab{background:#19244A;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#AFBDD6}
+.pacL.ideal{background:#15265A}
+.pacL .pn{font-family:Lexend,system-ui,sans-serif;font-weight:600;font-size:15px}
+.pacL .pv{font-variant-numeric:tabular-nums;color:#C2CFE4}
+.pacL .pv b{color:#F4F7FB;font-weight:700}
+.pacL .tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:3px;white-space:nowrap}
+.tag.cabe{background:#10332A;color:#5FC9A4}
+.tag.justo{background:#3A2E16;color:#E8B84B}
+.tag.nao{background:#3A1620;color:#F08C7E}
+@media (max-width:720px){
+  .pacL{grid-template-columns:1fr auto;gap:4px 10px}
+  .pacL.cab{display:none}
+  .pacL .pn{grid-column:1/-1}
+}
+.link{background:none;border:0;padding:0;font:inherit;color:#4D9BFF;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.calc-nota strong{color:#D7E0EF}
+
+/* ---- diagnóstico ---- */
+.diag-form{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.campo{display:flex;flex-direction:column}
+.campo input[type=text],.campo select{
+  font-family:Inter,sans-serif;font-size:1.25rem;font-weight:700;
+  background:#1B2850;color:#F4F7FB;border:1px solid #4A5C86;border-radius:3px;
+  padding:11px 13px;min-width:140px;
+}
+.campo select{min-width:92px}
+.btn{
+  font-family:Inter,sans-serif;font-size:14.5px;font-weight:700;letter-spacing:.03em;
+  background:#4D9BFF;color:#06122B;border:0;border-radius:3px;
+  padding:14px 24px;cursor:pointer;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:default}
+.diag-msg{margin:20px 0 0;font-size:14px;color:#C2CFE4;line-height:1.55}
+.diag-msg.erro{color:#F08C7E}
+#diagRes{display:none;margin-top:26px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1px;background:#223052;border:1px solid #223052;border-radius:4px;overflow:hidden;margin:0 0 20px}
+.dk{background:#121C3A;padding:16px 14px}
+.dk b{display:block;font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:1.95rem;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.dk.mau b{color:#F08C7E}
+.dk.bom b{color:#5FC9A4}
+.dk.av b{color:#4D9BFF}
+.dk i{display:block;font-style:normal;margin-top:7px;font-size:11.5px;line-height:1.35;color:#AFBDD6}
+.leitura{background:#19244A;border-left:3px solid var(--azul);border-radius:0 4px 4px 0;padding:18px 22px;margin:0 0 20px}
+.leitura p{margin:0 0 .7em;font-size:14.5px;line-height:1.56}
+.leitura p:last-child{margin-bottom:0}
+.leitura b{color:#4D9BFF}
+.lista-proc{border:1px solid #223052;border-radius:4px;overflow:hidden}
+.lp{background:#121C3A;padding:12px 16px;border-bottom:1px solid #223052;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:baseline}
+.lp:last-child{border-bottom:0}
+.lp .pr{font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.lp .ds{display:block;font-weight:400;color:#9CACC8;font-size:12.5px;line-height:1.45;margin-top:3px}
+.lp .tg{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.tg.ato{background:#3A1620;color:#F08C7E}
+.tg.dec{background:#15265A;color:#4D9BFF}
+.tg.age{background:#10332A;color:#5FC9A4}
+.tg.cego{background:#19244A;color:#7E8BA5}
+
+.tabela-wrap{overflow-x:auto;margin:0 0 1.4em;border:1px solid var(--rule);border-radius:4px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--rule);vertical-align:top}
+thead th{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);background:var(--surface-2);border-bottom:1px solid var(--rule-2)}
+tbody tr:last-child td{border-bottom:none}
+td.v,th.v{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right}
+tbody tr.destaque td{background:var(--azul-soft)}
+
+.obj{display:grid;gap:12px;margin:0 0 1.4em}
+.o{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:20px 24px}
+.o .fala{font-family:Lexend,system-ui,sans-serif;font-style:italic;font-size:1.14rem;line-height:1.4;margin:0 0 12px}
+.o .fala::before{content:"“"}
+.o .fala::after{content:"”"}
+.o .resp{margin:0;font-size:14.5px;line-height:1.56;color:var(--ink-2)}
+.o .resp strong{color:var(--ink)}
+.o .nota{margin:11px 0 0;padding-top:11px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3);line-height:1.5}
+
+.script{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--ink);border-radius:0 4px 4px 0;padding:26px 30px;margin:0 0 1.2em}
+.script .rotulo{display:block;font-size:10.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--azul);margin-bottom:14px}
+.script p{font-family:Lexend,system-ui,sans-serif;font-size:1.14rem;line-height:1.5;margin:0 0 .8em}
+.script p:last-child{margin-bottom:0}
+.script .acao{font-family:Inter,sans-serif;font-size:13.5px;color:var(--ink-3);font-style:italic;line-height:1.5}
+
+.premissas{margin:22px 0 0;padding:18px 0 0;border-top:1px solid #2E3D63}
+.prem-tit{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#AFBDD6;margin-bottom:14px}
+.grade-prem{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.grade-prem label{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#D7E0EF;line-height:1.3}
+.grade-prem input{width:5.4ch;flex:none;font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:15px;
+  background:#1B2850;color:#F4F7FB;border:1px solid #4A5C86;border-radius:3px;padding:7px 6px;text-align:center}
+.grade-prem span{font-size:11px;color:#9CACC8}
+
+/* ---- o que está na mesa ---- */
+.mesa{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:#223052;border:1px solid #223052;border-radius:4px;overflow:hidden;margin:0 0 20px}
+.mz{background:#121C3A;padding:18px 16px}
+.mz b{display:block;font-family:Lexend,system-ui,sans-serif;font-weight:700;font-size:1.65rem;line-height:1.05;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:#F08C7E}
+.mz.ok b{color:#5FC9A4}
+.mz.neutro b{color:#4D9BFF}
+.mz i{display:block;font-style:normal;margin-top:8px;font-size:11.5px;line-height:1.4;color:#D7E0EF}
+.mz em{display:block;font-style:normal;margin-top:6px;font-size:10.5px;line-height:1.4;color:#9CACC8}
+.acoes-diag{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 0}
+.btn-sec{font-family:Inter,sans-serif;font-size:13.5px;font-weight:700;background:transparent;color:#6FB0FF;border:1px solid #4A5C86;border-radius:3px;padding:11px 18px;cursor:pointer}
+.btn-sec:hover{border-color:#4D9BFF}
+
+/* ---- relatório para o cliente (só na impressão) ---- */
+#relatorio{display:none}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff;color:#111;padding:0;font-size:10.5pt;line-height:1.5}
+  body::before{display:none}
+  .wrap{max-width:none}
+  .wrap > *{display:none !important}
+  .wrap > #relatorio{display:block !important}
+  #relatorio{text-align:justify;hyphens:auto}
+  #relatorio .cabeca{display:flex;align-items:baseline;gap:5mm;margin:0 0 6mm;padding-bottom:3mm;border-bottom:2px solid #140DBF}
+  #relatorio .cabeca svg{width:46mm;height:auto;flex:none}
+  #relatorio .produto{font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:#2A71E5;font-weight:700;text-align:left}
+  #relatorio p{margin:0 0 3mm;orphans:3;widows:3}
+  #relatorio h1,#relatorio h2,#relatorio .sub,#relatorio th,#relatorio td{text-align:left}
+  #relatorio .inclui{display:flex;gap:5mm;margin:0 0 4mm}
+  #relatorio .inclui > div{flex:1;border:1px solid #D9E2EF;border-radius:2mm;padding:3mm 4mm}
+  #relatorio .inclui span{display:block;font-size:8pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2mm}
+  #relatorio .inclui .sim{border-color:#0E7A5F}
+  #relatorio .inclui .sim span{color:#0E7A5F}
+  #relatorio .inclui .nao{border-color:#B3261E}
+  #relatorio .inclui .nao span{color:#B3261E}
+  #relatorio .inclui ul{margin:0 0 2mm;padding-left:4mm;text-align:left}
+  #relatorio .inclui li{margin:0 0 1mm;font-size:9pt}
+  #relatorio .inclui p{font-size:8.5pt;color:#44506B;margin:0}
+  #relatorio h1{font-family:Lexend,sans-serif;font-size:21pt;letter-spacing:-.02em;margin:0 0 2mm;color:#0C1733}
+  #relatorio h2{font-family:Lexend,sans-serif;font-size:12.5pt;margin:7mm 0 2mm;color:#2A71E5;border-bottom:1px solid #D9E2EF;padding-bottom:1.5mm}
+  #relatorio .marca{font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:#2A71E5;font-weight:700}
+  #relatorio .sub{color:#44506B;margin:0 0 5mm;font-size:10pt}
+  #relatorio .kpis{display:flex;flex-wrap:wrap;gap:4mm;margin:0 0 4mm}
+  #relatorio .kpis div{border:1px solid #D9E2EF;border-radius:2mm;padding:3mm 4mm;min-width:30mm}
+  #relatorio .kpis b{display:block;font-family:Lexend,sans-serif;font-size:15pt;color:#0C1733}
+  #relatorio .kpis span{font-size:8pt;color:#44506B}
+  #relatorio table{width:100%;border-collapse:collapse;font-size:9pt;margin:0 0 4mm}
+  #relatorio th{text-align:left;background:#E8EEF7;padding:2mm 3mm;font-size:8pt;text-transform:uppercase;letter-spacing:.08em;color:#44506B}
+  #relatorio td{padding:2mm 3mm;border-bottom:1px solid #E8EEF7;vertical-align:top}
+  #relatorio .destaque{background:#FBE4E1;border-left:3px solid #B3261E;padding:3mm 4mm;margin:0 0 4mm}
+  #relatorio .destaque b{color:#B3261E}
+  #relatorio .nota{font-size:8.5pt;color:#7A869E;line-height:1.45}
+  #relatorio .conclusao{background:#E1EDFD;border-left:3px solid #2A71E5;padding:4mm 5mm;margin:4mm 0}
+  #relatorio .conclusao p{margin:0 0 2.5mm}
+  #relatorio .conclusao p:last-child{margin-bottom:0}
+  #relatorio .conclusao b{color:#140DBF}
+  #relatorio .rodape{margin-top:8mm;padding-top:3mm;border-top:1px solid #D9E2EF;font-size:8.5pt;color:#7A869E}
+  #relatorio tr{break-inside:avoid}
+}
+
+footer{margin-top:76px;padding-top:26px;border-top:2px solid var(--ink);font-size:12.5px;color:var(--ink-3);line-height:1.7}
+
+@media (max-width:720px){
+  body{font-size:16px;padding:0 16px 80px}
+  .linha{grid-template-columns:1fr}
+  .lado.frente{border-right:1px solid var(--rule);border-radius:4px 4px 0 0}
+  .lado.tras{border-left:1px solid var(--rule);border-radius:0 0 4px 4px}
+  .divisor{width:auto;height:3px}
+  .divisor span{transform:translate(-50%,-50%)}
+  .calc{padding:24px 20px}
+  .linha-out{grid-template-columns:1fr auto;gap:6px 12px}
+  .linha-out .qt{grid-column:1;font-size:12.5px}
+  .diag-form{flex-direction:column;align-items:stretch}
+  .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="tagline">Produto novo · material de venda · out 2026</span>
+  <h1>Pulso</h1>
+  <p class="promessa">Da procuração ao protocolo, <b>seu escritório no piloto automático.</b></p>
+  <p class="lede">Piloto automático não é voo sem piloto. A Facilita conduz a rotina inteira — documentos, peça, anexos, protocolo, publicações todos os dias. O advogado continua no comando nos dois momentos que a OAB reserva a ele: <strong>conferir a peça e autorizar o protocolo</strong>. Dois cliques. O resto do dia volta a ser dele.</p>
+  <div class="fitas">
+    <span class="fita">24 horas por dia</span>
+    <span class="fita">7 dias por semana</span>
+    <span class="fita">Sem folha fixa</span>
+    <span class="fita aberta">Compensa no Infinity e no Soberano</span>
+  </div>
+</header>
+
+<section class="col">
+  <h2>A tese: ele para de sobreviver e começa a prosperar</h2>
+  <p class="lede">É a ideia que vocês têm que saber dizer sem ler. O Pulso não vende tarefa executada; vende o advogado deixando de apagar incêndio e passando a tocar a carteira que ele já tem.</p>
+  <p>Comece sempre pela mesma pergunta: <strong>“quantos processos ativos você tem hoje?”</strong> Só hoje, 19 de outubro de 2026, atendemos <strong>dois escritórios que não souberam responder</strong>. Não é descuido de planilha. É o primeiro elo de uma corrente, e a corrente inteira é o nosso argumento.</p>
+
+  <div class="caixa nao">
+    <span class="rotulo">O encadeamento — diga nesta ordem</span>
+    <ul>
+      <li><strong>Não sei quantos processos tenho ativos.</strong></li>
+      <li>Logo, <strong>não sei quais são os processos da minha carteira.</strong></li>
+      <li>Logo, <strong>não acompanho</strong> o processo que não me procura.</li>
+      <li>Logo, <strong>deixo dinheiro na mesa e presto um serviço pior.</strong></li>
+      <li>E <strong>só lembro daquele processo quando o cliente vem me cobrar</strong> — o pior momento possível para descobrir qualquer coisa.</li>
+    </ul>
+  </div>
+
+  <p>Sobreviver é essa corrente rodando: o escritório responde ao que grita, e o que não grita some. Prosperar não é captar mais — <strong>é faturar o que já está na carteira dele</strong>: a execução que ninguém impulsionou, o acordo que ninguém cobrou, a vitória que ninguém comunicou ao cliente.</p>
+
+  <div class="caixa">
+    <span class="rotulo">O número que prova a corrente</span>
+    <p>No escritório-piloto, um escritório previdenciário em Goiás, o diário mostrou <strong>309 processos com movimentação em 12 meses</strong>. O advogado dizia ter cerca de <strong>600</strong>. Ou seja: <strong>metade da carteira dele não aparece em publicação nenhuma</strong> — e é justamente a metade que ninguém olha.</p>
+    <p>Daí saem as duas vendas, e elas são complementares: o <strong>Pulso</strong> cuida todo dia do que se mexe; o <strong>diagnóstico de processo parado, a R$ 30 por processo</strong>, vai atrás do que não se mexe.</p>
+  </div>
+
+  <p>Na ligação, o encadeamento vale mais do que qualquer lista de funcionalidade. Se ele não souber dizer quantos processos tem, <strong>não corrija e não julgue</strong> — rode o diagnóstico da OAB na frente dele e deixe o número aparecer sozinho.</p>
+</section>
+
+<section>
+  <div class="col"><h2>O que passa a ser nosso</h2>
+  <p class="lede">Desenhe esta linha na frente dele. De um lado, o que só ele pode fazer. Do outro, tudo o que hoje come o dia dele sem precisar — e que a Facilita assume por inteiro, 24 horas por dia, 7 dias por semana.</p></div>
+
+  <div class="linha">
+    <div class="lado frente">
+      <h4>Fica com ele</h4>
+      <span class="quem">O fronte</span>
+      <ul>
+        <li>Captar e atender o cliente</li>
+        <li>Decidir a estratégia do caso</li>
+        <li>Audiência e sustentação oral</li>
+        <li>Conferir a peça e autorizar o protocolo</li>
+        <li>Assinar — tudo sai no nome dele</li>
+      </ul>
+    </div>
+    <div class="divisor"><span>Pulso</span></div>
+    <div class="lado tras">
+      <h4>Passa para a Facilita</h4>
+      <span class="quem">A retaguarda</span>
+      <ul>
+        <li>Captar e cadastrar os documentos</li>
+        <li>Escrever a peça</li>
+        <li>Organizar os anexos no padrão do tribunal</li>
+        <li>Distribuir e protocolar</li>
+        <li>Ler as publicações todos os dias</li>
+        <li>Achar o prazo real dentro dos autos</li>
+        <li>Guia, RPV, diligência, andamento</li>
+        <li>Cobrar a pendência até resolver</li>
+        <li>Avisar audiência e perícia</li>
+        <li>Relatar o dia</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="col">
+  <h2>A âncora: ele não quer folha</h2>
+  <p class="lede">É o centro da venda, e o lugar onde quase todo vendedor erra.</p>
+  <p>Quem compra o Pulso <strong>não quer funcionário</strong>. Já teve, e sabe o preço: salário todo mês caia ou não caia serviço, encargos, férias, treinar de novo quando a pessoa sai, a semana perdida quando ela falta. O que ele quer são três coisas, e digam com estas palavras: <strong>mais eficiência, menos dor de cabeça e mais dinheiro no bolso.</strong></p>
+
+  <div class="caixa ok">
+    <span class="rotulo">A promessa, em uma linha</span>
+    <p><strong>O Pulso é a operação do escritório sem folha de pagamento.</strong> Custo que só existe quando o processo anda: <strong>mês parado não gera conta.</strong> Nada de encargo, de rescisão, de alguém que adoece no meio do prazo.</p>
+  </div>
+
+  <div class="caixa">
+    <span class="rotulo">A pergunta que abre tudo</span>
+    <p>“Hoje, quem lê suas publicações?” — e depois, qualquer que seja a resposta: <strong>“e está dando conta?”</strong> Nunca ouvimos um sim.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <h2>A prova, e ela é real</h2>
+    <p class="lede">Rodamos a triagem de 30 dias no primeiro escritório antes de vender para o segundo. Números medidos, não estimados.</p>
+  </div>
+
+  <div class="prova">
+    <div class="p-item"><b>166</b><i>publicações em 30 dias</i></div>
+    <div class="p-item"><b>101</b><i>processos com movimentação</i></div>
+    <div class="p-item mau"><b>31</b><i>exigiam um ato dele</i></div>
+    <div class="p-item mau"><b>5</b><i>processos perdidos no mês</i></div>
+    <div class="p-item bom"><b>11</b><i>vitórias que ele ainda não sabia que tinha</i></div>
+  </div>
+
+  <div class="col">
+    <div class="caixa nao">
+      <span class="rotulo">O argumento mais forte que temos</span>
+      <p>Em trinta dias, esse escritório teve <strong>três petições iniciais indeferidas e dois processos arquivados</strong>. Emenda não cumprida, comprovante de endereço não juntado, procuração não regularizada.</p>
+      <p><strong>Nenhum perdeu no mérito. Perdeu porque a publicação não foi lida — ou foi lida e não cumprida, por falta de tempo.</strong></p>
+      <p>É isso que o Pulso impede. Não é “nós protocolamos para você” — é <strong>“nós não deixamos seu processo morrer por um comprovante de residência”</strong>.</p>
+    </div>
+    <div class="caixa ok">
+      <span class="rotulo">E o outro lado da mesma moeda</span>
+      <p>No mesmo mês ele ganhou <strong>duas apelações no TRF1</strong>, teve um benefício assistencial concedido com liminar e <strong>um pagamento já depositado esperando ele sacar</strong>. Publicação sem leitura não é só prazo perdido — é dinheiro parado e boa notícia que o cliente dele não recebe.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <h2>Diagnóstico ao vivo</h2>
+    <p class="lede">Digite a OAB dele e veja o que aconteceu nos processos nos últimos 30 dias. Busca direto no Diário de Justiça Eletrônico Nacional, que é público — leva segundos e pode ser feito durante a ligação.</p>
+  </div>
+
+  <div class="calc">
+    <span class="rotulo">Diagnóstico do escritório · últimos 30 dias</span>
+    <div class="diag-form">
+      <div class="campo">
+        <label for="oab">Número da OAB</label>
+        <input type="text" id="oab" inputmode="numeric" placeholder="48702" autocomplete="off">
+      </div>
+      <div class="campo">
+        <label for="uf">UF</label>
+        <select id="uf">
+          <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option>
+          <option>CE</option><option>DF</option><option>ES</option><option selected>GO</option><option>MA</option>
+          <option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option>
+          <option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+          <option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option>
+          <option>SE</option><option>TO</option>
+        </select>
+      </div>
+      <button class="btn" id="btnDiag">Rodar diagnóstico</button>
+    </div>
+
+    <div class="premissas">
+      <span class="prem-tit">Premissas — troque pelos números do escritório e tudo recalcula</span>
+      <div class="grade-prem">
+        <label>Honorário médio por processo<input type="text" id="hon" inputmode="numeric" value="5.000"></label>
+        <label>Ler e triar uma publicação<input type="text" id="tTriar" inputmode="numeric" value="10"><span>min</span></label>
+        <label>Lançar o andamento nos sistemas<input type="text" id="tLancar" inputmode="numeric" value="5"><span>min</span></label>
+        <label>Organizar os documentos do ato<input type="text" id="tDocs" inputmode="numeric" value="20"><span>min</span></label>
+        <label>Protocolar ou distribuir<input type="text" id="tProt" inputmode="numeric" value="15"><span>min</span></label>
+        <label>Abrir os autos de um ilegível<input type="text" id="tAutos" inputmode="numeric" value="15"><span>min</span></label>
+      </div>
+    </div>
+    <p class="diag-msg" id="diagMsg">Fonte: DJEN/CNJ. A consulta sai do seu navegador direto para o diário — nada passa por nós e nada fica gravado.</p>
+
+    <div id="diagRes">
+      <div class="dgrid" id="dgrid"></div>
+      <div class="mesa" id="mesa"></div>
+      <div class="leitura" id="leitura"></div>
+      <div class="lista-proc" id="listaProc"></div>
+      <p class="calc-nota" id="diagRodape"></p>
+      <div class="acoes-diag">
+        <button class="btn-sec" id="btnPdf">Baixar relatório em PDF</button>
+        <button class="btn-sec" id="btnFase">Ver relatório de acompanhamento</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+</div>
+</section>
+
+<section>
+  <div class="col"><h2>Preço</h2>
+  <p class="lede">Tudo debitado do pacote que ele já tem. Não há mensalidade nova nem fatura à parte — o que muda é o consumo do saldo. <strong>Vale para todos os pacotes</strong>, mas só compensa de fato no <strong>Infinity</strong> e no <strong>Soberano</strong>: abaixo disso o saldo mensal não cobre o acompanhamento e ainda sobra para peça. Use o simulador de pacotes para mostrar isso na tela.</p></div>
+
+  <div class="tabela-wrap">
+    <table>
+      <thead><tr><th>Item</th><th class="v">Valor</th><th>Como cobra</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Configuração do escritório</strong></td><td class="v">R$ 1.500</td><td>Uma única vez. Certificado no cofre, conexão com os tribunais, captura das publicações e agente no WhatsApp</td></tr>
+        <tr><td><strong>Triagem</strong></td><td class="v">R$ 10,00</td><td><strong>Por publicação.</strong> Capturar a publicação e ler</td></tr>
+        <tr><td><strong>Acompanhamento</strong></td><td class="v">R$ 10,00</td><td><strong>Por publicação.</strong> Decidir o que precisa ser feito, cadastrar o caso na plataforma, lançar no relatório do dia, mandar a pendência no WhatsApp e cadastrar no sistema de gestão dele</td></tr>
+        <tr><td><strong>Protocolo ou distribuição</strong></td><td class="v">R$ 5,00</td><td>Por ato protocolado</td></tr>
+        <tr class="destaque"><td><strong>Diagnóstico de processo parado</strong></td><td class="v">R$ 30,00</td><td>Por processo, sob demanda. Para a carteira que <em>não</em> teve publicação</td></tr>
+        <tr><td><strong>Peças, pareceres e cálculos</strong></td><td class="v">tabela</td><td>Preço normal do pacote, sem mudança — ele já pagaria por isso de qualquer forma</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+    <div class="caixa">
+      <span class="rotulo">A conta que vocês precisam saber de cor</span>
+      <p><strong>Toda publicação custa R$ 20</strong> — R$ 10 de triagem e R$ 10 de acompanhamento. São as duas metades do mesmo trabalho: ler o que saiu, e decidir o que fazer com aquilo. Mesmo quando a publicação não gera ato nenhum, o processo foi lido e entrou no relatório do dia dele.</p>
+      <p>Some R$ 5 por protocolo. <strong>Processo que não publicou no mês não gera conta nenhuma.</strong></p>
+    </div>
+    <div class="caixa">
+      <span class="rotulo">Leia antes de falar número</span>
+      <p>O que o Pulso acrescenta ao consumo dele são <strong>triagem, acompanhamento e protocolo</strong>. As peças que saírem daí já estavam no pacote — ele as encomendaria de qualquer jeito quando descobrisse o prazo. <strong>Deixe isso explícito</strong>, ou o cliente soma tudo e acha que o produto custa o dobro.</p>
+    </div>
+  </div>
+</section>
+
+<section class="col">
+  <h2>Diagnóstico de processo parado</h2>
+  <p class="lede">O serviço que resolve a outra metade da carteira — a que não aparece em publicação nenhuma, e por isso ninguém olha.</p>
+  <p>Publicação só mostra o processo que se mexeu. O que está <strong>parado</strong> continua parado, em silêncio, às vezes por anos. É aí que mora o dinheiro esquecido do escritório: execução que ninguém impulsionou, cumprimento de sentença que não foi iniciado, RPV que ninguém sacou.</p>
+<p>Por <strong>R$ 30 por processo</strong>, a Facilita baixa os autos, lê o caso inteiro e responde duas perguntas, só duas:</p>
+  <div class="caixa">
+    <span class="rotulo">O que o cliente recebe por processo</span>
+    <ul>
+      <li><strong>Em que fase está</strong> — do que se trata a ação e onde ela parou.</li>
+      <li><strong>O que fazer para impulsionar</strong> — o ato concreto que destrava, nomeado.</li>
+    </ul>
+  </div>
+
+  <div class="caixa">
+    <span class="rotulo">Diga esta frase com todas as letras</span>
+    <p><strong>Todo processo sem publicação que ele queira saber em que pé está custa R$ 30 por processo.</strong> Não precisa estar abandonado nem parado há anos: basta ele não saber. É esse o critério, e é ele que o advogado entende na hora.</p>
+    <p>Vale um processo isolado que o cliente dele cobrou ontem, e vale a carteira antiga inteira em lote. <strong>O preço é o mesmo nos dois casos</strong> — e processo que publica já está coberto pelo acompanhamento, não precisa de diagnóstico.</p>
+  </div>
+
+  <p>Tudo isso vira <strong>um relatório único</strong> com a carteira analisada. O advogado lê, marca o que quer que ande e <strong>autoriza os impulsionamentos de uma vez</strong> — ou nenhum, se preferir. Cada impulsionamento autorizado vira peça pela tabela normal do pacote.</p>
+
+  <div class="caixa ok">
+    <span class="rotulo">Por que isso vende sozinho</span>
+    <p>É o único item da tabela que <strong>o cliente compra olhando para o retorno, não para o custo</strong>. R$ 30 para descobrir se um processo parado há dois anos ainda tem dinheiro dentro é barato em qualquer conta que ele faça. Ofereça para a carteira antiga, e ofereça em lote.</p>
+    <p>Com um limite dito em voz alta, antes que ele pergunte: <strong>os R$ 30 pagam a análise e a indicação do caminho — não a garantia de que há dinheiro lá dentro.</strong> Prometer achado é o jeito mais rápido de transformar a segunda venda em reclamação.</p>
+  </div>
+</section>
+
+<section>
+  <div class="col">
+    <h2>Calculadora de consumo</h2>
+    <p class="lede">Quanto o Pulso consome do pacote por mês. Rodando o diagnóstico acima, os números saem <strong>medidos no diário da OAB dele</strong>. Sem OAB, a calculadora estima pelo tamanho da carteira, com as proporções do escritório-piloto.</p>
+  </div>
+
+  <div class="calc">
+    <span class="rotulo">Estimativa mensal de consumo</span>
+    <div class="medido" id="medido" hidden></div>
+
+    <div>
+      <label for="qtd">Processos ativos na carteira do escritório</label>
+      <div class="calc-campo">
+        <input type="number" id="qtd" value="500" min="20" max="6000" step="10" aria-label="Processos ativos">
+        <input type="range" id="slider" value="500" min="20" max="3000" step="10" aria-label="Ajustar processos ativos">
+        <span class="un">processos</span>
+      </div>
+      <p class="dica" id="dicaQtd">O advogado quase nunca sabe esse número de cabeça. <button type="button" class="link" id="irDiag">Levante pela OAB</button> e estes valores passam a ser medidos, não estimados.</p>
+    </div>
+
+    <div class="calc-out">
+      <div class="linha-out">
+        <span class="oque">Triagem<em id="e1">capturar e ler · 22,7 publicações por 100 processos ativos</em></span>
+        <span class="qt" id="q1">—</span><span class="vl" id="v1">—</span>
+      </div>
+      <div class="linha-out">
+        <span class="oque">Acompanhamento<em id="e2">decidir o que fazer · uma por publicação</em></span>
+        <span class="qt" id="q2">—</span><span class="vl" id="v2">—</span>
+      </div>
+      <div class="linha-out">
+        <span class="oque">Protocolos e distribuições<em id="e3">5,2 por 100 processos ativos ao mês</em></span>
+        <span class="qt" id="q3">—</span><span class="vl" id="v3">—</span>
+      </div>
+      <div class="linha-out total">
+        <span class="oque">Por mês</span><span class="qt"></span><span class="vl" id="vt">—</span>
+      </div>
+    </div>
+
+    <p class="calc-nota"><strong>Fora disso:</strong> R$ 1.500 de configuração, uma única vez. O diagnóstico de processo parado, a R$ 30 cada, só quando ele pedir. E as peças que a triagem gerar, no preço normal do pacote — essas ele já pagaria de qualquer forma.</p>
+  </div>
+
+  <div class="calc">
+    <span class="rotulo">O pacote ideal para esta carteira</span>
+    <p class="calc-nota" style="margin:0 0 18px">O Pulso consome <b>o mesmo saldo que compraria as peças</b>. Por isso o pacote certo não é o mais barato que cobre o Pulso — é o que cobre o Pulso <b>e ainda deixa saldo para petição</b>.</p>
+    <div class="pac" id="pacotes"></div>
+    <p class="calc-nota" id="pacoteNota"></p>
+  </div>
+
+  <div class="col"><h3>Referências rápidas, para não precisar da calculadora na ligação</h3></div>
+
+  <div class="tabela-wrap">
+    <table>
+      <thead><tr><th>Carteira</th><th class="v">Publicações</th><th class="v">Protocolos</th><th class="v">Por mês</th></tr></thead>
+      <tbody>
+        <tr><td>100 processos</td><td class="v">23</td><td class="v">5</td><td class="v">R$ 485</td></tr>
+        <tr><td>250 processos</td><td class="v">57</td><td class="v">13</td><td class="v">R$ 1.205</td></tr>
+        <tr class="destaque"><td><strong>500 processos</strong></td><td class="v">113</td><td class="v">26</td><td class="v">R$ 2.390</td></tr>
+        <tr><td>600 processos <em style="color:var(--ink-3);font-style:normal;font-size:12px">(o piloto, real)</em></td><td class="v">136</td><td class="v">31</td><td class="v">R$ 2.875</td></tr>
+        <tr><td>1.000 processos</td><td class="v">227</td><td class="v">52</td><td class="v">R$ 4.800</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+<p style="font-size:13.5px;color:var(--ink-3);line-height:1.55">As proporções saem de um escritório previdenciário com 600 processos ativos, medido entre 16/09 e 16/10/2026. Carteira trabalhista tende a publicar mais; carteira cível, menos. <strong>Trate como estimativa</strong> e confirme com o diagnóstico ao vivo da OAB dele.</p>
+  </div>
+</section>
+
+<section class="col">
+  <h2>As seis objeções que vão aparecer</h2>
+  <div class="obj">
+    <div class="o">
+      <p class="fala">Vou ter que entregar meu certificado digital para vocês?</p>
+      <p class="resp">O certificado fica num <strong>cofre digital com senha, e continua sendo dele</strong> — pode revogar a qualquer hora, sozinho, sem falar com ninguém. Todo protocolo sai no nome do advogado responsável pela causa, nunca no nosso. E o mais importante: <strong>ele continua entrando no tribunal normalmente, pelo aplicativo dele.</strong> Nada no dia a dia do escritório muda.</p>
+      <p class="nota">É a objeção que mais mata venda. Trate antes que ele pergunte — quem esconde o assunto cria desconfiança.</p>
+    </div>
+    <div class="o">
+      <p class="fala">E se vocês perderem meu prazo?</p>
+      <p class="resp">Três respostas, nessa ordem. <strong>O prazo nunca é calculado por nós</strong> — é lido dentro do processo, onde o próprio tribunal gravou a data final. <strong>Só assumimos o que ainda tem prazo hábil com folga</strong>: chegando em cima da hora, recusamos e avisamos, em vez de arriscar. E <strong>o protocolo só sai depois que ele autoriza</strong> — a decisão final é dele, registrada com data e hora.</p>
+    </div>
+    <div class="o">
+      <p class="fala">A OAB permite isso?</p>
+      <p class="resp">Permite, e o desenho é exatamente para isso. Entregamos uma <strong>minuta</strong>; quem revisa, aprova e autoriza é o advogado. O protocolo só sai do clique dele. <strong>Nós não exercemos advocacia e não assinamos nada</strong> — somos estrutura, como o contador ou o sistema de gestão dele.</p>
+    </div>
+    <div class="o">
+      <p class="fala">Eu já assino o Jus Brasil, já recebo as publicações.</p>
+      <p class="resp">Receber a publicação é o fácil — nós fazemos isso de graça, direto do diário oficial. <strong>O problema dele nunca foi receber, foi o que vem depois:</strong> ler, entender o que o juiz mandou fazer, descobrir até quando, escrever a peça e protocolar. O Jus Brasil entrega o aviso e para aí. <strong>Pergunte quantas publicações estão não lidas na caixa dele agora.</strong></p>
+      <p class="nota">Dado útil: no piloto, <strong>56% das publicações do tribunal estadual chegam sem o conteúdo</strong> — só o aviso de que algo aconteceu. Nós abrimos o processo para descobrir o quê. Nenhum serviço de publicação faz isso.</p>
+    </div>
+    <div class="o">
+      <p class="fala">Quanto fica por mês?</p>
+      <p class="resp">Não há valor fixo novo: <strong>sai do pacote que ele já tem.</strong> Rode a calculadora com a carteira dele e dê o número de uma vez. Se ele estranhar, mostre o simulador de pacotes na tela — é mais forte do que qualquer explicação.</p>
+    </div>
+    <div class="o">
+      <p class="fala">Vocês atendem o meu tribunal?</p>
+      <p class="resp">Para <strong>ler publicações e acompanhar prazos, atendemos o Brasil inteiro</strong> — a fonte é nacional. Para <strong>protocolar</strong>, a cobertura ainda cresce tribunal a tribunal. <strong>Confirme com o time antes de prometer.</strong> Se o dele ainda não estiver pronto, venda a triagem e as peças agora e o protocolo quando entrar. Protocolo prometido e não entregue destrói a confiança neste produto.</p>
+    </div>
+  </div>
+</section>
+
+<section class="col">
+  <h2>Na ligação</h2>
+
+  <div class="script">
+    <span class="rotulo">Abertura — com o diagnóstico já rodado</span>
+    <p>“Doutor, antes de ligar eu olhei seus processos. Você teve <strong>X publicações nos últimos 30 dias</strong>, e <strong>Y pedem alguma providência</strong>. Hoje, quem lê isso aí? … E está dando conta?”</p>
+    <p class="acao">Deixe ele descrever o problema inteiro antes de falar da solução. A primeira pergunta dele diz qual objeção tratar.</p>
+  </div>
+
+  <div class="script">
+    <span class="rotulo">O número</span>
+    <p>“Com a sua carteira, isso consome por volta de <strong>R$ 2.400 por mês do seu pacote</strong> — e não é cobrança nova, sai do que você já tem.”</p>
+    <p class="acao">Rode a calculadora antes de ligar. Chegar com o número pronto vale mais do que qualquer argumento. Se ele achar alto, a próxima frase não é desconto — é <strong>“e quanto custa hoje a pessoa que deveria estar fazendo isso, no mês em que ela falta?”</strong></p>
+  </div>
+
+  <div class="script">
+    <span class="rotulo">O fechamento</span>
+    <p>“Me deixa te mandar <strong>o diagnóstico completo do seu escritório em PDF</strong>, com tudo o que aconteceu nos seus processos nos últimos 30 dias. Sem compromisso.”</p>
+    <p class="acao">É o fechamento mais forte do produto e custa um clique. No piloto, revelou cinco processos perdidos e onze vitórias que o próprio advogado não conhecia.</p>
+  </div>
+
+  <div class="caixa ok">
+    <span class="rotulo">Ofereça quando ouvir</span>
+    <p>“Eu capto bem, o problema é dar conta.” · “Não quero contratar mais ninguém.” · “Já tive funcionário e não compensa.” · “Tenho processo parado que nem sei em que pé está.” · “Já perdi prazo.” · “Fico o dia inteiro no sistema do tribunal.”</p>
+    <p><strong>Perfil ideal:</strong> carteira de 100 processos para cima, forte em captação, sem vontade de montar estrutura administrativa. Previdenciário e trabalhista sofrem mais. Abaixo de 100 processos ele não sente a dor — para esse, venda a esteira de peças.</p>
+  </div>
+
+  <div class="caixa nao">
+    <span class="rotulo">O que não prometer</span>
+    <ul>
+      <li><strong>Cobertura total de protocolo.</strong> Está em construção, tribunal a tribunal. Pergunte antes de afirmar.</li>
+      <li><strong>Prazo recuperado.</strong> O que venceu, analisamos e dizemos o que ainda cabe — sem garantir reverter.</li>
+      <li><strong>Que ele não olha mais nada.</strong> Ele revisa a peça e autoriza o protocolo. É exigência da OAB e protege os dois.</li>
+      <li><strong>Resultado no diagnóstico de processo parado.</strong> Os R$ 30 pagam a análise e o caminho, não a garantia de que há dinheiro dentro.</li>
+      <li><strong>Data de implantação apertada.</strong> A operação começa depois da configuração, que depende do certificado dele chegar.</li>
+      <li><strong>Nome de cliente.</strong> Os números desta página são internos. Diga “um escritório previdenciário em Goiás”.</li>
+    </ul>
+  </div>
+
+  <p>Dúvida sobre caso específico, fale comigo antes de prometer. O produto é novo e o que vocês ouvirem dos clientes muda o desenho — então me tragam.</p>
+</section>
+
+<footer>
+  Material interno da Facilita Jurídico · outubro de 2026 · As proporções da calculadora vêm do primeiro escritório atendido, medidas sobre 30 dias de publicações reais. O diagnóstico consulta o DJEN/CNJ, que é público, direto do navegador. Não cite o nome do cliente fora de casa.
+</footer>
+
+<div id="logoFJ" hidden><svg viewBox="0 0 6667.2 1108" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Facilita Jurídico"><radialGradient id="fjg" cx="441.05" cy="2174" r="339.6416" gradientTransform="matrix(1 0 0 1 0 -1620)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2A71E5"/><stop offset="0.2634" stop-color="#296EE4"/><stop offset="0.4525" stop-color="#2765E0"/><stop offset="0.6185" stop-color="#2455DA"/><stop offset="0.771" stop-color="#1F3FD2"/><stop offset="0.9131" stop-color="#1922C7"/><stop offset="1" stop-color="#140DBF"/></radialGradient><path fill="url(#fjg)" d="M569,134.5c0,0,0,185.4,0,404.9H313c0-1.2,0-2.4,0-3.6c0-222.6,154.8-276.4,219.3-286.2  c12.2-1.8,21.3-12.3,21.3-24.7v-90.3c-40.1,0-346.5,38.9-346.5,408.5v430.4h106c0,0,0-142.7,0-326h249.4  c-30.4,160-156.1,202.3-212.7,211c-12.2,1.8-21.3,12.3-21.3,24.7v90.3c40.1,0,346.5-38.9,346.5-408.5V134.5H569z"/><g fill="#140DBF"><path d="M921.4,768.7V337.6h294.3v84.6h-190.1v88.4h171.3v84.8h-171.3v173.2L921.4,768.7L921.4,768.7z"/><path d="M1307.2,768.7h-112l145.5-431.1h138.7l145.5,431.1h-112l-101.3-322.5h-3.4L1307.2,768.7z M1292.2,599h234.1   v79.1h-234.1V599z"/><path d="M2042.4,493.8h-105.3c-1.4-10.8-4.3-20.6-8.6-29.3c-4.4-8.7-10.1-16.1-17.3-22.3c-7.2-6.2-15.6-10.9-25.4-14.2   c-9.8-3.3-20.5-4.9-32.3-4.9c-20.9,0-38.9,5.1-54,15.4c-15.1,10.2-26.7,25-34.7,44.4c-8.1,19.4-12.1,42.8-12.1,70.3   c0,28.6,4.1,52.6,12.3,71.9c8.2,19.3,19.8,33.8,34.7,43.6c14.9,9.8,32.7,14.6,53.2,14.6c11.5,0,22-1.5,31.5-4.4s17.8-7.3,25.1-12.9   c7.2-5.7,13.2-12.6,17.9-20.8c4.7-8.2,8-17.5,9.8-27.9l105.3,0.6c-1.8,19.1-7.3,37.9-16.5,56.4s-21.8,35.4-37.8,50.6   c-16,15.2-35.5,27.3-58.4,36.3s-49.2,13.5-78.8,13.5c-39,0-73.9-8.6-104.7-25.8c-30.8-17.2-55.1-42.3-72.9-75.3   s-26.7-73.1-26.7-120.4c0-47.4,9.1-87.6,27.2-120.6s42.6-58,73.5-75.1s65.5-25.7,103.8-25.7c26.1,0,50.2,3.6,72.4,10.8   c22.2,7.2,41.7,17.8,58.5,31.6c16.8,13.8,30.5,30.8,41,50.8C2033.4,445,2039.9,468,2042.4,493.8z"/><path d="M2206.1,337.6v431.1h-104.2V337.6H2206.1z"/><path d="M2271.2,768.7V337.6h104.2v346.5h179.3v84.6L2271.2,768.7L2271.2,768.7z"/><path d="M2712.9,337.6v431.1h-104.2V337.6H2712.9z"/><path d="M2764.1,422.2v-84.6h364.4v84.6h-130.7v346.5h-102.7V422.2H2764.1z"/><path d="M3218.9,768.7h-112l145.5-431.1h138.7l145.5,431.1h-112l-101.3-322.5h-3.4L3218.9,768.7z M3204.1,599h234v79.1   h-234V599z"/></g><g fill="#383838"><path d="M3885.9,338.3h104V640c-0.1,28.3-6.9,52.9-20.2,74c-13.4,21.1-31.8,37.5-55.3,49.1   c-23.5,11.6-50.7,17.5-81.5,17.5c-27.3,0-52-4.8-74.3-14.3c-22.2-9.5-39.9-24.3-53.1-44.3c-13.1-20-19.6-45.7-19.5-76.9h105   c0.4,11.2,2.6,20.8,6.5,28.7c3.9,7.9,9.3,13.8,16.3,17.8c7,4,15.3,6,24.9,6c10.1,0,18.6-2.2,25.6-6.5c7-4.3,12.3-10.8,15.9-19.3   s5.5-19.1,5.6-31.7V338.3z"/><path d="M4319.9,338.3h105.3v281.5c0,32.5-7.7,60.8-23.2,84.9c-15.5,24.1-37.1,42.7-64.8,55.8   c-27.7,13.1-59.9,19.7-96.5,19.7c-37.1,0-69.5-6.6-97.2-19.7c-27.7-13.1-49.2-31.7-64.6-55.8c-15.3-24.1-23-52.4-23-84.9V338.3   h105.5v272.3c0,15.1,3.3,28.5,9.9,40.3c6.6,11.8,15.9,21,27.8,27.7c11.9,6.7,25.8,10,41.5,10c15.8,0,29.6-3.3,41.4-10   c11.9-6.7,21.1-15.9,27.8-27.7c6.7-11.8,10-25.2,10-40.3V338.3z"/><path d="M4491.2,774.7V338.3h180.3c32.7,0,60.9,5.9,84.7,17.6c23.8,11.7,42.2,28.5,55.1,50.3   c12.9,21.8,19.4,47.6,19.4,77.5c0,30.3-6.6,55.9-19.8,77s-32,37.1-56.2,48.2c-24.3,11-53.1,16.5-86.3,16.5h-114v-83.1h94.4   c15.9,0,29.2-2.1,40-6.3c10.7-4.2,18.9-10.6,24.4-19.2c5.5-8.6,8.3-19.6,8.3-33.1c0-13.5-2.8-24.7-8.3-33.6   c-5.5-8.9-13.7-15.6-24.5-20c-10.8-4.5-24.1-6.7-39.8-6.7h-52v351.4H4491.2z M4736.9,575.3l108.7,199.4h-115.1l-106.5-199.4H4736.9   z"/><path d="M4993.8,338.3v436.4h-105.5V338.3H4993.8z M4905.4,296.8l43-96.1h92.3l-64.3,96.1H4905.4z"/><path d="M5221.1,774.7h-161.3V338.3h161.1c44.5,0,82.8,8.7,115,26.1c32.2,17.4,57,42.4,74.5,75   c17.5,32.6,26.2,71.6,26.2,116.9c0,45.5-8.7,84.5-26.1,117.2c-17.4,32.7-42.2,57.7-74.5,75.1C5303.7,766,5265.5,774.7,5221.1,774.7   z M5165.3,684.8h51.8c24.4,0,45.1-4.2,62.1-12.5c17-8.3,29.8-21.9,38.6-40.7c8.7-18.8,13.1-43.9,13.1-75.3   c0-31.4-4.4-56.4-13.2-75.1c-8.8-18.7-21.8-32.2-38.9-40.5c-17.1-8.3-38.2-12.5-63.2-12.5h-50.3V684.8z"/><path d="M5603.4,338.3v436.4h-105.5V338.3H5603.4z"/><path d="M6065.5,496.4H5959c-1.4-10.9-4.3-20.8-8.7-29.6c-4.4-8.8-10.2-16.3-17.5-22.6c-7.2-6.2-15.8-11-25.7-14.4   c-9.9-3.3-20.8-5-32.7-5c-21.2,0-39.4,5.2-54.7,15.6c-15.3,10.4-27,25.4-35.2,45c-8.2,19.6-12.3,43.3-12.3,71.2   c0,29,4.2,53.2,12.5,72.8c8.3,19.5,20,34.2,35.2,44.1c15.1,9.9,33.1,14.8,53.8,14.8c11.6,0,22.3-1.5,31.9-4.5   c9.6-3,18-7.4,25.4-13.1c7.3-5.8,13.4-12.8,18.1-21.1c4.8-8.3,8.1-17.7,9.9-28.2l106.5,0.6c-1.8,19.3-7.4,38.4-16.7,57.1   c-9.3,18.8-22.1,35.8-38.2,51.2c-16.2,15.4-35.9,27.7-59.1,36.8c-23.2,9.1-49.8,13.6-79.8,13.6c-39.5,0-74.8-8.7-106-26.1   c-31.2-17.4-55.8-42.8-73.8-76.2c-18-33.4-27.1-74-27.1-121.9c0-48,9.2-88.7,27.5-122.1c18.3-33.4,43.1-58.7,74.4-76.1   c31.2-17.3,66.3-26,105-26c26.4,0,50.8,3.7,73.3,11c22.4,7.3,42.2,18,59.2,32c17,14,30.9,31.1,41.5,51.5   C6056.4,447.1,6063,470.3,6065.5,496.4z"/><path d="M6537.5,556.5c0,48-9.2,88.7-27.7,122.1c-18.5,33.4-43.4,58.7-74.9,76.1c-31.5,17.3-66.7,26-105.8,26   c-39.2,0-74.5-8.7-105.9-26.2c-31.4-17.5-56.3-42.9-74.7-76.2c-18.4-33.3-27.6-73.9-27.6-121.8c0-48,9.2-88.7,27.6-122.1   c18.4-33.4,43.3-58.7,74.7-76.1c31.4-17.3,66.7-26,105.9-26c39.1,0,74.3,8.7,105.8,26c31.5,17.3,56.4,42.7,74.9,76.1   C6528.2,467.8,6537.5,508.5,6537.5,556.5z M6429.7,556.5c0-28.4-4-52.4-12-72c-8-19.6-19.5-34.4-34.5-44.5   c-15-10.1-33-15.1-54-15.1c-20.9,0-38.9,5-53.9,15.1c-15.1,10.1-26.6,24.9-34.6,44.5c-8,19.6-12,43.6-12,72c0,28.4,4,52.4,12,72   c8,19.6,19.6,34.4,34.6,44.5c15.1,10.1,33,15.1,53.9,15.1c21,0,39-5,54-15.1c15-10.1,26.5-24.9,34.5-44.5   C6425.6,608.9,6429.7,584.9,6429.7,556.5z"/></g></svg></div>
+<div id="relatorio"></div>
+
+</div>
+
+<script>
+(function(){
+  /* ================= calculadora de consumo ================= */
+  var POR100 = { pub: 136/600, prot: 31/600 };
+  var PRECO  = { triagem: 10, acomp: 10, prot: 5 };
+  var qtd = document.getElementById('qtd'), slider = document.getElementById('slider');
+  var modo = 'estimado', medida = null;
+
+  function moeda(v){ return 'R$ ' + Math.round(v).toLocaleString('pt-BR'); }
+  function plural(n,s,p){ return n + ' ' + (n===1?s:p); }
+  function num(id, padrao){
+    var v=(document.getElementById(id).value||'').replace(/[^0-9]/g,'');
+    return v ? Number(v) : padrao;
+  }
+  function tempo(min){
+    if (min < 60) return Math.round(min) + ' min';
+    var h = min/60;
+    return (h<10 ? h.toFixed(1).replace('.',',') : String(Math.round(h))) + 'h';
+  }
+
+  function calcular(){
+    var pub, prot, e1, e2, e3;
+    if (modo === 'medido' && medida){
+      pub = medida.pubMes; prot = medida.protMes;
+      e1 = 'medido no diário · média dos últimos 12 meses';
+      e2 = 'uma por publicação';
+      e3 = 'atos com prazo, contados no próprio diário';
+    } else {
+      var n = Math.max(20, Math.min(6000, Math.round(Number(qtd.value))||0));
+      pub  = Math.round(n*POR100.pub);
+      prot = Math.round(n*POR100.prot);
+      e1 = 'capturar e ler · 22,7 publicações por 100 processos ativos';
+      e2 = 'decidir o que fazer · uma por publicação';
+      e3 = '5,2 por 100 processos ativos ao mês';
+    }
+    var v1=pub*PRECO.triagem, v2=pub*PRECO.acomp, v3=prot*PRECO.prot;
+    document.getElementById('e1').textContent = e1;
+    document.getElementById('e2').textContent = e2;
+    document.getElementById('e3').textContent = e3;
+    document.getElementById('q1').textContent = plural(pub,'publicação','publicações');
+    document.getElementById('q2').textContent = plural(pub,'publicação','publicações');
+    document.getElementById('q3').textContent = plural(prot,'ato','atos');
+    document.getElementById('v1').textContent = moeda(v1);
+    document.getElementById('v2').textContent = moeda(v2);
+    document.getElementById('v3').textContent = moeda(v3);
+    document.getElementById('vt').textContent = moeda(v1+v2+v3);
+    pintarPacotes(v1+v2+v3);
+  }
+  /* Valores de tabela. A quantidade de serviços e a validade conferidas no banco
+     da Facilita em 19/10/2026. O saldo é monetário: o Pulso debita reais, não
+     contagem de serviços. Soberano em 60 dias, como a casa pratica. */
+  var PACOTES = [
+    { nome:'Start',    preco:640,   servicos:4,   meses:12 },
+    { nome:'Premium',  preco:1960,  servicos:14,  meses:12 },
+    { nome:'Infinity', preco:8400,  servicos:70,  meses:12 },
+    { nome:'Soberano', preco:10000, servicos:142, meses:2  }
+  ];
+
+  /* Quanto o Pulso custa por processo ativo ao mês, pelas proporções do piloto.
+     É o que permite dizer até que carteira cada pacote aguenta. */
+  function custoPorProcesso(){
+    return POR100.pub*(PRECO.triagem+PRECO.acomp) + POR100.prot*PRECO.prot;
+  }
+
+  function pintarPacotes(custoPulso){
+    var linhas = ['<div class="pacL cab"><span>Pacote</span><span>Saldo por mês</span>'
+                + '<span>Pulso</span><span>Sobra ou falta</span><span>Cobre até</span><span></span></div>'];
+    var ideal = null, porProc = custoPorProcesso();
+    PACOTES.forEach(function(k){
+      var saldo = k.preco / k.meses;
+      var porPeca = k.preco / k.servicos;
+      var sobra = saldo - custoPulso;
+      var cabe  = sobra >= porPeca;          // sobra ao menos uma peça
+      if (cabe && !ideal) ideal = k.nome;
+      // maior carteira que ainda deixa uma peça de folga
+      k._cobre = Math.max(0, Math.floor((saldo - porPeca) / porProc));
+      k._saldo=saldo; k._sobra=sobra; k._cabe=cabe; k._peca=porPeca;
+    });
+    PACOTES.forEach(function(k){
+      var cls = k._cabe ? 'cabe' : (k._sobra >= 0 ? 'justo' : 'nao');
+      var np  = Math.floor(k._sobra/k._peca);
+      var txt = k._cabe ? (np + (np===1 ? ' peça' : ' peças')) : (k._sobra >= 0 ? 'não sobra peça' : 'não cabe');
+      // a pergunta que importa: falta quanto?
+      var col4 = k._sobra >= 0
+        ? '<b>+'+moeda(k._sobra)+'</b>'
+        : '<b style="color:#F08C7E">faltam '+moeda(-k._sobra)+'</b>';
+      linhas.push('<div class="pacL'+(k.nome===ideal?' ideal':'')+'">'
+        + '<span class="pn">'+k.nome+(k.nome===ideal?' &middot; ideal':'')+'</span>'
+        + '<span class="pv"><b>'+moeda(k._saldo)+'</b></span>'
+        + '<span class="pv">'+moeda(custoPulso)+'</span>'
+        + '<span class="pv">'+col4+'</span>'
+        + '<span class="pv">'+(k._cobre ? k._cobre+' proc.' : '—')+'</span>'
+        + '<span class="tag '+cls+'">'+txt+'</span></div>');
+    });
+    document.getElementById('pacotes').innerHTML = linhas.join('');
+    document.getElementById('pacoteNota').innerHTML = ideal
+      ? 'Com esse volume, o menor pacote que comporta o Pulso <b>e ainda deixa saldo para peças</b> é o <b>'
+        + ideal + '</b>. Abaixo dele, o Pulso consome o pacote inteiro e não sobra nada para petição — '
+        + 'o que na prática significa que o cliente vai precisar comprar avulso.'
+      : 'Com esse volume, <b>nenhum pacote comporta o Pulso sozinho</b>. É carteira para Soberano com '
+        + 'condição negociada — fale comigo antes de dar número.';
+    document.getElementById('pacoteNota').innerHTML +=
+      '<br><br>Saldo por mês = preço do pacote dividido pela validade. Start, Premium e Infinity em 12 meses; '
+      + '<b>Soberano em 60 dias</b>, que é como a casa pratica — por isso o saldo mensal dele é tão maior. '
+      + 'O que sobra está em reais e em quantas peças cabem, pelo preço por serviço daquele pacote '
+      + '(Start R$ 160, Premium R$ 140, Infinity R$ 120, Soberano R$ 70).'
+      + '<br><br><b>Por que o Infinity cobre tão menos que o Soberano?</b> Não é o preço, é a validade. '
+      + 'O Infinity são R$ 8.400 para <b>12 meses</b> — R$ 700 por mês. O Soberano são R$ 10.000 para '
+      + '<b>60 dias</b> — R$ 5.000 por mês. Sete vezes mais saldo mensal por um preço 19% maior. '
+      + 'A coluna <b>Cobre até</b> diz a maior carteira que cada pacote aguenta deixando ainda uma peça de folga.';
+  }
+
+  function manual(v){ modo='estimado'; qtd.value=v; slider.value=Math.min(3000,Math.max(20,v)); calcular(); }
+  qtd.addEventListener('input', function(){ manual(Number(qtd.value)); });
+  slider.addEventListener('input', function(){ manual(Number(slider.value)); });
+  calcular();
+
+  /* ================= diagnóstico por OAB ================= */
+  var API='https://comunicaapi.pje.jus.br/api/v1/comunicacao';
+  var btn=document.getElementById('btnDiag'), msg=document.getElementById('diagMsg'), res=document.getElementById('diagRes');
+  var campoOab=document.getElementById('oab');
+  var ultimo=null;
+
+  function iso(d){ return d.toISOString().slice(0,10); }
+  function limpar(h){
+    var t=String(h||'').replace(/<[^>]+>/g,' ');
+    var ta=document.createElement('textarea'); ta.innerHTML=t;
+    return ta.value.replace(/\s+/g,' ').trim();
+  }
+  function hash(s){ var h=0,i; for(i=0;i<s.length;i++){ h=(h*31+s.charCodeAt(i))|0; } return h; }
+  function dataBR(s){ var p=(s||'').split('/'); return p.length===3 ? new Date(+p[2],+p[1]-1,+p[0]) : null; }
+
+  var R = {
+    segredo   : /SEGREDO DE JUSTI/i,
+    cego      : /ARQUIVOS DIGITAIS INDISPON/i,
+    procedente: /JULGO\s+(totalmente\s+|parcialmente\s+)?PROCEDENTE|julgo.{0,30}procedente/i,
+    concessao : /\bCONCEDO\b|DEFIRO\s+(a\s+tutela|o\s+pedido|a\s+liminar|a\s+antecipa)|conceder\s+o\s+benef|implante\s+o\s+benef|implanta[çc][ãa]o\s+do\s+benef|antecipo\s+os\s+efeitos\s+da\s+tutela/i,
+    acordo    : /HOMOLOGO.{0,45}(acordo|transa|propost)|acordo.{0,25}homologad/i,
+    provGanho : /(dou|dar|dando)\s+provimento(?![^.]{0,60}do\s+INSS)|(nego|negar)\s+provimento[^.]{0,70}(do\s+INSS|da\s+(Uni[ãa]o|Fazenda|CEF|Caixa)|da\s+parte\s+r[ée])/i,
+    provPerda : /(nego|negar)\s+provimento[^.]{0,70}(da\s+parte\s+autora|do\s+autor|da\s+apela[çc][ãa]o\s+da\s+parte\s+autora)|desprovid|n[ãa]o\s+provid/i,
+    improc    : /IMPROCEDENTE|improcedente/i,
+    indeferido: /INDEFIRO\s+A\s+PETI|indeferimento\s+da\s+(peti|inicial)|INDEFIRO\s+o\s+pedido/i,
+    extinto   : /JULGO\s+EXTINT|EXTINT[OA]\s+o\s+(processo|feito)|extin[çc][ãa]o\s+do\s+(processo|feito)|sem\s+resolu[çc][ãa]o\s+(do\s+)?m[ée]rito/i,
+    arquivado : /ARQUIVAMENTO|arquivem-se|arquive-se|ao\s+arquivo|baixa\s+definitiva/i,
+    audiencia : /audi[êe]ncia/i,
+    pericia   : /per[íi]cia|estudo\s+social/i,
+    dinheiro  : /\bRPV\b|requisi[çc][ãa]o\s+de\s+pequeno\s+valor|precat[óo]rio|alvar[áa]|dep[óo]sito\s+judicial|levantamento/i,
+    ato       : /intim(e-se|em-se|ada|ado|a[çc][ãa]o)[^.]{0,90}(parte\s+autora|autor|exequente|requerente|patrono|advogad)/i,
+    ato2      : /(manifest\w+|emend\w+|apresent\w+|especific\w+|requeir\w+|junt\w+|comprov\w+|impugn\w+|recolh\w+)[^.]{0,60}prazo\s+de\s+\d+/i,
+    ato3      : /sob\s+pena\s+de\s+(extin|indeferimento|arquivamento|preclus)/i,
+    prazoN    : /prazo\s+de\s+(\d+)\s*\(?\s*[a-zç]*\s*\)?\s*dias/i,
+    /* causa da derrota — é o que separa perda de tese de falha de acompanhamento */
+    cEmenda   : /emend\w+[^.]{0,80}(n[ãa]o\s+(foi\s+)?(cumprid|atendid|sanad)|sem\s+cumprimento)|n[ãa]o\s+emendou|deixou\s+de\s+emendar|n[ãa]o\s+sanou/i,
+    cPreparo  : /deser[çc][ãa]o|\bdeserto\b|custas[^.]{0,50}n[ãa]o\s+(recolhid|pag)|aus[êe]ncia\s+de\s+preparo/i,
+    cAbandono : /abandono\s+da\s+causa|in[ée]rcia|aus[êe]ncia\s+de\s+(provid[êe]ncia|impulso)|n[ãa]o\s+promoveu\s+os\s+atos|deixou\s+de\s+promover/i,
+    cPrescr   : /prescri[çc][ãa]o|decad[êe]ncia|prescrit/i,
+    cIlegit   : /ilegitimidade|aus[êe]ncia\s+de\s+(interesse|legitimidade)|falta\s+de\s+interesse/i,
+    cDoc      : /(n[ãa]o\s+(juntou|apresentou|comprovou)|aus[êe]ncia\s+de)[^.]{0,60}(documento|comprovante|procura[çc][ãa]o|endere[çc]o)/i,
+
+    /* Vitória. "condeno o requerido" faltava, e por isso sentença procedente que
+       terminava em "transitada em julgado, arquive-se" era contada como derrota. */
+    ganho : /JULGO\s+(totalmente\s+|parcialmente\s+)?PROCEDENTE|julgo\s+[^.]{0,30}procedente|\bCONCEDO\b|DEFIRO\s+(a\s+tutela|o\s+pedido|a\s+liminar|a\s+antecipa)|conceder\s+o\s+benef|implante\s+o\s+benef|HOMOLOGO[^.]{0,45}(acordo|transa|propost)|acordo[^.]{0,25}homologad|condeno\s+(o|a)\s+(requerid|r[ée]u|INSS|parte\s+r[ée])|(dou|dar|dando)\s+provimento(?![^.]{0,60}do\s+INSS)/i,
+
+    /* Derrota só com VERBO OPERATIVO no presente. "arquive-se" sozinho é
+       encerramento de rotina — inclusive depois de uma vitória. */
+    opDerrota : /JULGO\s+IMPROCEDENTE|julgo\s+[^.]{0,30}improcedente|IMPROCEDENTE\s+o\s+pedido|INDEFIRO\s+A\s+PETI|indefiro\s+a\s+(inicial|peti)|indeferimento\s+da\s+(peti|inicial)|JULGO\s+EXTINT|EXTINGO\s+o\s+(processo|feito)|extin[çc][ãa]o\s+do\s+(processo|feito)|DETERMINO\s+O\s+ARQUIVAMENTO|determino\s+o\s+arquivamento|(nego|negar)\s+provimento|desprovid|n[ãa]o\s+provid/i,
+
+    /* "sob pena de arquivamento" é advertência futura: isso é prazo correndo. */
+    aviso : /sob\s+pena\s+de/i,
+    /* ato que só anda com documento do cliente — vira aviso no WhatsApp dele */
+    pendCliente : /(junt\w+|apresent\w+|comprov\w+|regulariz\w+)[^.]{0,70}(documento|comprovante|procura[çc][ãa]o|endere[çc]o|c[óo]pia|certid[ãa]o|contrato|laudo|carteira|CTPS|CNIS|RG|CPF)/i
+  };
+
+  /* Descarta as frases de advertência antes de classificar. Sem isso, despacho
+     que ameaça extinguir vira extinção, e o relatório mente para o advogado. */
+  function operativo(t){
+    return t.split('.').filter(function(f){ return !R.aviso.test(f); }).join('. ');
+  }
+
+  /* Classifica POR QUE o processo caiu. O advogado não precisa da lista de
+     processos; precisa saber se perdeu por tese fraca ou por acompanhamento. */
+  var CAUSAS = [
+    ['emenda não cumprida',   /(emenda|irregularidade|determina[çc][ãa]o)[^.]{0,90}(n[ãa]o\s+(foi\s+)?(cumprid|atendid|sanad)|permaneceu\s+iner|n[ãa]o\s+sanou|sem\s+manifesta)/i],
+    ['falta de impulso',      /permaneceu\s+inerte|abandono\s+da\s+causa|aus[êe]ncia\s+de\s+provid[êe]ncia|n[ãa]o\s+promoveu\s+os\s+atos|deixando\s+transcorrer\s+o\s+prazo/i],
+    ['documento não juntado', /(n[ãa]o\s+(juntou|apresentou|comprovou)|aus[êe]ncia\s+de)[^.]{0,60}(documento|comprovante|procura[çc][ãa]o|endere[çc]o)/i],
+    ['custas ou preparo',     /deser[çc][ãa]o|\bdeserto\b|custas[^.]{0,50}n[ãa]o\s+(recolhid|pag)|aus[êe]ncia\s+de\s+preparo/i],
+    ['ilegitimidade ou falta de interesse', /(reconhe[çc]o|declaro|julgo)[^.]{0,60}ilegitimidade|aus[êe]ncia\s+de\s+(interesse|legitimidade)/i],
+    ['prescrição ou decadência', /(reconhe[çc]o|declaro|pronuncio|julgo)[^.]{0,60}(prescri[çc][ãa]o|decad[êe]ncia)|prescri[çc][ãa]o\s+(intercorrente\s+)?(reconhecid|consumad)/i],
+    ['mérito',                /JULGO\s+IMPROCEDENTE|julgo\s+[^.]{0,30}improcedente|IMPROCEDENTE\s+o\s+pedido|(nego|negar)\s+provimento|desprovid|n[ãa]o\s+provid/i],
+    ['inicial indeferida',    /INDEFIRO\s+A\s+PETI|indefiro\s+a\s+(inicial|peti)|indeferimento\s+da\s+(peti|inicial)/i],
+    ['extinção sem mérito',   /JULGO\s+EXTINT|EXTINGO|extin[çc][ãa]o\s+do\s+(processo|feito)|sem\s+resolu[çc][ãa]o\s+(do\s+)?m[ée]rito/i]
+  ];
+  function causaDaDerrota(op){
+    for (var i=0;i<CAUSAS.length;i++) if (CAUSAS[i][1].test(op)) return CAUSAS[i][0];
+    return 'não identificada';
+  }
+
+  // Marca cada evento com tudo o que ele é — um mesmo ato pode ser sentença e conter prazo.
+  function marcar(e){
+    var t=e.txt, f={};
+    f.segredo   = R.segredo.test(t);
+    f.cego      = R.cego.test(t) || (t.length<200 && !f.segredo);
+    if (f.segredo || f.cego) { e.f=f; e.rotulo = f.segredo ? 'Segredo de justiça' : 'Ilegível no diário'; return; }
+    var op      = operativo(t);
+    f.ganho     = R.ganho.test(t);
+    f.perdido   = !f.ganho && R.opDerrota.test(op);
+    f.arquivado = false;
+    f.prazo     = R.ato.test(t) || R.ato2.test(t) || R.ato3.test(t);
+    f.dinheiro  = R.dinheiro.test(t);
+    f.audiencia = R.audiencia.test(t);
+    f.pericia   = R.pericia.test(t);
+    // data marcada só conta se for daqui para frente
+    if (f.audiencia || f.pericia) {
+      var base = dataBR(e.data) || new Date();
+      (t.match(/\d{2}\/\d{2}\/\d{4}/g)||[]).forEach(function(d){
+        var dt=dataBR(d);
+        if (dt && dt >= base && (!f.quando || dt < dataBR(f.quando))) f.quando=d;
+      });
+    }
+    var m=t.match(R.prazoN); if (m) f.dias=m[1];
+    if (f.perdido) {
+      f.causa  = causaDaDerrota(op);
+      f.merito = (f.causa === 'mérito');
+    }
+    f.pendente = f.prazo && R.pendCliente.test(op);
+    e.f=f;
+    e.rotulo = f.ganho ? 'Ganho' : f.perdido ? 'Perda' : f.arquivado ? 'Arquivado'
+             : f.prazo ? 'Prazo correndo' : (f.quando ? (f.pericia?'Perícia marcada':'Audiência marcada')
+             : (f.dinheiro ? 'Pagamento' : 'Andamento'));
+  }
+
+  function espera(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  /* O diário limita a 20 requisições por janela (cabeçalho X-RateLimit-Limit).
+     O navegador NÃO consegue ler esse cabeçalho — a API não manda
+     Access-Control-Expose-Headers —, então não dá para contar o saldo: resta ir
+     devagar e recuar quando levar 429. Três páginas por vez, com pausa. */
+  var LOTE = 3, PAUSA = 400, RECUO = [3000, 8000, 15000, 30000];
+
+  async function buscar(oab, uf, dias, aviso){
+    var fim=new Date(), ini=new Date(); ini.setDate(fim.getDate()-dias);
+    var base=API+'?numeroOab='+encodeURIComponent(oab)+'&ufOab='+encodeURIComponent(uf)
+      +'&dataDisponibilizacaoInicio='+iso(ini)+'&dataDisponibilizacaoFim='+iso(fim)
+      +'&itensPorPagina=100&pagina=';
+
+    async function pag(n, tent){
+      tent = tent || 0;
+      var r = await fetch(base+n, {headers:{Accept:'application/json'}});
+      if (r.status === 429) {
+        if (tent >= RECUO.length) {
+          throw new Error('o diário está limitando as consultas. Espere um minuto e rode de novo');
+        }
+        if (aviso) aviso(-1, Math.round(RECUO[tent]/1000));   // -1 avisa que está esperando
+        await espera(RECUO[tent]);
+        return pag(n, tent+1);
+      }
+      if (!r.ok) throw new Error('o diário respondeu '+r.status);
+      return r.json();
+    }
+
+    var p1=await pag(1), todos=((p1&&p1.items)||[]).slice();
+    /* A API devolve no máximo 10.000 itens por intervalo; não adianta pedir mais. */
+    var total=(p1&&p1.count)||todos.length, paginas=Math.min(Math.ceil(total/100), 100);
+    for(var i=2;i<=paginas;i+=LOTE){
+      var lote=[];
+      for(var k=i;k<i+LOTE&&k<=paginas;k++) lote.push(pag(k));
+      var rs=await Promise.all(lote);
+      rs.forEach(function(j){ todos=todos.concat((j&&j.items)||[]); });
+      if(aviso) aviso(todos.length, total);
+      if (i+LOTE <= paginas) await espera(PAUSA);
+    }
+    return todos;
+  }
+
+  /* Levanta a carteira: quantos processos distintos se mexeram em 12 meses,
+     quantas publicações por mês e quantos atos com prazo por mês. */
+  function carteira(brutas){
+    var procs={}, vistos={}, eventos=0, prazo=0, derrotas=0, evitaveis=0, ganhos=0;
+    brutas.forEach(function(it){
+      var txt=limpar(it.texto);
+      var k=it.numero_processo+'|'+it.data_disponibilizacao+'|'+hash(txt);
+      if(vistos[k]) return; vistos[k]=1; eventos++;
+      procs[it.numero_processo]=1;
+      if(R.ato.test(txt)||R.ato2.test(txt)||R.ato3.test(txt)) prazo++;
+      /* mesma classificação do diagnóstico, agora sobre os 12 meses:
+         assim a perda anual é CONTADA, não um mês multiplicado por doze */
+      if (R.segredo.test(txt) || R.cego.test(txt) || txt.length<200) return;
+      if (R.ganho.test(txt)) { ganhos++; return; }
+      var op = operativo(txt);
+      if (R.opDerrota.test(op)) {
+        derrotas++;
+        var c = causaDaDerrota(op);
+        if (c !== 'mérito' && c !== 'não identificada') evitaveis++;
+      }
+    });
+    return { procs:Object.keys(procs).length, eventos:eventos, prazo:prazo,
+             derrotas:derrotas, evitaveis:evitaveis, ganhos:ganhos };
+  }
+
+  async function levantar(oab, uf){
+    var el=document.getElementById('medido');
+    el.hidden=false;
+    el.innerHTML='<span class="rot">Levantando a carteira</span><p>Lendo 12 meses do diário da OAB '+oab+'/'+uf+'…</p>';
+    try{
+      var brutas=await buscar(oab, uf, 365, function(lidas, total){
+        el.innerHTML = (lidas === -1)
+          ? '<span class="rot">Levantando a carteira</span><p>O diário limita o número de consultas por minuto. '
+            + 'Aguardando '+total+' segundos para continuar de onde parou…</p>'
+          : '<span class="rot">Levantando a carteira</span><p>'+lidas+' de '+total+' publicações lidas…</p>';
+      });
+      if(!brutas.length){
+        el.innerHTML='<span class="rot">Carteira não levantada</span><p>O diário não tem publicação dessa OAB nos últimos 12 meses.</p>';
+        return;
+      }
+      var c=carteira(brutas);
+      medida={ carteira:c.procs, pubMes:Math.round(c.eventos/12), protMes:Math.round(c.prazo/12),
+               derrotasAno:c.derrotas, evitaveisAno:c.evitaveis, ganhosAno:c.ganhos };
+      if (ultimo) { ultimo.ano = medida; relatorio(); }
+      modo='medido';
+      qtd.value=c.procs; slider.value=Math.min(3000, Math.max(20, c.procs));
+      el.innerHTML='<span class="rot">Medido na OAB '+oab+'/'+uf+'</span>'
+        +'<p><b>'+c.procs+' processos</b> tiveram movimentação nos últimos 12 meses, com média de <b>'
+        +Math.round(c.eventos/12)+' publicações por mês</b>. Os valores abaixo saem desses números — não são estimativa.</p>'
+        +'<p class="aviso"><b>Esse é o piso, não a carteira inteira.</b> Processo que não publicou em 12 meses não aparece no diário: '
+        +'no escritório-piloto, o diário mostrou pouco mais da metade do que o advogado tinha. '
+        +'Pergunte quantos processos ele tem ao todo — <b>a diferença é a carteira parada</b>, e é exatamente o diagnóstico de R$ 30 por processo.</p>';
+      calcular();
+    }catch(e){
+      el.innerHTML='<span class="rot">Não consegui levantar a carteira</span><p>'+e.message
+        +'. O diagnóstico de 30 dias acima continua válido; a calculadora segue no modo estimado.</p>';
+    }
+  }
+
+  function apurar(brutas){
+    var vistos={}, ev=[];
+    brutas.forEach(function(it){
+      var txt=limpar(it.texto);
+      var k=it.numero_processo+'|'+it.data_disponibilizacao+'|'+hash(txt);
+      if(vistos[k]) return; vistos[k]=1;
+      var e={ proc: it.numeroprocessocommascara||it.numero_processo, trib: it.siglaTribunal,
+              orgao: it.nomeOrgao||'', data: it.datadisponibilizacao||it.data_disponibilizacao, txt: txt };
+      marcar(e); ev.push(e);
+    });
+    function por(fn){ return ev.filter(fn); }
+    function procs(lista){ var o={}; lista.forEach(function(e){o[e.proc]=1;}); return Object.keys(o).length; }
+    var g = {
+      ev: ev,
+      nProc: procs(ev),
+      ganhos:    por(function(e){return e.f.ganho;}),
+      perdas:    por(function(e){return e.f.perdido;}),
+      arquivados:[],
+      prazos:    por(function(e){return e.f.prazo && !e.f.cego && !e.f.segredo;}),
+      agenda:    por(function(e){return e.f.quando;}),
+      dinheiro:  por(function(e){return e.f.dinheiro;}),
+      pendencias:por(function(e){return e.f.pendente;}),
+      segredo:   por(function(e){return e.f.segredo;}),
+      cegos:     por(function(e){return e.f.cego;})
+    };
+    g.ilegiveis = procs(g.segredo.concat(g.cegos));
+    g.pctIlegivel = ev.length ? Math.round((g.segredo.length+g.cegos.length)/ev.length*100) : 0;
+
+    // derrotas agrupadas por causa, da mais frequente para a menos
+    g.derrotas = g.perdas;
+    g.evitaveis = g.derrotas.filter(function(e){
+      return e.f.causa && e.f.causa !== 'mérito' && e.f.causa !== 'não identificada';
+    });
+    g.pctEvitavel = g.derrotas.length
+      ? Math.round(g.evitaveis.length / g.derrotas.length * 100) : 0;
+    var conta = {};
+    g.derrotas.forEach(function(e){
+      var c = e.f.causa || 'não identificada';
+      conta[c] = (conta[c]||0) + 1;
+    });
+    g.causas = Object.keys(conta).map(function(c){ return { causa:c, n:conta[c] }; })
+                     .sort(function(a,b){ return b.n - a.n; });
+    return g;
+  }
+
+  function premissas(){
+    return { hon:num('hon',5000), triar:num('tTriar',10), lancar:num('tLancar',5),
+             docs:num('tDocs',20), prot:num('tProt',15), autos:num('tAutos',15) };
+  }
+  function contaTempo(g,p){
+    var a = g.ev.length*p.triar, b = g.ev.length*p.lancar,
+        c = g.prazos.length*p.docs, d = g.prazos.length*p.prot, e = g.ilegiveis*p.autos;
+    return { ler:a, lancar:b, docs:c, prot:d, autos:e, total:a+b+c+d+e };
+  }
+
+  function li(lista, lim){
+    return lista.slice(0,lim||6).map(function(e){
+      return '<div class="lp"><span class="pr">'+e.proc+'<span class="ds">'+e.data+' · '+e.trib
+        +(e.orgao?' · '+e.orgao:'')+(e.f.quando?' · <b>'+e.f.quando+'</b>':'')
+        +(e.f.dias?' · prazo de '+e.f.dias+' dias':'')+'</span></span></div>';
+    }).join('');
+  }
+
+  function pintar(){
+    if(!ultimo) return;
+    var g=ultimo.g, p=premissas(), T=contaTempo(g,p);
+    ultimo.p=p; ultimo.T=T;
+    ultimo.risco  = g.prazos.length*p.hon;
+    ultimo.escuro = g.ilegiveis*p.hon;
+
+    document.getElementById('dgrid').innerHTML =
+        '<div class="dk"><b>'+ultimo.brutas+'</b><i>publicações no diário</i></div>'
+      + '<div class="dk"><b>'+g.ev.length+'</b><i>eventos reais<br>(sem repetições)</i></div>'
+      + '<div class="dk"><b>'+g.nProc+'</b><i>processos</i></div>'
+      + '<div class="dk bom"><b>'+g.ganhos.length+'</b><i>ganhos</i></div>'
+      + '<div class="dk mau"><b>'+(g.perdas.length+g.arquivados.length)+'</b><i>perdas e arquivamentos</i></div>'
+      + '<div class="dk mau"><b>'+g.prazos.length+'</b><i>com prazo correndo</i></div>'
+      + '<div class="dk av"><b>'+g.agenda.length+'</b><i>audiências e perícias</i></div>'
+      + '<div class="dk av"><b>'+g.ilegiveis+'</b><i>processos ilegíveis ('+g.pctIlegivel+'%)</i></div>';
+
+    document.getElementById('mesa').innerHTML =
+        '<div class="mz"><b>'+moeda(ultimo.risco)+'</b><i>exposto agora</i><em>'
+          +g.prazos.length+' processos dependem de um ato com prazo correndo</em></div>'
+      + '<div class="mz"><b>'+moeda(ultimo.escuro)+'</b><i>fora do seu radar</i><em>'
+          +g.ilegiveis+' processos que ninguém consegue ler sem entrar no sistema com certificado</em></div>'
+      + '<div class="mz neutro"><b>'+tempo(T.total)+'</b><i>de trabalho no mês</i><em>'
+          +(T.total/480).toFixed(1).replace('.',',')+' dias úteis só para manter a carteira andando</em></div>'
+      + '<div class="mz"><b>'+moeda(g.evitaveis.length*p.hon)+'</b><i>perdido por acompanhamento</i><em>'
+          +g.evitaveis.length+' das '+g.derrotas.length+' perdas do mês não foram de mérito</em></div>'
+      + '<div class="mz ok"><b>'+g.dinheiro.length+'</b><i>com pagamento mencionado</i><em>'
+          +'RPV, precatório, alvará ou depósito a conferir</em></div>';
+
+    var frases=[];
+    frases.push('<p>Em 30 dias saíram <b>'+ultimo.brutas+' publicações</b> nessa OAB. Sem as repetições do diário, são <b>'
+      +g.ev.length+' eventos</b> em <b>'+g.nProc+' processos</b>.</p>');
+    if(g.ganhos.length)  frases.push('<p><b>'+g.ganhos.length+' decisões favoráveis</b> — procedência, benefício concedido, tutela deferida ou acordo homologado.</p>');
+    if(g.perdas.length||g.arquivados.length) frases.push('<p><b>'+(g.perdas.length+g.arquivados.length)+' desfechos negativos</b>: '
+      +g.perdas.length+' perdas e '+g.arquivados.length+' arquivamentos.</p>');
+    if(g.prazos.length)  frases.push('<p><b>'+g.prazos.length+' com prazo correndo</b> agora.</p>');
+    if(g.agenda.length)  frases.push('<p><b>'+g.agenda.length+' audiências ou perícias com data</b> — a mais próxima em '+g.agenda[0].f.quando+'.</p>');
+    if(g.ilegiveis)      frases.push('<p><b>'+g.ilegiveis+' processos ilegíveis no diário</b> ('+g.segredo.length
+      +' em segredo de justiça). O tribunal publica o aviso e guarda o documento dentro do sistema: <b>só se lê entrando com certificado digital</b>.</p>');
+    document.getElementById('leitura').innerHTML = frases.join('');
+
+    document.getElementById('listaProc').innerHTML = li(g.prazos.concat(g.agenda), 10);
+    document.getElementById('diagRodape').innerHTML =
+      'Classificação automática pelo texto da publicação — serve para dimensionar, não para fixar prazo. '
+      +'A triagem de verdade abre os autos e lê a data final que o tribunal gravou.';
+    res.style.display='block';
+    relatorio();
+  }
+
+  /* O que ainda cabe em cada motivo de perda. É o que transforma a classificação
+     em providência — sem isso a tabela só informa, e informação sem saída não vende. */
+  var SAIDA = {
+    'emenda não cumprida'  : 'Emenda ainda cabe enquanto não houver trânsito; depois, ação nova.',
+    'falta de impulso'     : 'Desarquivamento por simples petição, com o ato que faltava.',
+    'documento não juntado': 'Juntada do documento e pedido de reconsideração ou desarquivamento.',
+    'custas ou preparo'    : 'Recolhimento com justificativa, ou gratuidade se couber.',
+    'inicial indeferida'   : 'Apelação no prazo, ou nova inicial corrigida.',
+    'extinção sem mérito'  : 'Nova ação: extinção sem mérito não faz coisa julgada material.',
+    'ilegitimidade ou falta de interesse': 'Nova ação contra a parte certa ou com o pedido corrigido.',
+    'prescrição ou decadência': 'Verificar marco interruptivo e causa de suspensão antes de desistir.',
+    'mérito'               : 'Recurso no prazo — é a única perda que se discute no mérito.',
+    'não identificada'     : 'Abrir os autos e ler a decisão inteira.'
+  };
+
+  function juntar(a){
+    if (a.length <= 1) return a[0] || '';
+    return a.slice(0,-1).join(', ') + ' e ' + a[a.length-1];
+  }
+
+  /* Até três processos nomeados, em prosa. Âncora concreta para o relatório não
+     soar genérico — e só isso: inventário de processos ele já tem no diário. */
+  function exemplos(lista, n, preferirData){
+    return juntar(lista.slice(0, n||3).map(function(e){
+      if (preferirData && e.f.quando) return e.proc + ' (em '+e.f.quando+')';
+      if (e.f.dias)   return e.proc + ' (prazo de '+e.f.dias+' dias)';
+      if (e.f.quando) return e.proc + ' (em '+e.f.quando+')';
+      return e.proc;
+    }));
+  }
+
+  /* O relatório tem duas fases, e a ordem muda com ela.
+     VENDA: ganhou, perdeu, em andamento, o que pode ser feito.
+     ACOMPANHAMENTO: o mais urgente primeiro — o que precisa ser feito agora. */
+  var faseRel = 'venda';
+
+  function relatorio(){
+    if (faseRel === 'acompanhamento') return relatorioAcomp();
+    return relatorioVenda();
+  }
+
+  function relatorioAcomp(){
+    if(!ultimo) return;
+    var g=ultimo.g, p=ultimo.p, hoje=new Date().toLocaleDateString('pt-BR');
+    var h=[];
+    h.push('<div class="cabeca">' + document.getElementById('logoFJ').innerHTML
+      + '<span class="produto">Pulso &middot; relatório do dia</span></div>');
+    h.push('<h1>Relatório de acompanhamento</h1>');
+    h.push('<p class="sub">OAB '+ultimo.oab+'/'+ultimo.uf+' &middot; '+hoje
+      +' &middot; '+ultimo.brutas+' publicações lidas, '+g.ev.length+' eventos em '+g.nProc+' processos</p>');
+
+    /* 1. o que trava, primeiro */
+    h.push('<h2>Precisa da sua decisão</h2>');
+    if (g.prazos.length) {
+      h.push('<div class="destaque"><p><b>'+g.prazos.length+(g.prazos.length===1?' processo está':' processos estão')
+        +' com prazo correndo.</b> As peças estão sendo produzidas e entram para sua revisão na plataforma. '
+        +'O protocolo só sai depois da sua autorização.</p></div>');
+      h.push('<p>Mais próximos: '+exemplos(g.prazos,3)+'.</p>');
+      h.push('<p class="nota">O prazo de cada um é a data final gravada pelo tribunal no processo, lida dentro dos '
+        +'autos — nunca calculada a partir da publicação.</p>');
+    } else {
+      h.push('<p>Nenhum ato novo exige decisão sua hoje.</p>');
+    }
+
+    /* 2. o que depende do cliente */
+    h.push('<h2>Depende de documento seu</h2>');
+    if (g.pendencias.length) {
+      h.push('<p><b>'+g.pendencias.length+(g.pendencias.length===1?' processo depende':' processos dependem')
+        +' de documento que só você tem.</b> O pedido de cada um foi enviado no WhatsApp do escritório, '
+        +'com o nome das partes, o número do processo, a publicação, a pendência e como resolver.</p>');
+      h.push('<p>'+exemplos(g.pendencias,3)+'.</p>');
+      h.push('<p class="nota">Enquanto o documento não chega, a peça fica parada — e o prazo continua correndo.</p>');
+    } else {
+      h.push('<p>Nada pendente do seu lado.</p>');
+    }
+
+    /* 3. agenda */
+    h.push('<h2>Na sua agenda</h2>');
+    if (g.agenda.length) {
+      h.push('<p><b>'+g.agenda.length+(g.agenda.length===1?' data marcada':' datas marcadas')
+        +'</b>, a mais próxima em <b>'+g.agenda[0].f.quando+'</b>: '+exemplos(g.agenda,3,true)+'.</p>');
+    } else {
+      h.push('<p>Nenhuma audiência ou perícia com data nova.</p>');
+    }
+
+    /* 4. dinheiro a levantar */
+    if (g.dinheiro.length) {
+      h.push('<h2>Dinheiro a conferir</h2>');
+      h.push('<p><b>'+g.dinheiro.length+' processos mencionam pagamento</b> — RPV, precatório, alvará ou depósito. '
+        +'Vamos conferir um a um se há valor disponível e avisamos o que puder ser levantado.</p>');
+    }
+
+    /* 5. o que mudou */
+    h.push('<h2>O que mudou nos seus processos</h2>');
+    var mud=[];
+    if (g.ganhos.length)   mud.push('<b>'+g.ganhos.length+'</b> com decisão favorável');
+    if (g.derrotas.length) mud.push('<b>'+g.derrotas.length+'</b> com desfecho negativo');
+    if (mud.length) {
+      h.push('<p>'+juntar(mud)+'. ');
+      if (g.evitaveis.length) h.push(g.evitaveis.length+' das perdas não foram de mérito — vamos analisar '
+        +'uma a uma o que ainda cabe e trazer a proposta no relatório de amanhã.</p>');
+      else h.push('</p>');
+    } else {
+      h.push('<p>Nenhum desfecho novo no período.</p>');
+    }
+
+    /* 6. o que foi lido e não exige nada */
+    var semAcao = g.ev.length - g.prazos.length - g.agenda.length - g.derrotas.length - g.ganhos.length;
+    if (semAcao > 0) {
+      h.push('<p class="nota">Outras <b>'+semAcao+' publicações</b> foram lidas e não exigem ação — '
+        +'andamento de rotina, intimação da parte contrária, despacho de mero expediente. '
+        +'Ficam registradas no seu histórico.</p>');
+    }
+
+    /* 7. o que exigiu entrar nos autos */
+    if (g.ilegiveis) {
+      h.push('<h2>O que o diário não mostrou</h2>');
+      h.push('<p><b>'+g.ilegiveis+' processos</b> publicaram apenas o aviso, sem o conteúdo — '
+        +g.segredo.length+' deles em segredo de justiça. <b>Entramos no sistema do tribunal com o certificado '
+        +'e lemos cada um</b>; o que foi determinado já está refletido nas seções acima.</p>');
+    }
+
+    h.push('<div class="rodape">Facilita Jurídico &middot; Pulso — acompanhamento processual &middot; '+hoje+'. '
+      +'Dúvida sobre qualquer item, responda no grupo do WhatsApp.</div>');
+    document.getElementById('relatorio').innerHTML = h.join('');
+  }
+
+  function relatorioVenda(){
+    if(!ultimo) return;
+    var g=ultimo.g, p=ultimo.p, T=ultimo.T, hoje=new Date().toLocaleDateString('pt-BR');
+    var nG=g.ganhos.length, nD=g.derrotas.length, nE=g.evitaveis.length;
+    var nM=g.derrotas.filter(function(e){ return e.f.causa==='mérito'; }).length;
+    var vGanho=nG*p.hon, vPerda=nD*p.hon, vDeixou=nE*p.hon, vExposto=g.prazos.length*p.hon;
+    var h=[];
+
+    h.push('<div class="cabeca">' + document.getElementById('logoFJ').innerHTML
+      + '<span class="produto">Pulso · acompanhamento processual</span></div>');
+    h.push('<h1>Diagnóstico do escritório</h1>');
+    h.push('<p class="sub">OAB '+ultimo.oab+'/'+ultimo.uf+' · últimos 30 dias · emitido em '+hoje+'</p>');
+
+    /* ---- o retrato, em números, antes de qualquer texto ---- */
+    h.push('<h2>O retrato do mês</h2>');
+    h.push('<div class="kpis">'
+      + '<div><b>'+g.nProc+'</b><span>processos se mexeram</span></div>'
+      + '<div><b>'+nG+'</b><span>ganhos</span></div>'
+      + '<div><b>'+nD+'</b><span>perdas e arquivamentos</span></div>'
+      + '<div><b>'+g.prazos.length+'</b><span>com prazo correndo</span></div>'
+      + '<div><b>'+g.agenda.length+'</b><span>audiências e perícias</span></div>'
+      + '<div><b>'+g.ilegiveis+'</b><span>que você não consegue ler</span></div>'
+      + '</div>');
+    h.push('<p class="nota">Base: '+ultimo.brutas+' publicações no diário, que viram '+g.ev.length
+      +' eventos reais depois de removidas as repetições. Os valores usam a premissa de <b>'+moeda(p.hon)
+      +' de honorário médio por processo</b> — troque pela sua média e tudo recalcula.</p>');
+
+    /* ---- 1. o que ganhou ---- */
+    h.push('<h2>O que você ganhou</h2>');
+    if (nG) {
+      h.push('<p>No período, <b>'+nG+(nG===1?' decisão foi favorável':' decisões foram favoráveis')
+        +'</b> — procedência, benefício concedido, tutela deferida ou acordo homologado. '
+        +'Pela premissa acima, <b>'+moeda(vGanho)+'</b> em causas que chegaram a resultado.</p>');
+      h.push('<p>Decisão favorável publicada não é o fim da história: é o começo de um prazo. '
+        +'Benefício a implantar, honorário a executar, valor a levantar. '
+        +'<b>Cada uma dessas '+nG+' depende de um ato seu para virar dinheiro</b> — e esse ato só acontece '
+        +'se alguém tiver lido a publicação no dia em que ela saiu.</p>');
+    } else {
+      h.push('<p>Nenhuma decisão favorável saiu nos últimos 30 dias. Em uma janela de um mês isso é comum e '
+        +'não diz nada sobre a carteira. O que importa é que, no dia em que sair, ela seja lida — porque é '
+        +'dela que nasce o prazo para executar o que você ganhou.</p>');
+    }
+
+    /* ---- 2. o que perdeu, e sobretudo POR QUE ---- */
+    h.push('<h2>O que você perdeu — e por quê</h2>');
+    if (nD) {
+      h.push('<p><b>'+nD+(nD===1?' processo terminou':' processos terminaram')
+        +' em perda ou arquivamento</b>, o equivalente a <b>'+moeda(vPerda)+'</b>.</p>');
+      h.push('<p>O número importa menos que a causa. Lendo o que o tribunal escreveu em cada um: '
+        + juntar(g.causas.map(function(c){ return '<b>'+c.n+'</b> por '+c.causa; })) + '.</p>');
+      if (nE) {
+        h.push('<div class="destaque"><p><b>'+nE+' das '+nD+' perdas — '+g.pctEvitavel
+          +'% — não foram de mérito.</b> '
+          + (nM ? 'Apenas '+nM+(nM===1?' caiu':' caíram')+' por tese; o resto caiu por prazo, documento, emenda ou impulso. '
+                : 'Nenhuma tese sua caiu: foi prazo, documento, emenda e impulso. ')
+          +'São <b>'+moeda(vDeixou)+'</b> que deixaram de entrar por motivo que não tem relação '
+          +'com a qualidade do seu trabalho jurídico.</p></div>');
+        h.push('<p>Essa é a parte recuperável, e é a razão de este relatório existir. Perda de mérito se '
+          +'discute no recurso. Perda por acompanhamento se evita antes — e, em boa parte dos casos, se '
+          +'desfaz depois: arquivamento por inércia volta com simples petição, inicial indeferida se refaz, '
+          +'emenda não cumprida ainda cabe enquanto não houver trânsito.</p>');
+      } else {
+        h.push('<p>Todas as perdas do período foram de mérito ou não puderam ser classificadas pelo texto '
+          +'da publicação. Perda de mérito é a única que o acompanhamento não evita — ela se discute no '
+          +'recurso, e o prazo para recorrer é justamente o que não pode passar em branco.</p>');
+      }
+      if (ultimo.ano && ultimo.ano.derrotasAno) {
+        var A=ultimo.ano;
+        h.push('<p><b>E o mês não é exceção.</b> Lendo <b>os doze meses</b> do diário dessa OAB: '
+          +'<b>'+A.derrotasAno+' perdas</b> no ano, das quais <b>'+A.evitaveisAno+' não foram de mérito</b>. '
+          +'Pela mesma premissa, <b>'+moeda(A.derrotasAno*p.hon)+'</b> em valor de causa perdido no ano, '
+          +'sendo <b>'+moeda(A.evitaveisAno*p.hon)+'</b> por motivo que o acompanhamento evita.</p>');
+        h.push('<div class="destaque"><p>Na média, <b>'+moeda(Math.round(A.evitaveisAno*p.hon/12))
+          +' por mês</b> deixam de entrar por falha de acompanhamento — '
+          +(A.evitaveisAno/12).toFixed(1).replace('.',',')+' processos por mês, todo mês. '
+          +'<b>Isso não é projeção de um mês multiplicado por doze: é a contagem dos doze meses.</b></p></div>');
+      }
+      /* classificação das perdas: o que foi, quanto custou e o que ainda cabe */
+      h.push('<table><tr><th>Motivo da perda</th><th>Quantos</th><th>Valor</th><th>O que ainda cabe</th></tr>'
+        + g.causas.map(function(c){
+            return '<tr><td>'+c.causa+'</td><td>'+c.n+'</td><td>'+moeda(c.n*p.hon)+'</td><td>'
+                 + (SAIDA[c.causa] || 'Depende da leitura dos autos.') +'</td></tr>';
+          }).join('')
+        + '</table>');
+      h.push('<p class="nota">A classificação sai do texto da própria decisão. '
+        + 'Cada linha precisa ser conferida nos autos antes de virar providência — aqui ela serve para '
+        + 'mostrar onde está a perda, não para decidir o recurso.</p>');
+    } else {
+      h.push('<p>Nenhum processo foi perdido ou arquivado nos últimos 30 dias. É um bom mês — e vale dizer '
+        +'o que isso não significa: arquivamento costuma vir depois de uma intimação não cumprida, '
+        +'semanas antes. O que protege o mês que vem é o que se lê hoje.</p>');
+    }
+
+    /* ---- 3. o que está em andamento ---- */
+    h.push('<h2>O que está em andamento</h2>');
+    if (g.prazos.length) {
+      h.push('<p><b>'+g.prazos.length+(g.prazos.length===1?' processo está':' processos estão')
+        +' com prazo correndo neste momento</b>, com <b>'+moeda(vExposto)
+        +'</b> dependendo de um ato que ainda não foi praticado. Cada um deles é, hoje, uma das perdas '
+        +'administrativas do mês que vem.</p>');
+      h.push('<p class="nota">Exemplos: '+exemplos(g.prazos,3)+'. A lista completa fica no relatório diário — '
+        +'aqui interessa a ordem de grandeza.</p>');
+    } else {
+      h.push('<p>Nenhuma intimação do período pede um ato seu com prazo em aberto.</p>');
+    }
+    if (g.agenda.length) {
+      h.push('<p><b>'+g.agenda.length+(g.agenda.length===1?' audiência ou perícia marcada':' audiências ou perícias marcadas')
+        +'</b>, a mais próxima em <b>'+g.agenda[0].f.quando+'</b>. Data de perícia perdida não se remarca sem custo: '
+        +'o processo volta para a fila.</p>');
+    }
+    if (g.dinheiro.length) {
+      h.push('<p><b>'+g.dinheiro.length+' processos mencionam pagamento</b> — RPV, precatório, alvará ou depósito judicial. '
+        +'Vale conferir um a um se há valor disponível para levantamento: é dinheiro que já é seu e está parado no tribunal.</p>');
+    }
+
+    /* ---- 4. o que você não consegue ler ---- */
+    if (g.ilegiveis) {
+      h.push('<h2>O que você não consegue ler</h2>');
+      h.push('<p>São <b>'+g.ilegiveis+' processos</b>, '+g.pctIlegivel+'% dos eventos do mês. Em <b>'+g.segredo.length
+        +'</b> deles o processo corre em <b>segredo de justiça</b>; nos demais, o tribunal publicou apenas o aviso '
+        +'e manteve o documento dentro do sistema.</p>');
+      h.push('<p>O conteúdo existe e está disponível — <b>mas só para quem entra no sistema do tribunal com '
+        +'certificado digital</b>, abre o processo e lê o que foi determinado. '
+        +'Nenhum serviço de monitoramento de publicações faz isso, porque o diário não traz o texto. '
+        +'Na prática, <b>'+moeda(g.ilegiveis*p.hon)+' da sua carteira estão fora do seu campo de visão</b> — '
+        +'não por falta de ferramenta, mas porque a ferramenta certa é entrar nos autos.</p>');
+    }
+
+    /* ---- 5. o que pode ser feito ---- */
+    h.push('<h2>O que pode ser feito</h2>');
+    var acoes=[];
+    if (nE) acoes.push('<li><b>Reabrir o que caiu por acompanhamento.</b> '+nE+' processos caíram por causa '
+      +'administrativa. Cada um precisa ser lido para dizer se ainda cabe desarquivamento, emenda ou ação nova.</li>');
+    if (g.prazos.length) acoes.push('<li><b>Cumprir o que está correndo.</b> '+g.prazos.length+' atos com prazo aberto, '
+      +'com a data final lida de dentro do processo — nunca calculada a partir da publicação.</li>');
+    if (g.ilegiveis) acoes.push('<li><b>Abrir os '+g.ilegiveis+' processos ilegíveis</b> com certificado digital e '
+      +'descobrir o que foi determinado em cada um.</li>');
+    if (g.dinheiro.length) acoes.push('<li><b>Conferir os '+g.dinheiro.length+' processos com pagamento mencionado</b> '
+      +'e levantar o que estiver disponível.</li>');
+    if (nG) acoes.push('<li><b>Executar o que você ganhou.</b> '+nG+' decisões favoráveis esperando o ato seguinte.</li>');
+    acoes.push('<li><b>Fazer isso todos os dias</b>, para que o mês que vem não repita este.</li>');
+    h.push('<ul>'+acoes.join('')+'</ul>');
+
+    /* ---- 6. quanto custa manter isso em dia ---- */
+    h.push('<h2>Quanto tempo isso consome</h2>');
+    h.push('<table><tr><th>Atividade</th><th>Volume</th><th>Minutos cada</th><th>Total</th></tr>'
+      + '<tr><td>Ler e triar as publicações</td><td>'+g.ev.length+'</td><td>'+p.triar+'</td><td>'+tempo(T.ler)+'</td></tr>'
+      + '<tr><td>Lançar o andamento nos sistemas</td><td>'+g.ev.length+'</td><td>'+p.lancar+'</td><td>'+tempo(T.lancar)+'</td></tr>'
+      + '<tr><td>Organizar os documentos do ato</td><td>'+g.prazos.length+'</td><td>'+p.docs+'</td><td>'+tempo(T.docs)+'</td></tr>'
+      + '<tr><td>Protocolar ou distribuir</td><td>'+g.prazos.length+'</td><td>'+p.prot+'</td><td>'+tempo(T.prot)+'</td></tr>'
+      + '<tr><td>Abrir os autos dos processos ilegíveis</td><td>'+g.ilegiveis+'</td><td>'+p.autos+'</td><td>'+tempo(T.autos)+'</td></tr>'
+      + '<tr><td><b>Total no mês</b></td><td></td><td></td><td><b>'+tempo(T.total)+'</b></td></tr></table>');
+    h.push('<p class="nota">São <b>'+(T.total/480).toFixed(1).replace('.',',')+' dias úteis</b> de alguém dedicado só a isso. '
+      +'Não entra aqui escrever a peça, falar com o cliente nem ir à audiência — é apenas o trabalho de manter a '
+      +'carteira organizada e em dia.</p>');
+
+    /* ---- 7. conclusão ---- */
+    h.push('<h2>Conclusão</h2>');
+    h.push('<div class="conclusao">'
+      + '<p>Em trinta dias, '+g.nProc+' dos seus processos se mexeram. '
+      + (nG ? nG+' trouxeram decisão favorável. ' : '')
+      + (nD ? nD+' terminaram em perda ou arquivamento'
+            + (nE ? ', e '+g.pctEvitavel+'% dessas perdas não foram de mérito. ' : '. ') : '')
+      + (g.prazos.length ? g.prazos.length+' seguem com prazo correndo agora. ' : '')
+      + (g.ilegiveis ? 'E '+g.ilegiveis+' continuam fora do seu alcance, porque o diário não publica o conteúdo.' : '')
+      + '</p>'
+      + '<p>O que esses números descrevem <b>não é um problema de competência jurídica</b>. '
+      + 'Nada aqui se perde por tese fraca. Perde-se porque a publicação não foi lida a tempo, porque o documento '
+      + 'não foi juntado, porque o prazo correu enquanto o dia era ocupado por outra coisa, ou porque ninguém abriu '
+      + 'o processo que o diário não deixa ler. <b>É um problema de visibilidade e de organização</b> — e esse tem solução.</p>'
+      + '<p>Manter essa carteira em dia custa <b>'+tempo(T.total)+' por mês</b>, todo mês, sem falhar uma semana. '
+      + 'É um trabalho que não aparece, não gera honorário e não pode parar — e é o primeiro a ficar para trás '
+      + 'quando o escritório tem um mês cheio.</p>'
+      + '<p><b>É exatamente esse trabalho que o Pulso assume.</b> Lemos as publicações todos os dias, abrimos os autos '
+      + 'que o diário não mostra e dizemos o que cada processo exige e até quando. <b>Todos os dias você recebe um '
+      + 'relatório com tudo o que foi triado e feito</b>, e entra no sistema da Facilita apenas para <b>revisar as '
+      + 'petições e confirmar o protocolo</b>. O resto do seu dia volta a ser seu.</p>'
+      + '</div>');
+
+    /* ---- 8. o investimento ---- */
+    h.push('<h2>O investimento</h2>');
+    h.push('<p>Pelo volume deste diagnóstico, o acompanhamento ficaria em torno de <b>'
+      + moeda(g.ev.length*20 + g.prazos.length*5)+' no mês</b>, debitado do pacote contratado. '
+      + 'Para que não haja dúvida sobre o que esse valor cobre:</p>');
+    h.push('<div class="inclui">'
+      + '<div class="sim"><span>Está incluso nessa estimativa</span><ul>'
+        + '<li>Captura e triagem de todas as publicações, todos os dias</li>'
+        + '<li>Leitura dos autos quando o diário não traz o conteúdo</li>'
+        + '<li>Decisão do que precisa ser feito, com o prazo lido do processo</li>'
+        + '<li>Cadastro do caso na plataforma e no seu sistema de gestão</li>'
+        + '<li>Aviso de pendência e relatório diário</li>'
+        + '<li>Protocolo e distribuição</li>'
+      + '</ul></div>'
+      + '<div class="nao"><span>Não está incluso</span><ul>'
+        + '<li><b>Petições, guias e cálculos</b></li>'
+        + '<li>Pareceres e demais peças</li>'
+      + '</ul>'
+      + '<p>A Facilita produz tudo isso para você — e os valores <b>seguem a tabela do pacote contratado</b>, '
+      + 'variando conforme o serviço. Não são cobrados à parte: saem do mesmo pacote.</p></div>'
+      + '</div>');
+
+    /* ---- 9. fontes e limites ---- */
+    h.push('<h2>Como lemos isso</h2>');
+    h.push('<p class="nota">Fonte: <b>Diário de Justiça Eletrônico Nacional do CNJ</b>, público, consultado pelo número '
+      + 'da OAB nos últimos 30 dias. O diário repete a mesma decisão uma vez por destinatário — por isso '
+      + ultimo.brutas+' publicações correspondem a '+g.ev.length+' eventos reais.</p>');
+    h.push('<p class="nota">A classificação do desfecho e da causa é automática, pela leitura do texto da publicação, '
+      + 'e pode errar em redação incomum. <b>Serve para dimensionar, não para fixar prazo.</b> '
+      + 'O prazo que vale é a data final que o próprio tribunal grava no processo, e ela só se lê abrindo os autos.</p>');
+    h.push('<p class="nota">Os valores em dinheiro multiplicam a quantidade de processos pela premissa de '
+      + moeda(p.hon)+' de honorário médio; os de tempo usam '+p.triar+', '+p.lancar+', '+p.docs+', '+p.prot
+      + ' e '+p.autos+' minutos por atividade. São premissas editáveis, não medições do seu escritório.</p>');
+
+    h.push('<div class="rodape">Facilita Jurídico · Pulso — acompanhamento processual. '
+      + 'Gerado a partir de dados públicos do DJEN/CNJ em '+hoje+'.</div>');
+
+    document.getElementById('relatorio').innerHTML = h.join('');
+  }
+
+  async function rodar(){
+    var oab=(campoOab.value||'').replace(/\D/g,''), uf=document.getElementById('uf').value;
+    if(!oab){ msg.className='diag-msg erro'; msg.textContent='Digite o número da OAB.'; return; }
+    btn.disabled=true; msg.className='diag-msg'; msg.textContent='Consultando o diário…'; res.style.display='none';
+    try{
+      var brutas=await buscar(oab,uf,30);
+      if(!brutas.length){
+        msg.textContent='Nenhuma publicação para a OAB '+oab+'/'+uf+' nos últimos 30 dias. Confira o número e a UF.';
+      } else {
+        ultimo={ brutas:brutas.length, g:apurar(brutas), oab:oab, uf:uf };
+        msg.textContent='Diagnóstico da OAB '+oab+'/'+uf+', últimos 30 dias.';
+        pintar();
+        levantar(oab, uf);
+      }
+    }catch(e){
+      msg.className='diag-msg erro';
+      msg.textContent='Não consegui consultar agora: '+e.message+'.';
+    }
+    btn.disabled=false;
+  }
+
+  btn.addEventListener('click', rodar);
+  campoOab.addEventListener('keydown', function(ev){ if(ev.key==='Enter') rodar(); });
+  ['hon','tTriar','tLancar','tDocs','tProt','tAutos'].forEach(function(id){
+    document.getElementById(id).addEventListener('input', pintar);
+  });
+  document.getElementById('btnPdf').addEventListener('click', function(){ window.print(); });
+  document.getElementById('btnFase').addEventListener('click', function(){
+    faseRel = (faseRel === 'venda') ? 'acompanhamento' : 'venda';
+    this.textContent = (faseRel === 'venda') ? 'Ver relatório de acompanhamento' : 'Ver relatório de venda';
+    relatorio();
+    window.print();
+  });
+  document.getElementById('irDiag').addEventListener('click', function(){
+    campoOab.scrollIntoView({behavior:'smooth', block:'center'});
+    campoOab.focus();
+  });
+})();
+</script>
