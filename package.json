@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "publicar": "scripts/publicar.sh",
+    "previa": "scripts/publicar.sh previa"
   },
   "dependencies": {
     "next": "15.0.3",
